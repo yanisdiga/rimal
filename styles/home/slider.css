@@ -1,0 +1,89 @@
+.imageSlider {
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+}
+
+.imageSlider .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom,
+            rgba(0, 0, 0, 1) 0%,
+            rgba(0, 0, 0, 0) 30%,
+            rgba(0, 0, 0, 0) 70%,
+            rgba(0, 0, 0, 1) 100%);
+    pointer-events: none;
+}
+
+.slider-indicators {
+    position: absolute;
+    bottom: 20px;
+    /* marge bas */
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    z-index: 2;
+}
+
+.slider-indicators .indicator {
+    height: 6px;
+    border-radius: 3px;
+    background-color: rgba(255, 255, 255, 0.6);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.slider-indicators .indicator.active {
+    width: 40px;
+    /* grande barre quand active */
+    background-color: white;
+}
+
+.slider-indicators .indicator:not(.active) {
+    width: 12px;
+    /* petite barre sinon */
+}
+
+.slider-text {
+    position: absolute;
+    bottom: 80px;
+    /* au-dessus des indicateurs */
+    left: 60px;
+    color: white;
+    font-family: 'Oswald', sans-serif;
+    z-index: 2;
+    max-width: 70vw;
+    animation: fadeInUp 1s ease forwards;
+}
+
+.slider-text h1 {
+    font-size: clamp(2.5rem, 2.19rem + 0.88vw, 3.25rem);
+    font-weight: 600;
+    margin: 0 0 10px 0;
+    line-height: 1.2;
+}
+
+.slider-text p {
+    font-size: clamp(2.5rem, 2.19rem + 0.88vw, 3.25rem);
+    font-weight: 300;
+    margin: 0;
+    opacity: 0.85;
+}
+
+/* Animation douce */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

@@ -1,0 +1,222 @@
+.navbar {
+    width: 100%;
+    height: 60px;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    padding: 30px 60px;
+    background: linear-gradient(rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.8) 8.1%, rgba(0, 0, 0, 0.8) 15.5%, rgba(0, 0, 0, 0.8) 22.5%, rgba(0, 0, 0, 0.78) 29%, rgba(0, 0, 0, 0.73) 35.3%, rgba(0, 0, 0, 0.67) 41.2%, rgba(0, 0, 0, 0.6) 47.1%, rgba(0, 0, 0, 0.52) 52.9%, rgba(0, 0, 0, 0.44) 58.8%, rgba(0, 0, 0, 0.33) 64.7%, rgba(0, 0, 0, 0.22) 71%, rgba(0, 0, 0, 0.12) 77.5%, rgba(0, 0, 0, 0.05) 84.5%, rgba(0, 0, 0, 0.01) 91.9%, rgba(0, 0, 0, 0) 100%);
+    z-index: 2;
+}
+
+.hamburger {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    gap: 8px;
+}
+
+
+/* Logo centré */
+.logo {
+    position: absolute;
+    left: 50%;
+    top: 20px;
+    font-family: 'Oswald', sans-serif;
+    font-size: 22px;
+    font-weight: 300;
+    letter-spacing: 1.5px;
+    transform: translateX(-50%) scaleX(1.2);
+}
+
+.active {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: translateX(0) !important;
+    transition: all 0.3s ease-in;
+}
+
+.menu {
+    opacity: 0;
+    visibility: hidden;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(32px);
+    transform: translateX(-20px);
+    z-index: 3;
+}
+
+.menu-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 65%;
+    height: 100%;
+    background-color: #FFFFFF;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    font-family: 'Oswald', sans-serif;
+    font-size: 24px;
+    color: white;
+    z-index: 20;
+}
+
+.menu-overlay a {
+    color: black;
+}
+
+.menu-overlay .close-button {
+    position: absolute;
+    top: 15px;
+    right: -46px;
+    cursor: pointer;
+    padding: 7px;
+    border-radius: 3px;
+    z-index: 25;
+    font-size: 20px;
+    font-weight: lighter;
+    color: white;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    transform: scaleX(2.2);
+    transition: all 0.2s ease-in-out;
+
+    span {
+        font-size: 18px;
+        font-weight: 100;
+        font-family: 'Oswald', sans-serif;
+    }
+}
+
+.menu-overlay .close-button:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.menu-overlay-left {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: start;
+    background-color: #ffffff;
+    padding-block: 4rem;
+
+    .items {
+        width: 85%;
+        display: flex;
+        flex-direction: column;
+        justify-content: start;
+        gap: 15px;
+        font-weight: 300;
+
+        .selected {
+            background-color: rgb(227, 228, 230);
+        }
+
+        a {
+            border-radius: 7.5px;
+            padding: 12.5px 15px;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.3s ease;
+        }
+
+        a:not(.selected):hover {
+            background-color: rgb(238, 239, 242);
+        }
+    }
+
+}
+
+.active {
+    display: flex !important;
+}
+
+.menu-overlay-right {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    background-color: #eeeff2;
+}
+
+.menu-overlay-right .right-menu-items {
+    width: 100%;
+    height: 100%;
+    padding-inline: 15%;
+    padding-block: 4rem;
+    flex-direction: column;
+    gap: 1px;
+    overflow-y: auto;
+}
+
+.vehicules-items,
+.localisations-items {
+    display: none;
+}
+
+
+.menu-overlay-right .right-menu-items .item {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    border-radius: 5px;
+    align-items: start;
+    justify-content: center;
+    transition: background-color 0.2s ease-in;
+    cursor: pointer;
+    color: black;
+
+    .carInfo,
+    .locInfo {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 10px;
+
+        span {
+            font-size: 18px;
+            font-weight: 300;
+            padding: 7px;
+            background-color: white;
+            border-radius: 5px;
+            transition: all 0s;
+        }
+    }
+
+    img {
+        width: 100%;
+        height: auto;
+        object-fit: contain;
+        margin-bottom: 10px;
+    }
+
+    .locImg {
+        border-radius: 5px;
+    }
+}
+
+.menu-overlay-right .right-menu-items .item:hover {
+    background-color: #ffffff;
+
+    .carInfo span,
+    .locInfo span {
+        background-color: #eeeff2;
+    }
+
+    img {
+        transform: translateX(-5px) translateY(-5px) scale(1.05);
+        transition: transform 0.3s ease;
+    }
+}

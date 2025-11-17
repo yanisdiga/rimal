@@ -1,0 +1,139 @@
+// Fichier : prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// --- Enums (Listes de choix) ---
+
+enum Transmission {
+  MANUELLE
+  AUTOMATIQUE
+}
+
+enum FuelType {
+  ESSENCE
+  DIESEL
+  ELECTRIQUE
+  HYBRIDE
+}
+
+enum StatusReservation {
+  PENDING    // En attente
+  CONFIRMED  // Approuvée
+  REJECTED   // Refusée
+  COMPLETED  // Terminée
+  CANCELLED  // Annulée
+}
+
+enum StatutVehicule {
+  DISPONIBLE  // Prêt à être loué
+  MAINTENANCE // Au garage
+  LOUE        // Déjà en location (utile pour le statut en direct)
+  RETIRE      // Ne plus utiliser
+}
+
+
+// --- Modèles de données ---
+
+// 1. LE MODELE (Catalogue, ce que le client voit)
+model ModeleVoiture {
+  id            Int      @id @default(autoincrement())
+  nom           String   @unique // Ex: "Renault Clio 5 - Bleu"
+  description   String?  @db.Text
+  imageUrl      String?
+  prixParJour   Int      @map("prix_par_jour")
+  nbPlaces      Int      @default(5)
+  transmission  Transmission @default(MANUELLE)
+  fuelType      FuelType     @default(ESSENCE) @map("fuel_type")
+
+  // Relation: Ce modèle a plusieurs véhicules physiques
+  vehicules     Vehicule[]
+
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+  
+  @@map("modeles_voiture")
+}
+
+// 2. LE VEHICULE (Stock, l'objet physique avec une plaque)
+model Vehicule {
+  id            Int       @id @default(autoincrement())
+  plaque        String    @unique
+  statut        StatutVehicule @default(DISPONIBLE)
+  
+  // Relation: Ce véhicule est une instance d'un modèle
+  modeleId      Int
+  modele        ModeleVoiture @relation(fields: [modeleId], references: [id])
+
+  // Relation: Ce véhicule précis a des réservations
+  reservations  Reservation[]
+
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+  
+  @@map("vehicules")
+}
+
+// 3. LA LOCATION (Formulaire de réservation)
+model Location {
+  id            Int      @id @default(autoincrement())
+  nom           String   @unique // Ex: "Aéroport Marrakech-Menara"
+  adresse       String?
+  fraisSupplementaires Int @default(0) @map("frais_supplementaires")
+
+  // Relations pour les réservations
+  reservationsPriseEnCharge Reservation[] @relation("PriseEnCharge")
+  reservationsRetour        Reservation[] @relation("Retour")
+
+  createdAt     DateTime @default(now()) @map("created_at")
+  
+  @@map("locations")
+}
+
+// 4. LA RESERVATION (Le lien entre tout)
+model Reservation {
+  id          Int      @id @default(autoincrement())
+  dateDebut   DateTime @map("date_debut")
+  dateFin     DateTime @map("date_fin")
+  prixTotal   Int      @map("prix_total") // Calculé au moment de la résa
+
+  // Infos client
+  clientNom   String   @map("client_nom")
+  clientEmail String   @map("client_email")
+  clientTel   String   @map("client_tel")
+
+  status      StatusReservation @default(PENDING)
+
+  // Relation: La réservation est pour UN véhicule précis (plaque)
+  vehiculeId  Int
+  vehicule    Vehicule @relation(fields: [vehiculeId], references: [id])
+
+  // Relations pour les lieux
+  lieuPriseEnChargeId Int
+  lieuPriseEnCharge   Location @relation("PriseEnCharge", fields: [lieuPriseEnChargeId], references: [id])
+
+  lieuRetourId Int
+  lieuRetour   Location @relation("Retour", fields: [lieuRetourId], references: [id])
+
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("reservations")
+}
+
+// 5. L'ADMIN (Pour le panel)
+model Admin {
+  id             Int      @id @default(autoincrement())
+  email          String   @unique
+  hashedPassword String   @map("hashed_password")
+
+  createdAt      DateTime @default(now()) @map("created_at")
+  
+  @@map("admins")
+}

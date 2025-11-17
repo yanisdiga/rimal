@@ -1,0 +1,32 @@
+.footer {
+    width: 100%;
+    padding: 30px 50px;
+    background-color: #c2c5ca;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.footer .first-cat, .footer .second-cat, .footer .third-cat {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.footer .first-cat {
+    align-items: start;
+    text-align: left;
+    span {
+        font-weight: 600;
+        font-size: 1.1rem;
+    }
+}
+
+.footer .third-cat {
+    align-items: end;
+    text-align: right;
+    i {
+        padding-inline: 5px;
+    }
+}
