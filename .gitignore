@@ -10,6 +10,8 @@
 !.yarn/releases
 !.yarn/versions
 
+
+# next.js
 # testing
 /coverage
 
@@ -28,11 +30,12 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-.pnpm-debug.log*
+.pneeded)
+.env*
 
 # vercel
 .vercel
 
 # typescript
 *.tsbuildinfo
-next-env.d.ts
+ated/prisma
