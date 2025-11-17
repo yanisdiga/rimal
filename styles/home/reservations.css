@@ -39,20 +39,45 @@
    Conteneurs principaux  
 ----------------------- */
 
-.reservations .pickup-container {
-  flex: 1 1 400px;
-  /* largeur mini 300px */
-  min-width: 400px;
-  width: 100%;
+/* NOTE: Les styles pour '.reservations .pickup-container' 
+  ont été supprimés car '.locations-container' 
+  et les nouvelles '.location-column' gèrent l'alignement. 
+*/
+
+/* Assurez-vous que le conteneur principal est bien en 'flex' */
+.locations-container {
+    display: flex;
+    gap: 10px;
+    /* Aligne les inputs en bas s'ils n'ont pas la même hauteur */
+    align-items: flex-end; 
+    min-width: 400px;
+    flex-wrap: wrap;
 }
 
-.reservations .locations-container {
-  display: flex;
-  flex-direction: row;
-  gap: 10px;
-  flex: 1;
-  width: 100%;
+/* La nouvelle colonne */
+.location-column {
+    display: flex;
+    flex-direction: column;
+    flex: 1; /* Permet à la colonne "Retrait" de s'étirer */
 }
+
+/* La colonne de droite ne doit pas s'étirer */
+.location-column.return-column {
+    flex: 0;
+}
+
+/* Le style pour vos labels (le span) */
+.location-column span {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 5px; /* Espace entre le label et l'input */
+    
+    /* Hauteur fixe pour que "Retour" s'aligne avec "Retrait" 
+       et éviter les sauts de page */
+    height: 1.2em; 
+}
+
 
 .reservations .dates-validation-container {
   flex: 2 1 500px;
@@ -111,23 +136,24 @@
 .reservations .choose-location .selected {
   gap: 50px;
   justify-content: space-between;
+  text-wrap: nowrap;
 }
 
 .reservations .return-location {
   flex: 0 !important;
-  color: #868686 !important;
+  color: #868686 !important; /* Applique la couleur à l'icône <i> */
   border: none !important;
+}
 
-  .selected {
-    gap: 20px;
-    justify-content: space-between;
-    padding: 0 !important;
-  }
+.reservations .return-location .selected {
+  gap: 20px;
+  justify-content: space-between;
+  padding: 0 !important;
+}
 
-  span {
-    text-wrap: nowrap;
-    color: #868686 !important;
-  }
+.reservations .return-location span {
+  text-wrap: nowrap;
+  color: #868686 !important; /* Applique la couleur au texte <span> */
 }
 
 .reservations .choose-hour {
@@ -241,11 +267,10 @@
 }
 
 /* -----------------------
-   Conteneurs date et pickup
+   Conteneurs date 
 ----------------------- */
 .reservations .start-date-container,
-.reservations .end-date-container,
-.reservations .pickup-container {
+.reservations .end-date-container {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -253,8 +278,7 @@
 }
 
 .reservations .start-date-container button,
-.reservations .end-date-container button,
-.reservations .pickup-container button {
+.reservations .end-date-container button {
   font-weight: 300;
   background-color: white;
   border: 1px solid #ddd;

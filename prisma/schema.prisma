@@ -38,6 +38,16 @@ enum StatutVehicule {
   RETIRE      // Ne plus utiliser
 }
 
+enum DayOfWeek {
+  LUNDI
+  MARDI
+  MERCREDI
+  JEUDI
+  VENDREDI
+  SAMEDI
+  DIMANCHE
+}
+
 
 // --- Modèles de données ---
 
@@ -91,6 +101,9 @@ model Location {
   reservationsPriseEnCharge Reservation[] @relation("PriseEnCharge")
   reservationsRetour        Reservation[] @relation("Retour")
 
+  // Chaque lieu a un planning de 7 jours
+  horaires      Horaires[]
+
   createdAt     DateTime @default(now()) @map("created_at")
   
   @@map("locations")
@@ -136,4 +149,41 @@ model Admin {
   createdAt      DateTime @default(now()) @map("created_at")
   
   @@map("admins")
+}
+
+model BackgroundImage {
+  id        Int      @id @default(autoincrement())
+  name      String
+  url       String   @db.Text
+  title     String?  
+  subtitle  String? 
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("background_image")
+}
+
+// Table pour les heures d'ouverture, liée à 'Location'
+model Horaires {
+  id          Int       @id @default(autoincrement())
+  
+  dayOfWeek   DayOfWeek @map("jour_de_semaine") // LUNDI, MARDI...
+  isClosed    Boolean   @default(false) @map("est_ferme")
+
+  // Période 1 (Matin ou journée complète)
+  openTime    String?   @map("ouverture_matin") // "09:00"
+  closeTime   String?   @map("fermeture_matin") // "18:00" (ou "12:30" si pause)
+  
+  // Période 2 (Après-midi) - Optionnel, pour la pause
+  openTimeAfternoon  String?   @map("ouverture_aprem")  // "14:00"
+  closeTimeAfternoon String?   @map("fermeture_aprem")  // "18:00"
+
+  // Relation: Cet horaire appartient à un lieu
+  locationId  Int
+  location    Location  @relation(fields: [locationId], references: [id], onDelete: Cascade)
+
+  // Contrainte: Un seul "LUNDI" par "Location"
+  @@unique([locationId, dayOfWeek])
+  @@map("horaires")
 }

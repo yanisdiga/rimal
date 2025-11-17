@@ -8,6 +8,8 @@ body {
     width: 100vw;
     overflow-x: hidden;
     font-family: 'Anton', sans-serif;
+    background: none;
+    color: black;
 }
 
 nav {
@@ -49,4 +51,9 @@ li {
 
 #flatpickr-hidden {
     display: none;
+}
+
+body.no-scroll {
+  /* La magie est ici : */
+  overflow: hidden;
 }

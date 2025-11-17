@@ -17,6 +17,7 @@
             rgba(0, 0, 0, 0) 70%,
             rgba(0, 0, 0, 1) 100%);
     pointer-events: none;
+    z-index: 2;
 }
 
 .slider-indicators {
@@ -27,7 +28,7 @@
     transform: translateX(-50%);
     display: flex;
     gap: 8px;
-    z-index: 2;
+    z-index: 3;
 }
 
 .slider-indicators .indicator {

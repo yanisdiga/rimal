@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Oswald } from "next/font/google";
 import "./globals.css";
 
 import "../styles/home/reservations.css";
@@ -9,7 +10,7 @@ import "../styles/home/footer.css";
 import "../styles/navbar.css";
 import "../styles/style.css";
 
-import { NavbarAndMenu } from "./components/Navbar";
+import { NavbarAndMenu } from "./components/Menu";
 import {prisma} from '../lib/prisma';
 
 const geistSans = Geist({
@@ -20,6 +21,11 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+});
+
+const oswald = Oswald({
+  subsets: ['latin'],
+  weight: ['200', '300', '400', '500', '600', '700'],
 });
 
 export const metadata: Metadata = {
@@ -33,7 +39,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
 
-  const voitures = await prisma.localisation.findMany();
+  const voitures = await prisma.modeleVoiture.findMany();
 
   return (
     <html lang="fr">
@@ -41,6 +47,9 @@ export default async function RootLayout({
       <head>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+        <script src="https://cdn.jsdelivr.net/npm/flatpickr" defer></script>
       </head>
 
       {/* Appliquez la police Oswald au body */}

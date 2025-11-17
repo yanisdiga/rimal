@@ -5,7 +5,7 @@
     grid-template-columns: auto 1fr auto;
     padding: 30px 60px;
     background: linear-gradient(rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.8) 8.1%, rgba(0, 0, 0, 0.8) 15.5%, rgba(0, 0, 0, 0.8) 22.5%, rgba(0, 0, 0, 0.78) 29%, rgba(0, 0, 0, 0.73) 35.3%, rgba(0, 0, 0, 0.67) 41.2%, rgba(0, 0, 0, 0.6) 47.1%, rgba(0, 0, 0, 0.52) 52.9%, rgba(0, 0, 0, 0.44) 58.8%, rgba(0, 0, 0, 0.33) 64.7%, rgba(0, 0, 0, 0.22) 71%, rgba(0, 0, 0, 0.12) 77.5%, rgba(0, 0, 0, 0.05) 84.5%, rgba(0, 0, 0, 0.01) 91.9%, rgba(0, 0, 0, 0) 100%);
-    z-index: 2;
+    z-index: 4;
 }
 
 .hamburger {
@@ -46,7 +46,7 @@
     background-color: rgba(0, 0, 0, 0.6);
     backdrop-filter: blur(32px);
     transform: translateX(-20px);
-    z-index: 3;
+    z-index: 5;
 }
 
 .menu-overlay {
@@ -207,16 +207,25 @@
     }
 }
 
+/* Effet de survol de base pour tous les 'item' */
 .menu-overlay-right .right-menu-items .item:hover {
     background-color: #ffffff;
+}
 
-    .carInfo span,
-    .locInfo span {
-        background-color: #eeeff2;
-    }
+/* Changement de fond pour les spans (carInfo et locInfo) au survol de l'item parent */
+.menu-overlay-right .right-menu-items .item:hover .carInfo span,
+.menu-overlay-right .right-menu-items .item:hover .locInfo span {
+    background-color: #eeeff2;
+}
 
-    img {
-        transform: translateX(-5px) translateY(-5px) scale(1.05);
-        transition: transform 0.3s ease;
-    }
+/* Animation pour l'image d'un 'vehicule-item' AU SURVOL DE L'ITEM */
+.menu-overlay-right .right-menu-items .item.vehicule-item:hover img {
+    transform: translateX(-5px) translateY(-5px) scale(1.05);
+    transition: transform 0.3s ease;
+}
+
+/* Animation pour un 'localisation-item' complet AU SURVOL DE L'ITEM */
+.menu-overlay-right .right-menu-items .item.localisation-item:hover {
+    transform: scale(1.02);
+    transition: transform 0.3s ease-in-out;
 }
