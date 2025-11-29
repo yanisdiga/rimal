@@ -208,7 +208,7 @@ export function ReservationForm({ locations, hours }: ReservationFormProps) {
               >
                 <i className="fas fa-calendar-alt"></i>
                 <span>
-                  {selectedRange?.from ? format(selectedRange.from, 'dd/MM/yyyy') : 'Date de départ'}
+                  {selectedRange?.from ? format(selectedRange.from, 'dd/MM/yyyy') : ''}
                 </span>
               </button>
 
@@ -249,7 +249,7 @@ export function ReservationForm({ locations, hours }: ReservationFormProps) {
               >
                 <i className="fas fa-calendar-alt"></i>
                 <span>
-                  {selectedRange?.to ? format(selectedRange.to, 'dd/MM/yyyy') : 'Date de retour'}
+                  {selectedRange?.to ? format(selectedRange.to, 'dd/MM/yyyy') : ''}
                 </span>
               </button>
 
@@ -281,7 +281,7 @@ export function ReservationForm({ locations, hours }: ReservationFormProps) {
 
           {/* LE CALENDRIER (anciennement flatpickr) */}
           {isCalendarOpen && (
-            <div style={{ position: 'absolute', top: '100%', zIndex: 100, background: 'white', boxShadow: '0 8px 16px rgba(0,0,0,0.1)' }}>
+            <div className="calendar-container">
               <DayPicker
                 mode="range"
                 selected={selectedRange}

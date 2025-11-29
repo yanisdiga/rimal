@@ -39,8 +39,8 @@
   display: flex;
   gap: 20px;
   align-items: flex-end;
-  flex: 2;
-  min-width: 300px;
+  flex: 3;
+  min-width: 530px;
 }
 
 .location-column {
@@ -116,6 +116,7 @@
   /* Hauteur uniforme */
   display: flex;
   align-items: center;
+  cursor: pointer;
 }
 
 .choose-location-select,
@@ -242,25 +243,6 @@
 .reservations .validate-button:active {
   transform: translateY(-1px);
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-}
-
-/* -----------------------
-   Dropdown Options
------------------------ */
-.reservations .options {
-  position: absolute;
-  top: calc(100% + 8px);
-  left: 0;
-  width: 100%;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(0, 0, 0, 0.05);
-  padding: 8px;
-  z-index: 200;
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.3s ease;
 }
 
 .reservations .open .options {
@@ -422,33 +404,14 @@
 .reservations .options {
   position: absolute;
   top: calc(100% + 8px);
-  left: 0;
-  width: 100%;
   background: white;
   border-radius: 12px;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
   border: 1px solid rgba(0, 0, 0, 0.05);
   padding: 8px;
   z-index: 200;
-  animation: slideUpFade 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   transform-origin: top center;
   z-index: 1000 !important;
-  top: calc(100% + 15px) !important;
-  /* Espace avec le champ */
-  left: 50% !important;
-  transform: translateX(-50%) !important;
-}
-
-@keyframes slideUpFade {
-  from {
-    opacity: 0;
-    transform: translateX(-50%) translateY(-10px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
 }
 
 /* Mois et Année */
@@ -541,4 +504,70 @@
 .rdp-day:hover:not(.rdp-day_selected) {
   background-color: #f7f7f7;
   transform: scale(1.1);
+}
+
+/* Update for reservations.css */
+.reservations {
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  transform: translate(-50%, -20%);
+  background: transparent;
+
+  span {
+    color: #fff;
+  }
+
+  i {
+    color: #fff;
+  }
+}
+
+.return-location {
+  span {
+    color: #ccc !important;
+  }
+
+  i {
+    color: #ccc !important;
+  }
+
+  border: 1px solid #ccc !important;
+}
+
+.open {
+  border: 1px solid #fff !important;
+
+  span {
+    color: #fff !important;
+  }
+
+  i {
+    color: #fff !important;
+  }
+}
+
+.reservations .choose-location,
+.reservations .choose-hour,
+.reservations button.choose-date,
+.reservations .button-start button,
+.reservations .button-end button {
+  background-color: transparent !important;
+  position: relative;
+}
+
+.imageSlider {
+  height: 80vh !important;
+}
+
+.calendar-container {
+  position: absolute;
+  top: calc(100% + 8px);
+  transform-origin: top;
+  background: #fff;
+  border: 1px solid #0000000d;
+  border-radius: 12px;
+  padding: 8px;
+  box-shadow: 0 10px 40px #0000001a;
+  z-index: 1000 !important;
 }

@@ -76,7 +76,7 @@ export default async function Home() {
                     <a href="#"><i className="fab fa-instagram"></i>Instagram</a>
                     <a href="#"><i className="fab fa-linkedin-in"></i>Linkedin</a>
                 </div>
-                <span>© 2024 MJ Cars. Tous droits réservés.</span>
+                <span>© 2024 Rimal. Tous droits réservés.</span>
             </div>
         </>
     );
