@@ -97,7 +97,7 @@ export function ReservationForm({ locations, hours }: ReservationFormProps) {
       // ...sinon, on le définit.
       setSelectedReturnLocation(location);
     }
-    
+
     // On ferme le menu déroulant dans tous les cas
     setIsReturnLocationOpen(false);
   };
@@ -114,84 +114,84 @@ export function ReservationForm({ locations, hours }: ReservationFormProps) {
   return (
     <div className="reservations">
       {/* 👇 VOTRE CODE EST ICI - Remplacez ce bloc entier 👇 */}
-        <div className="locations-container">
+      <div className="locations-container">
 
-          {/* === COLONNE 1: RETRAIT === */}
-          <div className="location-column">
-            <span>
-              {selectedReturnLocation ? 'Retrait' : 'Retrait et retour'}
-            </span>
-            <div
-              className={`choose-location ${isLocationOpen ? 'open' : ''}`}
-              ref={locationRef}
-              onClick={() => setIsLocationOpen(!isLocationOpen)}
-            >
-              <i className="fas fa-map-marker-alt"></i>
-              <div className="choose-location-select">
-                <div className="selected">
-                  <span>
-                    {selectedLocation ? selectedLocation.nom : 'Choisir un lieu'}
-                  </span>
-                  <svg viewBox="-19.04 0 75.804 75.804" className={isLocationOpen ? 'rotated' : ''}>
-                    {/* ... svg path ... */}
-                  </svg>
-                </div>
+        {/* === COLONNE 1: RETRAIT === */}
+        <div className="location-column">
+          <span>
+            {selectedReturnLocation ? 'Retrait' : 'Retrait et retour'}
+          </span>
+          <div
+            className={`choose-location ${isLocationOpen ? 'open' : ''}`}
+            ref={locationRef}
+            onClick={() => setIsLocationOpen(!isLocationOpen)}
+          >
+            <i className="fas fa-map-marker-alt"></i>
+            <div className="choose-location-select">
+              <div className="selected">
+                <span>
+                  {selectedLocation ? selectedLocation.nom : 'Choisir un lieu'}
+                </span>
+                <svg viewBox="-19.04 0 75.804 75.804" className={isLocationOpen ? 'rotated' : ''}>
+                  {/* ... svg path ... */}
+                </svg>
               </div>
-              {isLocationOpen && (
-                <ul className="options">
-                  {locations.map((loc) => (
-                    <li
-                      key={loc.id}
-                      onClick={() => handleLocationSelect(loc)}
-                    >
-                      {loc.nom}
-                    </li>
-                  ))}
-                </ul>
-              )}
-              <input type="hidden" name="location" value={selectedLocation?.id || ''} />
             </div>
+            {isLocationOpen && (
+              <ul className="options">
+                {locations.map((loc) => (
+                  <li
+                    key={loc.id}
+                    onClick={() => handleLocationSelect(loc)}
+                  >
+                    {loc.nom}
+                  </li>
+                ))}
+              </ul>
+            )}
+            <input type="hidden" name="location" value={selectedLocation?.id || ''} />
           </div>
-
-          {/* === COLONNE 2: RETOUR (C'EST LE BLOC QUE VOUS AVIEZ SUPPRIMÉ) === */}
-          <div className="location-column return-column">
-            {/* Le label "Retour" (vide ou non) pour l'alignement */}
-            <span>
-                {selectedReturnLocation ? 'Retour' : <span>&nbsp;</span>}
-            </span>
-
-            {/* Le bouton "+ Lieu de retour différent" */}
-            <div
-                className={`choose-location return-location ${isReturnLocationOpen ? 'open' : ''}`}
-                ref={returnLocationRef}
-                onClick={() => setIsReturnLocationOpen(!isReturnLocationOpen)}
-            >
-                <i className="fa-solid fa-plus"></i>
-                <div className="choose-location-select">
-                    <div className="selected">
-                        <span>
-                            {selectedReturnLocation ? selectedReturnLocation.nom : 'Lieu de retour différent'}
-                        </span>
-                    </div>
-                </div>
-                {isReturnLocationOpen && (
-                    <ul className="options">
-                        {locations.map((loc) => (
-                            <li
-                                key={loc.id}
-                                onClick={() => handleReturnLocationSelect(loc)}
-                            >
-                                {loc.nom}
-                            </li>
-                        ))}
-                    </ul>
-                )}
-                <input type="hidden" name="return-location" value={selectedReturnLocation?.id || selectedLocation?.id || ''} />
-            </div>
-          </div>
-          {/* === FIN DU BLOC MANQUANT === */}
-
         </div>
+
+        {/* === COLONNE 2: RETOUR (C'EST LE BLOC QUE VOUS AVIEZ SUPPRIMÉ) === */}
+        <div className="location-column return-column">
+          {/* Le label "Retour" (vide ou non) pour l'alignement */}
+          <span>
+            {selectedReturnLocation ? 'Retour' : <span>&nbsp;</span>}
+          </span>
+
+          {/* Le bouton "+ Lieu de retour différent" */}
+          <div
+            className={`choose-location return-location ${isReturnLocationOpen ? 'open' : ''}`}
+            ref={returnLocationRef}
+            onClick={() => setIsReturnLocationOpen(!isReturnLocationOpen)}
+          >
+            <i className="fa-solid fa-plus"></i>
+            <div className="choose-location-select">
+              <div className="selected">
+                <span>
+                  {selectedReturnLocation ? selectedReturnLocation.nom : 'Lieu de retour différent'}
+                </span>
+              </div>
+            </div>
+            {isReturnLocationOpen && (
+              <ul className="options">
+                {locations.map((loc) => (
+                  <li
+                    key={loc.id}
+                    onClick={() => handleReturnLocationSelect(loc)}
+                  >
+                    {loc.nom}
+                  </li>
+                ))}
+              </ul>
+            )}
+            <input type="hidden" name="return-location" value={selectedReturnLocation?.id || selectedLocation?.id || ''} />
+          </div>
+        </div>
+        {/* === FIN DU BLOC MANQUANT === */}
+
+      </div>
 
       {/* === Conteneur des Dates === */}
       <div className="dates-validation-container">

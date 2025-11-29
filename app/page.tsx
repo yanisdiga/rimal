@@ -7,11 +7,14 @@ import { BackgroundImage, ModeleVoiture } from '@prisma/client';
 import { NavbarAndMenu } from './components/Menu';
 import { VehiclesSection } from './components/VehiclesSection';
 import { ReservationForm } from './components/ReservationForm';
+import { ServicesSection } from './components/ServicesSection';
+import { ExperienceSection } from './components/ExperienceSection';
+import { ReviewsSection } from './components/ReviewsSection';
 
 const timeSlots = [
-  "08:00", "08:30", "09:00", "09:30", "10:00", "10:30", "11:00", "11:30",
-  "12:00", "12:30", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30",
-  "16:00", "16:30", "17:00", "17:30", "18:00"
+    "08:00", "08:30", "09:00", "09:30", "10:00", "10:30", "11:00", "11:30",
+    "12:00", "12:30", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30",
+    "16:00", "16:30", "17:00", "17:30", "18:00"
 ];
 
 export default async function Home() {
@@ -41,7 +44,18 @@ export default async function Home() {
             <NavbarAndMenu voitures={voitures} />
             <ImageSlider images={sliderData} interval={5000} />
             <ReservationForm locations={locations} hours={timeSlots} />
+
+            {/* New Services Section */}
+            <ServicesSection />
+
             <VehiclesSection voitures={voitures} />
+
+            {/* New Experience Section */}
+            <ExperienceSection />
+
+            {/* New Reviews Section */}
+            <ReviewsSection />
+
             <div className="footer">
                 <div className="first-cat">
                     <span>MJCars</span>

@@ -32,17 +32,29 @@ body {
 }
 
 .rdp-range_middle button {
-  background-color: #757575 !important;
-  color: white !important;
-  border-radius: 8px !important;
+  background-color: #E4E4E4 !important;
+  color: black !important;
+  border-radius: 0px !important;
 }
 
 .rdp-range_start button,
 .rdp-range_end button {
   background-color: black !important;
   color: white !important;
-  border-radius: 8px !important;
   border: 1px solid white !important;
+}
+
+.rdp-range_start button {
+  border-top-left-radius: 8px !important;
+  border-bottom-left-radius: 8px !important;
+  border-top-right-radius: 0px !important;
+  border-bottom-right-radius: 0px !important;
+}
+.rdp-range_end button {
+  border-top-right-radius: 8px !important;
+  border-bottom-right-radius: 8px !important;
+  border-top-left-radius: 0px !important;
+  border-bottom-left-radius: 0px !important;
 }
 
 .rdp-range_start, .rdp-range_end {
@@ -51,4 +63,27 @@ body {
 
 .rdp-range_middle {
   background: none !important;
+}
+
+.rdp-button_next {
+  position: absolute !important;
+  right: 0 !important;
+}
+
+.rdp-button_next svg, .rdp-button_previous svg{
+  fill: black !important;
+  width: 24px !important;
+  height: 24px !important;
+}
+
+.rdp-button_previous, .rdp-button_next {
+  padding: 0 !important;
+  background-color: transparent !important;
+  border: none !important;
+  border-radius: 50% !important;
+}
+
+.rdp-month_caption {
+  justify-content: center;
+  align-items: center;
 }

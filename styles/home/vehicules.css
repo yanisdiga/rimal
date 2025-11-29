@@ -1,72 +1,78 @@
 .vehicules {
     display: flex;
     flex-wrap: wrap;
-    justify-content: start;
+    justify-content: center;
     align-items: center;
-    gap: 20px;
+    gap: 40px;
     width: 100%;
     height: auto;
-    margin-top: 20px;
-    padding-inline: 10%;
-    padding-block: 1rem;
+    margin-top: 40px;
+    padding-inline: 5%;
+    padding-block: 2rem;
 
     h1 {
-        font-size: 2.5rem;
+        font-size: 3rem;
         font-weight: 300;
-        padding-bottom: 20px;
+        padding-bottom: 40px;
+        width: 100%;
+        text-align: center;
+        text-transform: uppercase;
+        letter-spacing: 2px;
     }
 }
 
 .vehicules {
     opacity: 0;
-    transform: translateY(50px); /* commence un peu en dessous */
-    transition: all 0.6s ease-out;
+    transform: translateY(50px);
+    transition: all 0.8s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
 .vehicules.visible {
     opacity: 1;
-    transform: translateY(0); /* remonte en place */
+    transform: translateY(0);
 }
 
 .vehicules .vehicules-container {
     width: 100%;
     display: flex;
     justify-content: center;
-    gap: 20px;
+    gap: 30px;
     flex-wrap: wrap;
 
     .vehicule {
-        flex: 1 1 400px;
+        flex: 1 1 350px;
         max-width: 400px;
         box-sizing: border-box;
-        padding-block: 10px;
-        padding-inline: 10px;
-        height: 100%;
+        padding: 20px;
         background-color: white;
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        border: 1px solid #ddd;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        border: 1px solid rgba(0, 0, 0, 0.05);
         overflow: hidden;
         display: flex;
         flex-direction: column;
         align-items: center;
         text-align: center;
-        gap: 10px;
-        transition: background-color 0.2s ease-in;
+        gap: 15px;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         cursor: pointer;
+        position: relative;
 
         h2 {
             font-family: 'Anton', sans-serif;
-            font-size: 1.5rem;
-            font-weight: 600;
+            font-size: 1.8rem;
+            font-weight: 500;
             margin: 10px 0;
-            color: #333;
+            color: #1a1a1a;
+            letter-spacing: 0.5px;
         }
 
         img {
             width: 100%;
-            height: 200px;
+            height: 220px;
             object-fit: contain;
+            transition: transform 0.5s ease;
+            filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.1));
         }
 
         .carInfo {
@@ -76,44 +82,88 @@
             justify-content: center;
             flex-wrap: wrap;
             gap: 10px;
+            width: 100%;
 
             span {
-                font-size: 15px;
-                font-weight: 300;
-                padding: 7px;
-                background-color: #ededed;
-                border-radius: 5px;
-                transition: all 0s;
+                font-size: 0.85rem;
+                font-weight: 500;
+                padding: 8px 12px;
+                background-color: #f8f9fa;
+                border-radius: 8px;
+                color: #555;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
             }
         }
 
         .vehicule-bottom-info {
             display: flex;
             flex-direction: column;
-            gap: 5px;
+            gap: 15px;
+            width: 100%;
+            margin-top: auto;
+
+            .price {
+                font-size: 1.1rem;
+                font-weight: 600;
+                color: #333;
+            }
 
             button {
+                width: 100%;
+                padding: 14px;
+                border: none;
+                border-radius: 12px;
+                cursor: pointer;
+
+                /* Style Futuriste (Même que Reservation) */
+                background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+                color: white;
+                font-family: 'Oswald', sans-serif;
                 font-size: 1rem;
-                font-weight: 600;
-                padding: 10px;
-                background-color: #ededed;
-                color: black;
-                border-radius: 5px;
+                font-weight: 500;
+                letter-spacing: 1px;
+                text-transform: uppercase;
+
+                position: relative;
+                overflow: hidden;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
                 transition: all 0.3s ease;
+            }
+
+            /* Shine Effect sur le bouton */
+            button::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(90deg,
+                        transparent,
+                        rgba(255, 255, 255, 0.2),
+                        transparent);
+                transition: 0.5s;
+            }
+
+            button:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            }
+
+            button:hover::before {
+                left: 100%;
             }
         }
     }
 
+    /* Hover Effect sur la CARTE */
     .vehicule:hover {
-        background-color: #ededed;
-        box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
-        .carInfo span,
-        .vehicule-bottom-info button {
-            background-color: white;
-        }
+        transform: translateY(-10px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+
         img {
-            transform: translateX(-10px) translateY(-10px) scale(1.05);
-            transition: transform 0.3s ease;
+            transform: scale(1.08) translateY(-5px);
         }
     }
 }

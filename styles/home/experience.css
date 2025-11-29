@@ -1,0 +1,99 @@
+/* =======================
+   Experience Section
+======================= */
+.experience-section {
+    width: 100%;
+    padding: 6rem 10%;
+    background-color: #fff;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 50px;
+    overflow: hidden;
+}
+
+.experience-content {
+    flex: 1;
+    min-width: 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.experience-content h2 {
+    font-family: 'Oswald', sans-serif;
+    font-size: 3rem;
+    font-weight: 300;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #1a1a1a;
+    line-height: 1.2;
+}
+
+.experience-content p {
+    font-size: 1.1rem;
+    color: #555;
+    line-height: 1.8;
+    font-weight: 300;
+    max-width: 500px;
+}
+
+.experience-content button {
+    padding: 15px 30px;
+    background-color: #000;
+    color: white;
+    font-family: 'Oswald', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    width: fit-content;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+}
+
+.experience-content button:hover {
+    background-color: #333;
+    transform: translateX(5px);
+}
+
+.experience-image {
+    flex: 1;
+    min-width: 300px;
+    position: relative;
+    height: 500px;
+}
+
+.experience-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 20px;
+    box-shadow: 20px 20px 0px rgba(0, 0, 0, 0.05);
+    transition: all 0.5s ease;
+}
+
+.experience-image:hover img {
+    transform: scale(1.02);
+    box-shadow: 10px 10px 0px rgba(0, 0, 0, 0.1);
+}
+
+@media screen and (max-width: 900px) {
+    .experience-section {
+        flex-direction: column;
+        padding: 4rem 5%;
+        text-align: center;
+    }
+
+    .experience-content {
+        align-items: center;
+    }
+
+    .experience-image {
+        width: 100%;
+        height: 300px;
+    }
+}

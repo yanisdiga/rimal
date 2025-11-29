@@ -4,371 +4,541 @@
 .reservations {
   display: flex;
   flex-wrap: wrap;
-  gap: 5rem;
+  gap: 2rem;
   align-items: flex-end;
-  gap: 3rem;
-  width: 85%;
+  width: 90%;
+  max-width: 1400px;
   padding: 2rem 3rem;
-  margin: 10px auto;
-  background-color: #fff;
-  border-radius: 30px;
-  position: sticky;
-  top: 10px;
+  margin: -40px auto 40px;
+  /* Remonte un peu sur le slider */
+  background-color: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: 24px;
+  position: relative;
   z-index: 100;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  margin-top: 20px;
 }
 
 .reservations span {
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   font-weight: 600;
-  color: #333;
-}
-
-.reservations button {
-  padding: 12px 15px;
-  background-color: #333;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-weight: 300;
-  cursor: pointer;
-  transition: all 0.3s ease;
+  color: #555;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: block;
+  white-space: nowrap;
 }
 
 /* -----------------------
    Conteneurs principaux  
 ----------------------- */
 
-/* NOTE: Les styles pour '.reservations .pickup-container' 
-  ont été supprimés car '.locations-container' 
-  et les nouvelles '.location-column' gèrent l'alignement. 
-*/
-
-/* Assurez-vous que le conteneur principal est bien en 'flex' */
 .locations-container {
-    display: flex;
-    gap: 10px;
-    /* Aligne les inputs en bas s'ils n'ont pas la même hauteur */
-    align-items: flex-end; 
-    min-width: 400px;
-    flex-wrap: wrap;
+  display: flex;
+  gap: 20px;
+  align-items: flex-end;
+  flex: 2;
+  min-width: 300px;
 }
 
-/* La nouvelle colonne */
 .location-column {
-    display: flex;
-    flex-direction: column;
-    flex: 1; /* Permet à la colonne "Retrait" de s'étirer */
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 }
 
-/* La colonne de droite ne doit pas s'étirer */
 .location-column.return-column {
-    flex: 0;
+  flex: 0;
 }
-
-/* Le style pour vos labels (le span) */
-.location-column span {
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: #333;
-    margin-bottom: 5px; /* Espace entre le label et l'input */
-    
-    /* Hauteur fixe pour que "Retour" s'aligne avec "Retrait" 
-       et éviter les sauts de page */
-    height: 1.2em; 
-}
-
 
 .reservations .dates-validation-container {
-  flex: 2 1 500px;
-  min-width: 500px;
+  flex: 3;
   display: flex;
-  flex-wrap: nowrap;
+  gap: 20px;
   align-items: flex-end;
-  justify-content: flex-start;
-  gap: 10%;
-  width: 100%;
 }
 
-@media screen and (max-width: 900px) {
+@media screen and (max-width: 1100px) {
+  .reservations {
+    flex-direction: column;
+    align-items: stretch;
+    margin-top: 20px;
+  }
+
+  .locations-container,
+  .reservations .dates-validation-container {
+    width: 100%;
+    flex: none;
+  }
+}
+
+@media screen and (max-width: 768px) {
   .reservations .dates-validation-container {
     flex-direction: column;
-    gap: 1rem;
-    align-items: stretch;
+  }
+
+  .reservations .dates-container {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .reservations .validate-button {
+    width: 100%;
+    margin-top: 10px;
   }
 }
 
 .reservations .dates-container {
   display: flex;
   flex-direction: row;
-  gap: 10px;
-  flex: 1;
-}
-
-.reservations .validate-button {
-  flex: 1;
-  text-wrap: nowrap;
-  padding: 12px 15px;
-  border-radius: 8px;
-  font-weight: 300;
-  cursor: pointer;
-  transition: all 0.3s ease;
+  gap: 20px;
+  flex: 2;
 }
 
 /* -----------------------
-   Choix de la localisation et de l'heure
+   Inputs & Selectors
 ----------------------- */
 .reservations .choose-location,
-.reservations .choose-hour {
-  position: relative;
+.reservations .choose-hour,
+.reservations button.choose-date,
+.reservations .button-start button,
+.reservations .button-end button {
+  background-color: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+  padding: 0 20px;
+  font-size: 0.95rem;
+  color: #333;
+  transition: all 0.2s ease;
+  height: 56px;
+  /* Hauteur uniforme */
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 15px 12px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  flex: 1;
-  transition: 0.1s ease-in-out all;
-  box-sizing: border-box;
-  cursor: pointer;
 }
 
-.reservations .choose-location .selected {
-  gap: 50px;
-  justify-content: space-between;
-  text-wrap: nowrap;
+.choose-location-select,
+.choose-hour-select {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.reservations .return-location {
-  flex: 0 !important;
-  color: #868686 !important; /* Applique la couleur à l'icône <i> */
-  border: none !important;
-}
-
-.reservations .return-location .selected {
-  gap: 20px;
-  justify-content: space-between;
-  padding: 0 !important;
-}
-
-.reservations .return-location span {
-  text-wrap: nowrap;
-  color: #868686 !important; /* Applique la couleur au texte <span> */
+.choose-location-select .selected,
+.choose-hour-select .selected {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .reservations .choose-hour {
-  justify-content: space-between;
-  padding: 15px 0;
   border-top-left-radius: 0 !important;
   border-bottom-left-radius: 0 !important;
-  flex: 0;
 }
 
-.reservations .choose-hour .selected {
-  gap: 10px;
-  padding: 0 12px !important;
+.reservations .choose-location:hover,
+.reservations .choose-hour:hover,
+.reservations button.choose-date:hover,
+.reservations .button-start button:hover,
+.reservations .button-end button:hover {
+  background-color: #fff;
+  border-color: #ced4da;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
-.reservations .choose-location-select,
-.reservations .choose-hour-select {
-  border: none;
-  outline: none;
-  font-size: 1rem;
-  font-weight: 300;
-  color: black !important;
-  background-color: transparent;
-  width: 100%;
-  position: relative;
-  cursor: pointer;
+.reservations .choose-location.open,
+.reservations .choose-hour.open {
+  background-color: #fff;
+  border-color: #000;
+  box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.05);
 }
 
-.reservations .choose-location-select .selected,
-.reservations .choose-hour-select .selected {
-  padding: 0px 0.75rem;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-
-  svg {
-    width: 16px;
-    height: 16px;
-    fill: #333;
-    transition: transform 0.3s ease;
-  }
-}
-
-.reservations .choose-hour-select .selected svg {
-  width: 12px !important;
-  height: 12px !important;
-}
-
-.rotated {
-  transform: rotate(90deg);
-}
-
-.reservations .choose-location .options,
-.reservations .choose-hour .options {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  width: 100%;
-  max-height: 0;
-  overflow: hidden;
-  background: white;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  z-index: 10;
-  overflow-y: auto;
-}
-
-.reservations .open {
-  outline: 2px solid black;
-  outline-offset: -2px;
-  /* pour qu’il reste sur le bloc sans agrandir */
-}
-
-.reservations .choose-location.open .options,
-.reservations .choose-hour.open .options {
-  max-height: 300px;
-  /* Déroulé */
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1),
-    0 4px 6px rgba(0, 0, 0, 0.08);
-  margin-top: 0.5rem !important;
-}
-
-.reservations .choose-location .options li,
-.reservations .choose-hour .options li {
-  padding: 0.5rem;
-}
-
-.reservations .choose-location .options li:hover,
-.reservations .choose-hour .options li:hover {
-  background-color: #f0f0f0;
-}
-
-/* -----------------------
-   Boutons de date et heure
------------------------ */
-.reservations button.choose-date {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  white-space: nowrap;
-}
-
-.reservations button.choose-date span {
-  font-size: 1rem;
-  font-weight: 300;
-  color: black;
-}
-
-/* -----------------------
-   Conteneurs date 
------------------------ */
-.reservations .start-date-container,
-.reservations .end-date-container {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 5px;
-}
-
-.reservations .start-date-container button,
-.reservations .end-date-container button {
-  font-weight: 300;
-  background-color: white;
-  border: 1px solid #ddd;
-  border-top-left-radius: 5px !important;
-  border-bottom-left-radius: 5px !important;
-  border-top-right-radius: 0 !important;
-  border-bottom-right-radius: 0 !important;
-}
-
-.reservations .start-date-container,
-.reservations .end-date-container {
-  flex: 1;
-  width: 100%;
-}
-
-/* Boutons Start & End groupés */
+/* Specific adjustments for grouped inputs */
 .reservations .button-start,
 .reservations .button-end {
   display: flex;
-  flex-direction: row;
   width: 100%;
-  flex: 1;
 }
 
 .reservations .button-start button,
 .reservations .button-end button {
-  background-color: #fff;
-  color: black;
-  border: 1px solid #ddd;
-  border-radius: 0;
-  padding: 12px 15px;
-  transition: background-color 0.3s ease;
-  flex: 1;
-  width: 100%;
-}
-
-.reservations .button-start button:hover,
-.reservations .button-end button:hover {
-  background-color: #eee;
+  border-radius: 12px 0 0 12px !important;
+  border-right: none;
 }
 
 .reservations .button-start .button-hour,
 .reservations .button-end .button-hour {
-  border: 1px solid #ddd;
-  padding-inline: 10px;
-  border-top-right-radius: 5px !important;
-  border-bottom-right-radius: 5px !important;
-  border-left: 0 !important;
+  border-radius: 0 12px 12px 0 !important;
+  border-left: 1px solid #e9ecef !important;
+  width: 100px;
+  justify-content: center;
+  padding: 0;
 }
 
-/* =======================
-   Flatpickr Styles
-======================= */
-#flatpickr-hidden {
-  position: absolute;
-  opacity: 0;
-  width: 0;
-  height: 0;
-  pointer-events: none;
+/* Icons */
+.reservations i {
+  color: #000;
+  margin-right: 12px;
+  font-size: 1.1rem;
 }
 
-.flatpickr-day {
-  color: black;
-  font-weight: 600;
+/* -----------------------
+   FUTURISTIC BUTTON
+----------------------- */
+.reservations .validate-button {
+  flex: 1;
+  min-width: 160px;
+  height: 56px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+
+  /* Style */
+  background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+  color: white;
   font-family: 'Oswald', sans-serif;
-  border: none !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  display: inline-block;
+  /* Assurez-vous d'avoir cette police ou une autre moderne */
+  font-size: 1.1rem;
+  font-weight: 500;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+
+  /* Effects */
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-.flatpickr-day.selected,
-.flatpickr-day.startRange,
-.flatpickr-day.endRange {
-  background: black !important;
-  color: white !important;
-  border: none !important;
+/* Shine Effect */
+.reservations .validate-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg,
+      transparent,
+      rgba(255, 255, 255, 0.2),
+      transparent);
+  transition: 0.5s;
 }
 
-.flatpickr-day.startRange {
-  border-top-left-radius: 10px !important;
-  border-bottom-left-radius: 10px !important;
+.reservations .validate-button:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+  background: black;
 }
 
-.flatpickr-day.endRange {
-  border-top-right-radius: 10px !important;
-  border-bottom-right-radius: 10px !important;
+.reservations .validate-button:hover::before {
+  left: 100%;
+  transition: 0.5s;
 }
 
-.flatpickr-day.inRange {
-  color: black !important;
-  border: none !important;
+.reservations .validate-button:active {
+  transform: translateY(-1px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* -----------------------
+   Dropdown Options
+----------------------- */
+.reservations .options {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  width: 100%;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  padding: 8px;
+  z-index: 200;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+.reservations .open .options {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.reservations .options li {
+  padding: 10px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+  font-size: 0.95rem;
+}
+
+.reservations .button-end button {
+  background-color: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+  padding: 0 20px;
+  font-size: 0.95rem;
+  color: #333;
+  transition: all 0.2s ease;
+  height: 56px;
+  /* Hauteur uniforme */
+  display: flex;
+  align-items: center;
+}
+
+.choose-location-select,
+.choose-hour-select {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.choose-location-select .selected,
+.choose-hour-select .selected {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.reservations .choose-hour {
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+}
+
+.reservations .choose-location:hover,
+.reservations .choose-hour:hover,
+.reservations button.choose-date:hover,
+.reservations .button-start button:hover,
+.reservations .button-end button:hover {
+  background-color: #fff;
+  border-color: #ced4da;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.reservations .choose-location.open,
+.reservations .choose-hour.open {
+  background-color: #fff;
+  border-color: #000;
+  box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.05);
+}
+
+/* Specific adjustments for grouped inputs */
+.reservations .button-start,
+.reservations .button-end {
+  display: flex;
+  width: 100%;
+}
+
+.reservations .button-start button,
+.reservations .button-end button {
+  border-radius: 12px 0 0 12px !important;
+  border-right: none;
+}
+
+.reservations .button-start .button-hour,
+.reservations .button-end .button-hour {
+  border-radius: 0 12px 12px 0 !important;
+  border-left: 1px solid #e9ecef !important;
+  width: 100px;
+  justify-content: center;
+  padding: 0;
+}
+
+/* Icons */
+.reservations i {
+  color: #000;
+  margin-right: 12px;
+  font-size: 1.1rem;
+}
+
+/* -----------------------
+   FUTURISTIC BUTTON
+----------------------- */
+.reservations .validate-button {
+  flex: 1;
+  min-width: 160px;
+  height: 56px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+
+  /* Style */
+  background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+  color: white;
+  font-family: 'Oswald', sans-serif;
+  /* Assurez-vous d'avoir cette police ou une autre moderne */
+  font-size: 1.1rem;
+  font-weight: 500;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+
+  /* Effects */
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Shine Effect */
+.reservations .validate-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg,
+      transparent,
+      rgba(255, 255, 255, 0.2),
+      transparent);
+  transition: 0.5s;
+}
+
+.reservations .validate-button:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+  background: black;
+}
+
+.reservations .validate-button:hover::before {
+  left: 100%;
+  transition: 0.5s;
+}
+
+.reservations .validate-button:active {
+  transform: translateY(-1px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* -----------------------
+   Dropdown Options
+----------------------- */
+.reservations .options {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  width: 100%;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  padding: 8px;
+  z-index: 200;
+  animation: slideUpFade 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transform-origin: top center;
+  z-index: 1000 !important;
+  top: calc(100% + 15px) !important;
+  /* Espace avec le champ */
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+}
+
+@keyframes slideUpFade {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+/* Mois et Année */
+.rdp-caption_label {
+  font-size: 1.1rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #1a1a1a;
+}
+
+/* Navigation (Flèches) */
+.rdp-nav_button {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: transparent;
+  color: #1a1a1a;
+  transition: all 0.2s ease;
+}
+
+.rdp-nav_button:hover {
+  background: #f0f0f0;
+  color: #000;
+}
+
+/* Jours de la semaine (Lun, Mar...) */
+.rdp-head_cell {
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: #888;
+  text-transform: uppercase;
+  padding-bottom: 10px;
+}
+
+/* Cellules des jours */
+.rdp-day {
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: 10px;
+  /* Carrés arrondis moderne */
+  transition: all 0.2s ease;
+}
+
+.rdp-day_today {
+  color: #000;
+  font-weight: 700;
+  position: relative;
+}
+
+.rdp-day_today::after {
+  content: '';
+  position: absolute;
+  bottom: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 4px;
+  background-color: #000;
+  border-radius: 50%;
+}
+
+/* Sélection (Range) */
+.rdp-day_selected {
+  background-color: #000 !important;
+  color: #fff !important;
+  font-weight: 600;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.rdp-day_range_middle {
+  background-color: #f0f0f0 !important;
+  color: #000 !important;
+  border-radius: 0 !important;
+  /* Connecte les jours entre eux */
+  box-shadow: none;
+}
+
+.rdp-day_range_start {
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+}
+
+.rdp-day_range_end {
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+}
+
+/* Hover sur les jours */
+.rdp-day:hover:not(.rdp-day_selected) {
+  background-color: #f7f7f7;
+  transform: scale(1.1);
 }
