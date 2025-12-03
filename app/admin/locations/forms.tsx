@@ -10,16 +10,10 @@ function SubmitLocationButton() {
         <button
             type="submit"
             disabled={pending}
-            className="menu-item-link"
+            className="btn-primary"
+            style={{ width: '100%', marginTop: '20px' }}
         >
-            {pending ? (
-                <>
-                    <span className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full"></span>
-                    Création en cours...
-                </>
-            ) : (
-                'Créer le Lieu'
-            )}
+            {pending ? 'Création en cours...' : 'Créer le Lieu'}
         </button>
     );
 }
@@ -34,22 +28,22 @@ export function AddLocationForm() {
                 formRef.current?.reset();
             }}
             ref={formRef}
-            className="bg-white p-6 rounded-lg shadow-md border border-gray-200 mb-8"
+            className="admin-form-container"
+            style={{ padding: '0', boxShadow: 'none', margin: '0' }}
         >
-            <h3 className="text-xl font-semibold mb-4 text-gray-800">Ajouter un Lieu de Retrait</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                    <label className="block text-sm font-medium text-gray-700">Nom du Lieu</label>
-                    <input name="nom" required type="text" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 border p-2" placeholder="Ex: Aéroport Marrakech" />
+            <div className="form-row">
+                <div className="form-group">
+                    <label style={{ display: 'block', marginBottom: '5px', fontSize: '0.9rem', color: '#666' }}>Nom du Lieu</label>
+                    <input name="nom" required type="text" placeholder="Ex: Aéroport Marrakech" />
                 </div>
-                <div>
-                    <label className="block text-sm font-medium text-gray-700">Frais Supplémentaires (DH)</label>
-                    <input name="fraisSupplementaires" type="number" defaultValue={0} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 border p-2" />
+                <div className="form-group">
+                    <label style={{ display: 'block', marginBottom: '5px', fontSize: '0.9rem', color: '#666' }}>Frais Supplémentaires (DH)</label>
+                    <input name="fraisSupplementaires" type="number" defaultValue={0} />
                 </div>
-                <div className="md:col-span-2">
-                    <label className="block text-sm font-medium text-gray-700">Adresse (Optionnel)</label>
-                    <input name="adresse" type="text" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 border p-2" placeholder="Adresse complète..." />
-                </div>
+            </div>
+            <div className="form-group">
+                <label style={{ display: 'block', marginBottom: '5px', fontSize: '0.9rem', color: '#666' }}>Adresse (Optionnel)</label>
+                <input name="adresse" type="text" placeholder="Adresse complète..." />
             </div>
             <SubmitLocationButton />
         </form>
@@ -60,7 +54,7 @@ export function DeleteLocationButton({ id }: { id: number }) {
     return (
         <button
             onClick={() => deleteLocation(id)}
-            className="text-red-600 hover:text-red-800 text-sm font-medium"
+            className="btn-danger"
         >
             Supprimer
         </button>

@@ -12,7 +12,7 @@ interface VehiclesSectionProps {
 }
 
 export function VehiclesSection({ voitures }: VehiclesSectionProps) {
-  
+
   // 2. Remplacer document.querySelector par des "états" et "refs"
   const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef<HTMLDivElement | null>(null); // Pour pointer vers la div .vehicules
@@ -20,7 +20,7 @@ export function VehiclesSection({ voitures }: VehiclesSectionProps) {
   // 3. Conversion de votre IntersectionObserver
   // useEffect se lance quand le composant est "monté" (chargé)
   useEffect(() => {
-    
+
     // La logique de l'observer est identique
     const observer = new IntersectionObserver(
       (entries) => {
@@ -58,13 +58,13 @@ export function VehiclesSection({ voitures }: VehiclesSectionProps) {
   // 4. Rendu du TSX
   // Remplace votre 'fetch' et 'innerHTML'
   return (
-    <div 
-      className={`vehicules ${isVisible ? 'visible' : ''}`} 
+    <div
+      className={`vehicules ${isVisible ? 'visible' : ''}`}
       ref={sectionRef} // On lie la ref à cette div
     >
       <h1>Nos Véhicules</h1>
       <div className="vehicules-container">
-        
+
         {/* On boucle sur les 'voitures' reçues en props */}
         {voitures.map((car) => (
           <div key={car.id} className="vehicule">
@@ -76,16 +76,16 @@ export function VehiclesSection({ voitures }: VehiclesSectionProps) {
                 <span>{toSentenceCase(car.fuelType)}</span>
               </div>
             </div>
-            
+
             <img src={car.imageUrl || undefined} alt={car.nom} />
-            
+
             <div className="vehicule-bottom-info">
-              <span className="price">À partir de {car.prixParJour} €/jour</span>
+              <span className="price">À partir de {car.prixParJour} DH/jour</span>
               <button className="reserve-button">Réserver</button>
             </div>
           </div>
         ))}
-        
+
       </div>
     </div>
   );

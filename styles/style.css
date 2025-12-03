@@ -1,4 +1,6 @@
-*, *::before, *::after {
+*,
+*::before,
+*::after {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
@@ -7,7 +9,7 @@
 body {
     width: 100vw;
     overflow-x: hidden;
-    font-family: 'Anton', sans-serif;
+
     background: none;
     color: black;
 }
@@ -19,8 +21,8 @@ nav {
     left: 0;
     z-index: 10;
     background-color: transparent;
-    color : white;
-    font-family: 'Anton', sans-serif;
+    color: white;
+    font-family: 'Oswald', sans-serif;
 }
 
 a {
@@ -54,6 +56,6 @@ li {
 }
 
 body.no-scroll {
-  /* La magie est ici : */
-  overflow: hidden;
+    /* La magie est ici : */
+    overflow: hidden;
 }

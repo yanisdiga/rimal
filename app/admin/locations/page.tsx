@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import { AddLocationForm, DeleteLocationButton } from './forms';
-import Link from 'next/link';
+import { AdminLayout } from '../components/AdminLayout';
 
 const prisma = new PrismaClient();
 
@@ -12,38 +12,38 @@ export default async function LocationsPage() {
     });
 
     return (
-        <div className="admin-location-container">
-            <Link href="/admin" className="back-button menu-item-link">Retour</Link>
-            <h1 className="text-3xl font-bold text-gray-800 mb-8">Gestion des Lieux</h1>
+        <AdminLayout title="Gestion des Lieux">
+            <div className="admin-form-container">
+                <h2 style={{ fontSize: '1.5rem', marginBottom: '20px', fontFamily: 'Anton, sans-serif' }}>Ajouter un Lieu</h2>
+                <AddLocationForm />
+            </div>
 
-            <AddLocationForm />
-
-            <div className="actual-locations">
-                <div className="p-6 border-b">
-                    <h2 className="text-xl font-bold text-gray-800">Lieux Enregistrés ({locations.length})</h2>
-                </div>
+            <div className="data-grid">
+                <h2 style={{ fontSize: '1.5rem', marginBottom: '10px', fontFamily: 'Anton, sans-serif' }}>Lieux Enregistrés ({locations.length})</h2>
 
                 {locations.length === 0 ? (
-                    <div className="p-6 text-gray-500 italic">Aucun lieu enregistré.</div>
+                    <p style={{ color: '#888', fontStyle: 'italic' }}>Aucun lieu enregistré.</p>
                 ) : (
-                    <ul className="divide-y divide-gray-200">
-                        {locations.map((loc) => (
-                            <li key={loc.id} className="p-6 flex items-center justify-between hover:bg-gray-50 transition-colors">
-                                <div>
-                                    <h3 className="text-lg font-semibold text-gray-800">{loc.nom}</h3>
-                                    {loc.adresse && <p className="text-gray-600 text-sm location-adresse">{loc.adresse}</p>}
+                    locations.map((loc) => (
+                        <div key={loc.id} className="data-item">
+                            <div className="data-item-content">
+                                <div className="data-info">
+                                    <h3>{loc.nom}</h3>
+                                    {loc.adresse && <p>{loc.adresse}</p>}
                                     {loc.fraisSupplementaires > 0 && (
-                                        <span className="inline-block mt-1 px-2 py-1 bg-yellow-100 text-yellow-800 text-xs rounded-full">
+                                        <span style={{ display: 'inline-block', marginTop: '5px', padding: '2px 8px', backgroundColor: '#fff9c4', color: '#fbc02d', borderRadius: '4px', fontSize: '0.8rem' }}>
                                             + {loc.fraisSupplementaires} DH frais
                                         </span>
                                     )}
                                 </div>
+                            </div>
+                            <div className="data-actions">
                                 <DeleteLocationButton id={loc.id} />
-                            </li>
-                        ))}
-                    </ul>
+                            </div>
+                        </div>
+                    ))
                 )}
             </div>
-        </div>
+        </AdminLayout>
     );
 }

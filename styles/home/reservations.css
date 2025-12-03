@@ -15,7 +15,7 @@
   backdrop-filter: blur(20px);
   border-radius: 24px;
   position: relative;
-  z-index: 100;
+  z-index: 1;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
   border: 1px solid rgba(255, 255, 255, 0.5);
   margin-top: 20px;
@@ -454,6 +454,7 @@
   border-radius: 10px;
   /* Carrés arrondis moderne */
   transition: all 0.2s ease;
+  width: auto !important;
 }
 
 .rdp-day_today {
@@ -490,6 +491,11 @@
   box-shadow: none;
 }
 
+.rdp-range_start button,
+.rdp-range_end button {
+  border: none !important;
+}
+
 .rdp-day_range_start {
   border-top-right-radius: 0 !important;
   border-bottom-right-radius: 0 !important;
@@ -506,23 +512,6 @@
   transform: scale(1.1);
 }
 
-/* Update for reservations.css */
-.reservations {
-  position: absolute;
-  top: 20%;
-  left: 50%;
-  transform: translate(-50%, -20%);
-  background: transparent;
-
-  span {
-    color: #fff;
-  }
-
-  i {
-    color: #fff;
-  }
-}
-
 .return-location {
   span {
     color: #ccc !important;
@@ -535,17 +524,6 @@
   border: 1px solid #ccc !important;
 }
 
-.open {
-  border: 1px solid #fff !important;
-
-  span {
-    color: #fff !important;
-  }
-
-  i {
-    color: #fff !important;
-  }
-}
 
 .reservations .choose-location,
 .reservations .choose-hour,

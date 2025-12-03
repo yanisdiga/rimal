@@ -38,6 +38,31 @@ export async function deleteModel(id: number) {
     revalidatePath('/admin/vehicles');
 }
 
+export async function updateModel(id: number, formData: FormData) {
+    const nom = formData.get('nom') as string;
+    const description = formData.get('description') as string;
+    const imageUrl = formData.get('imageUrl') as string;
+    const prixParJour = parseInt(formData.get('prixParJour') as string);
+    const nbPlaces = parseInt(formData.get('nbPlaces') as string);
+    const transmission = formData.get('transmission') as Transmission;
+    const fuelType = formData.get('fuelType') as FuelType;
+
+    await prisma.modeleVoiture.update({
+        where: { id },
+        data: {
+            nom,
+            description,
+            imageUrl,
+            prixParJour,
+            nbPlaces,
+            transmission,
+            fuelType,
+        },
+    });
+
+    revalidatePath('/admin/vehicles');
+}
+
 // --- VEHICLE ACTIONS ---
 
 export async function createVehicle(formData: FormData) {

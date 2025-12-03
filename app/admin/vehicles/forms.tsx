@@ -11,16 +11,10 @@ function SubmitModelButton() {
         <button
             type="submit"
             disabled={pending}
-            className="menu-item-link"
+            className="btn-primary"
+            style={{ width: '100%', marginTop: '20px' }}
         >
-            {pending ? (
-                <>
-                    <span className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full"></span>
-                    Création en cours...
-                </>
-            ) : (
-                'Créer le Modèle'
-            )}
+            {pending ? 'Création en cours...' : 'Créer le Modèle'}
         </button>
     );
 }
@@ -31,9 +25,10 @@ function SubmitVehicleButton() {
         <button
             type="submit"
             disabled={pending}
-            className="menu-item-link add-vehicle-button"
+            className="btn-primary"
+            style={{ height: '42px', marginTop: 'auto' }}
         >
-            {pending ? 'Validation...' : 'Valider l\'ajout'}
+            {pending ? '...' : 'Ajouter'}
         </button>
     );
 }
@@ -48,47 +43,59 @@ export function AddModelForm() {
                 formRef.current?.reset();
             }}
             ref={formRef}
-            className="bg-white p-6 rounded-lg shadow-md border border-gray-200 mb-8"
+            className="admin-form-container"
+            style={{ padding: '0', boxShadow: 'none', margin: '0' }}
         >
-            <h3 className="text-xl font-semibold mb-4 text-gray-800">Ajouter un Nouveau Modèle</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                    <label className="block text-sm font-medium text-gray-700">Nom du Modèle</label>
-                    <input name="nom" required type="text" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 border p-2" placeholder="Ex: Renault Clio 5" />
+            <div className="form-row">
+                <div className="form-group">
+                    <label style={{ display: 'block', marginBottom: '5px', fontSize: '0.9rem', color: '#666' }}>Nom du Modèle</label>
+                    <input name="nom" required type="text" placeholder="Ex: Renault Clio 5" />
                 </div>
-                <div>
-                    <label className="block text-sm font-medium text-gray-700">Prix par Jour (DH)</label>
-                    <input name="prixParJour" required type="number" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 border p-2" />
+                <div className="form-group">
+                    <label style={{ display: 'block', marginBottom: '5px', fontSize: '0.9rem', color: '#666' }}>Prix par Jour (DH)</label>
+                    <input name="prixParJour" required type="number" />
                 </div>
-                <div>
-                    <label className="block text-sm font-medium text-gray-700">Image URL</label>
-                    <input name="imageUrl" type="text" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 border p-2" placeholder="https://..." />
+            </div>
+
+            <div className="form-row">
+                <div className="form-group">
+                    <label style={{ display: 'block', marginBottom: '5px', fontSize: '0.9rem', color: '#666' }}>Image URL</label>
+                    <input name="imageUrl" type="text" placeholder="https://..." />
                 </div>
-                <div>
-                    <label className="block text-sm font-medium text-gray-700">Nombre de Places</label>
-                    <input name="nbPlaces" required type="number" defaultValue={5} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 border p-2" />
+                <div className="form-group">
+                    <label style={{ display: 'block', marginBottom: '5px', fontSize: '0.9rem', color: '#666' }}>Nombre de Places</label>
+                    <input name="nbPlaces" required type="number" defaultValue={5} />
                 </div>
-                <div>
-                    <label className="block text-sm font-medium text-gray-700">Transmission</label>
-                    <select name="transmission" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 border p-2">
+            </div>
+
+            <div className="form-row">
+                <div className="form-group">
+                    <label style={{ display: 'block', marginBottom: '5px', fontSize: '0.9rem', color: '#666' }}>Transmission</label>
+                    <select name="transmission">
                         {Object.values(Transmission).map((t) => (
                             <option key={t} value={t}>{t}</option>
                         ))}
                     </select>
                 </div>
-                <div>
-                    <label className="block text-sm font-medium text-gray-700">Carburant</label>
-                    <select name="fuelType" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 border p-2">
+                <div className="form-group">
+                    <label style={{ display: 'block', marginBottom: '5px', fontSize: '0.9rem', color: '#666' }}>Carburant</label>
+                    <select name="fuelType">
                         {Object.values(FuelType).map((f) => (
                             <option key={f} value={f}>{f}</option>
                         ))}
                     </select>
                 </div>
-                <div className="md:col-span-2">
-                    <label className="block text-sm font-medium text-gray-700">Description</label>
-                    <textarea name="description" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 border p-2" rows={3}></textarea>
-                </div>
             </div>
+
+            <div className="form-group">
+                <label style={{ display: 'block', marginBottom: '5px', fontSize: '0.9rem', color: '#666' }}>Description</label>
+                <textarea
+                    name="description"
+                    rows={3}
+                    style={{ width: '100%', padding: '10px', border: '1px solid #ddd', borderRadius: '8px', fontFamily: 'inherit' }}
+                ></textarea>
+            </div>
+
             <SubmitModelButton />
         </form>
     );
@@ -104,18 +111,18 @@ export function AddVehicleForm({ modeleId }: { modeleId: number }) {
                 formRef.current?.reset();
             }}
             ref={formRef}
-            className="mt-4 p-4 bg-gray-50 rounded-md border border-gray-200"
+            style={{ marginTop: '20px', padding: '15px', backgroundColor: '#f9f9f9', borderRadius: '8px', border: '1px solid #eee' }}
         >
             <input type="hidden" name="modeleId" value={modeleId} />
-            <h4 className="text-sm font-semibold mb-2 text-gray-700">Ajouter un véhicule au stock</h4>
-            <div className="add-vehicle-container">
-                <div className="add-vehicle-input">
-                    <label className="block text-xs font-medium text-gray-500">Plaque d'immatriculation</label>
-                    <input name="plaque" required type="text" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 border p-2 text-sm" placeholder="12345-A-1" />
+            <h4 style={{ fontSize: '0.9rem', fontWeight: 'bold', marginBottom: '10px', color: '#555' }}>Ajouter un véhicule au stock</h4>
+            <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-end' }}>
+                <div style={{ flex: 1 }}>
+                    <label style={{ display: 'block', marginBottom: '5px', fontSize: '0.8rem', color: '#666' }}>Plaque</label>
+                    <input name="plaque" required type="text" placeholder="AA-123-AA" style={{ padding: '8px' }} />
                 </div>
-                <div className="add-vehicle-select">
-                    <label className="block text-xs font-medium text-gray-500">Statut Initial</label>
-                    <select name="statut" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 border p-2 text-sm">
+                <div style={{ flex: 1 }}>
+                    <label style={{ display: 'block', marginBottom: '5px', fontSize: '0.8rem', color: '#666' }}>Statut Initial</label>
+                    <select name="statut" style={{ padding: '8px' }}>
                         {Object.values(StatutVehicule).map((s) => (
                             <option key={s} value={s}>{s}</option>
                         ))}
@@ -128,34 +135,38 @@ export function AddVehicleForm({ modeleId }: { modeleId: number }) {
 }
 
 export function VehicleItem({ vehicle }: { vehicle: any }) {
+    const getStatusClass = (status: string) => {
+        switch (status) {
+            case 'DISPONIBLE': return 'available';
+            case 'MAINTENANCE': return 'unavailable';
+            case 'LOUE': return 'unavailable'; // Or another color if you prefer
+            case 'RETIRE': return 'retired';
+            default: return '';
+        }
+    };
+
     return (
-        <div className="vehicle-item-personal">
-            <div className="vehicle-item-personal-left">
-                <span className="font-mono font-bold text-gray-800">{vehicle.plaque}</span>
-                <span className={`vehicle-status-span ${vehicle.statut === 'DISPONIBLE' ? 'bg-green-100 text-green-800' :
-                    vehicle.statut === 'MAINTENANCE' ? 'bg-red-100 text-red-800' :
-                        vehicle.statut === 'LOUE' ? 'bg-blue-100 text-blue-800' :
-                            'bg-gray-100 text-gray-800'
-                    }`}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px', border: '1px solid #eee', borderRadius: '6px', backgroundColor: '#fff' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+                <span style={{ fontFamily: 'monospace', fontWeight: 'bold', fontSize: '1rem' }}>{vehicle.plaque}</span>
+                <span className={`status-badge ${getStatusClass(vehicle.statut)}`}>
                     {vehicle.statut}
                 </span>
             </div>
-            <div className="vehicle-item-personal-right">
-                <div className="vehicle-status">
-                    <span className="block text-xs font-medium text-gray-500">Statut</span>
-                    <select
-                        defaultValue={vehicle.statut}
-                        onChange={(e) => updateVehicleStatus(vehicle.id, e.target.value as StatutVehicule)}
-                        className="text-xs border-gray-300 rounded-md shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 border p-1"
-                    >
-                        {Object.values(StatutVehicule).map((s) => (
-                            <option key={s} value={s}>{s}</option>
-                        ))}
-                    </select>
-                </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <select
+                    defaultValue={vehicle.statut}
+                    onChange={(e) => updateVehicleStatus(vehicle.id, e.target.value as StatutVehicule)}
+                    style={{ padding: '5px', fontSize: '0.8rem', width: 'auto' }}
+                >
+                    {Object.values(StatutVehicule).map((s) => (
+                        <option key={s} value={s}>{s}</option>
+                    ))}
+                </select>
                 <button
                     onClick={() => deleteVehicle(vehicle.id)}
-                    className="vehicle-delete-button"
+                    className="btn-danger"
+                    style={{ padding: '5px 10px', fontSize: '0.8rem' }}
                 >
                     Supprimer
                 </button>
@@ -168,10 +179,9 @@ export function DeleteModelButton({ id }: { id: number }) {
     return (
         <button
             onClick={() => deleteModel(id)}
-            className="vehicle-item-header-right"
+            className="btn-danger"
         >
             Supprimer le modèle
         </button>
     )
 }
-
