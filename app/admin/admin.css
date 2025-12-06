@@ -61,6 +61,11 @@
     font-size: 1.1rem;
     transition: all 0.3s ease;
     border-left: 4px solid transparent;
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center !important;
+    gap: 10px !important;
 }
 
 .nav-item:hover {
@@ -382,3 +387,375 @@ select:focus {
         padding-top: 10px;
     }
 }
+
+/* Reservations Page Specifics */
+.btn-success {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.btn-success:hover {
+    background-color: #218838;
+}
+
+.btn-sm {
+    padding: 5px 10px;
+    font-size: 0.8rem;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.9rem;
+    transition: background-color 0.3s ease;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+}
+
+/* Modal Styles */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 30px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.modal-title {
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-family: 'Anton', sans-serif;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+    justify-content: flex-end;
+}
+
+/* Reservation Card Details */
+.reservation-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+}
+
+.reservation-title {
+    margin: 0;
+    font-size: 1.2rem;
+}
+
+.reservation-subtitle {
+    font-size: 0.9rem;
+    color: #888;
+    font-weight: normal;
+}
+
+.reservation-price {
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.reservation-details-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.info-row {
+    margin-bottom: 3px;
+    display: flex;
+    align-items: center;
+}
+
+.info-icon {
+    width: 20px;
+    text-align: center;
+    margin-right: 5px;
+}
+
+.client-name {
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 3px;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 5px;
+}
+/* Reservation Page Specifics */
+.reservations-title {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    font-family: 'Anton', sans-serif;
+}
+
+.reservations-empty {
+    color: #888;
+    font-style: italic;
+}
+
+.reservation-arrow {
+    font-size: 0.8rem;
+    margin: 0 5px;
+}
+
+/* Status Badges Colors */
+.status-badge.pending {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.status-badge.confirmed {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.status-badge.rejected,
+.status-badge.cancelled {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.status-badge.completed {
+    background-color: #cce5ff;
+    color: #004085;
+}
+
+/* Edit Modal Button */
+.btn-edit-reservation {
+    padding: 5px 10px;
+    font-size: 0.8rem;
+    background-color: #333;
+}
+
+.modal-label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+
+/* Vehicles Page Specifics */
+.admin-form-container.compact {
+    padding: 0;
+    box-shadow: none;
+    margin: 0;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.form-textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-family: inherit;
+}
+
+.add-vehicle-form {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    border: 1px solid #eee;
+}
+
+.add-vehicle-header {
+    font-size: 0.9rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #555;
+}
+
+.add-vehicle-row {
+    display: flex;
+    gap: 10px;
+    align-items: flex-end;
+}
+
+.vehicle-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid #eee;
+    border-radius: 6px;
+    background-color: #fff;
+}
+
+.vehicle-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.vehicle-plaque {
+    font-family: monospace;
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+.vehicle-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.vehicle-status-select {
+    padding: 5px;
+    font-size: 0.8rem;
+    width: auto;
+}
+
+/* Vehicle Model Row */
+.model-row {
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.model-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+}
+
+.model-main-info {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.model-image {
+    width: 100px;
+    height: 60px;
+    object-fit: contain;
+}
+
+.model-title {
+    margin: 0;
+    font-size: 1.2rem;
+}
+
+.model-details {
+    margin: 0;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.model-price {
+    color: #1a1a1a;
+    font-weight: bold;
+}
+
+.model-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.edit-model-container {
+    margin-bottom: 20px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    border: 1px solid #eee;
+}
+
+.edit-model-title {
+    margin-bottom: 15px;
+    font-family: 'Anton', sans-serif;
+}
+
+.stock-section {
+    padding-left: 20px;
+}
+
+.stock-title {
+    font-size: 0.9rem;
+    color: #888;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+
+.stock-empty {
+    font-size: 0.9rem;
+    color: #aaa;
+    margin-bottom: 15px;
+}
+
+.stock-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+
+/* Locations Page Specifics */
+.locations-title {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    font-family: 'Anton', sans-serif;
+}
+
+.locations-subtitle {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    font-family: 'Anton', sans-serif;
+}
+
+.locations-empty {
+    color: #888;
+    font-style: italic;
+}
+
+.location-fees-badge {
+    display: inline-block;
+    margin-top: 5px;
+    padding: 2px 8px;
+    background-color: #fff9c4;
+    color: #fbc02d;
+    border-radius: 4px;
+    font-size: 0.8rem;
+}
+

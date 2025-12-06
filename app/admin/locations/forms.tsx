@@ -28,21 +28,20 @@ export function AddLocationForm() {
                 formRef.current?.reset();
             }}
             ref={formRef}
-            className="admin-form-container"
-            style={{ padding: '0', boxShadow: 'none', margin: '0' }}
+            className="admin-form-container compact"
         >
             <div className="form-row">
                 <div className="form-group">
-                    <label style={{ display: 'block', marginBottom: '5px', fontSize: '0.9rem', color: '#666' }}>Nom du Lieu</label>
+                    <label className="form-label">Nom du Lieu</label>
                     <input name="nom" required type="text" placeholder="Ex: Aéroport Marrakech" />
                 </div>
                 <div className="form-group">
-                    <label style={{ display: 'block', marginBottom: '5px', fontSize: '0.9rem', color: '#666' }}>Frais Supplémentaires (DH)</label>
+                    <label className="form-label">Frais Supplémentaires (DH)</label>
                     <input name="fraisSupplementaires" type="number" defaultValue={0} />
                 </div>
             </div>
             <div className="form-group">
-                <label style={{ display: 'block', marginBottom: '5px', fontSize: '0.9rem', color: '#666' }}>Adresse (Optionnel)</label>
+                <label className="form-label">Adresse (Optionnel)</label>
                 <input name="adresse" type="text" placeholder="Adresse complète..." />
             </div>
             <SubmitLocationButton />

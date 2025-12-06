@@ -55,29 +55,6 @@ export default async function Home() {
 
             {/* New Reviews Section */}
             <ReviewsSection />
-
-            <div className="footer">
-                <div className="first-cat">
-                    <span>MJCars</span>
-                    <a href="#">Réservations</a>
-                    <a href="#">Nos Véhicules</a>
-                    <a href="#">Nos Localisations</a>
-                    <a href="#">Notre Agence</a>
-                    <a href="#">Nous Contacter</a>
-                </div>
-                <div className="second-cat">
-                    <a href="#">Conditions Générales de Location</a>
-                    <a href="#">Politique de Confidentialité</a>
-                    <a href="#">Mentions Légales</a>
-                    <a href="#">Plan du Site</a>
-                </div>
-                <div className="third-cat">
-                    <a href="#"><i className="fab fa-facebook-f"></i>Facebook</a>
-                    <a href="#"><i className="fab fa-instagram"></i>Instagram</a>
-                    <a href="#"><i className="fab fa-linkedin-in"></i>Linkedin</a>
-                </div>
-                <span>© 2024 Rimal. Tous droits réservés.</span>
-            </div>
         </>
     );
 }

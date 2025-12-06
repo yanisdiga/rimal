@@ -9,7 +9,8 @@
     "lint": "eslint",
     "prisma:generate": "dotenv -- npx prisma generate",
     "prisma:pull": "dotenv -- npx prisma db pull",
-    "prisma:migrate": "dotenv -- npx prisma migrate dev"
+    "prisma:migrate": "dotenv -- npx prisma migrate dev",
+    "prisma:migrate:reset": "dotenv -- npx prisma migrate reset"
   },
   "dependencies": {
     "@prisma/client": "^6.19.0",

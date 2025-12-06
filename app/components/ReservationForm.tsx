@@ -3,6 +3,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 // Importe le type de votre BDD
 import { Location } from '@prisma/client';
 // Imports pour le calendrier
@@ -61,6 +62,7 @@ export function ReservationForm({ locations, hours }: ReservationFormProps) {
 
   const [isReturnTimeOpen, setIsReturnTimeOpen] = useState(false);
   const [selectedReturnTime, setSelectedReturnTime] = useState(hours[0]);
+  const [isReturnLocationDifferent, setIsReturnLocationDifferent] = useState(false);
 
   // --- Références (Refs) ---
   const calendarRef = useRef<HTMLDivElement>(null);
@@ -93,9 +95,11 @@ export function ReservationForm({ locations, hours }: ReservationFormProps) {
     if (location.id === selectedLocation?.id) {
       // ...on réinitialise le lieu de retour (on le remet à 'undefined').
       setSelectedReturnLocation(undefined);
+      setIsReturnLocationDifferent(false);
     } else {
       // ...sinon, on le définit.
       setSelectedReturnLocation(location);
+      setIsReturnLocationDifferent(true);
     }
 
     // On ferme le menu déroulant dans tous les cas
@@ -108,6 +112,36 @@ export function ReservationForm({ locations, hours }: ReservationFormProps) {
   const handleReturnTimeSelect = (hour: string) => {
     setSelectedReturnTime(hour);
     setIsReturnTimeOpen(false);
+  };
+
+  const router = useRouter();
+
+  const handleSearch = () => {
+    const query: Record<string, string> = {};
+
+    if (selectedLocation?.id) {
+      query.location = selectedLocation.id.toString();
+    }
+    // If return location is not explicitly set, it defaults to the pickup location
+    query.returnLocation = (selectedReturnLocation?.id || selectedLocation?.id || '').toString();
+
+    if (selectedRange?.from) {
+      query.startDate = format(selectedRange.from, 'yyyy-MM-dd');
+    }
+    if (selectedRange?.to) {
+      query.endDate = format(selectedRange.to, 'yyyy-MM-dd');
+    }
+
+    if (selectedStartTime) {
+      query.startTime = selectedStartTime;
+    }
+    if (selectedReturnTime) {
+      query.returnTime = selectedReturnTime;
+    }
+
+    // Construct the query string
+    const queryString = new URLSearchParams(query).toString();
+    router.push(`/reservation?${queryString}`);
   };
 
   // --- Rendu JSX ---
@@ -162,7 +196,7 @@ export function ReservationForm({ locations, hours }: ReservationFormProps) {
 
           {/* Le bouton "+ Lieu de retour différent" */}
           <div
-            className={`choose-location return-location ${isReturnLocationOpen ? 'open' : ''}`}
+            className={`choose-location return-location ${isReturnLocationOpen ? 'open' : ''} ${isReturnLocationDifferent ? 'different' : ''}`}
             ref={returnLocationRef}
             onClick={() => setIsReturnLocationOpen(!isReturnLocationOpen)}
           >
@@ -293,7 +327,7 @@ export function ReservationForm({ locations, hours }: ReservationFormProps) {
             </div>
           )}
         </div>
-        <button className="validate-button">Rechercher</button>
+        <button className="validate-button" onClick={handleSearch}>Rechercher</button>
       </div>
     </div>
   );

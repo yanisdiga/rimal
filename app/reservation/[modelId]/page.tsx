@@ -1,0 +1,70 @@
+import React from 'react';
+import { prisma } from '../../../lib/prisma';
+import { BookingForm } from '../../components/BookingForm';
+import { notFound } from 'next/navigation';
+import Link from 'next/link';
+import '../../../styles/booking.css'; // Import custom styles
+
+export default async function BookingPage({
+    params,
+    searchParams,
+}: {
+    params: Promise<{ modelId: string }>;
+    searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
+    const { modelId: modelIdStr } = await params;
+    const resolvedSearchParams = await searchParams;
+
+    const modelId = parseInt(modelIdStr);
+    if (isNaN(modelId)) return notFound();
+
+    const model = await prisma.modeleVoiture.findUnique({
+        where: { id: modelId },
+    });
+
+    if (!model) return notFound();
+
+    // Calculate estimated price
+    const startDateStr = resolvedSearchParams.startDate as string;
+    const endDateStr = resolvedSearchParams.endDate as string;
+    let totalPrice = 0;
+    let days = 0;
+
+    if (startDateStr && endDateStr) {
+        const start = new Date(startDateStr);
+        const end = new Date(endDateStr);
+        const diffTime = Math.abs(end.getTime() - start.getTime());
+        days = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        totalPrice = days * model.prixParJour;
+    }
+
+    const locations = await prisma.location.findMany();
+
+    return (
+        <div className="booking-page">
+            <div className="home-logo-container">
+                <Link href="/" className="home-logo">MJ Cars</Link>
+            </div>
+
+            <div className="booking-container">
+                <Link href="/reservation" className="back-button">
+                    <i className="fas fa-arrow-left"></i>
+                    <span>Retour</span>
+                </Link>
+
+                <h1 className="booking-title">
+                    Finaliser votre réservation
+                </h1>
+
+                <BookingForm
+                    modelId={modelId}
+                    modelName={model.nom}
+                    modelImageUrl={model.imageUrl}
+                    searchParams={resolvedSearchParams}
+                    locations={locations}
+                    pricePerDay={model.prixParJour}
+                />
+            </div>
+        </div>
+    );
+}

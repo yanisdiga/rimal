@@ -1,0 +1,119 @@
+'use client';
+
+import { useState, useRef } from 'react';
+import { BackgroundImage } from '@prisma/client';
+import { createBackgroundImage, updateBackgroundImage } from '@/app/actions/style';
+
+interface StyleModalProps {
+    image?: BackgroundImage; // If provided, we are in Edit mode
+    trigger?: React.ReactNode; // Custom trigger button
+}
+
+export function StyleModal({ image, trigger }: StyleModalProps) {
+    const [isOpen, setIsOpen] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const formRef = useRef<HTMLFormElement>(null);
+
+    const isEdit = !!image;
+
+    const handleSubmit = async (formData: FormData) => {
+        setIsLoading(true);
+        try {
+            if (isEdit && image) {
+                await updateBackgroundImage(image.id, formData);
+            } else {
+                await createBackgroundImage(formData);
+            }
+            setIsOpen(false);
+            formRef.current?.reset();
+        } catch (error) {
+            console.error('Error saving background image:', error);
+            alert('Une erreur est survenue lors de l\'enregistrement.');
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    return (
+        <>
+            {trigger ? (
+                <div onClick={() => setIsOpen(true)}>{trigger}</div>
+            ) : (
+                <button
+                    onClick={() => setIsOpen(true)}
+                    className="btn-primary add-image-btn"
+                >
+                    <i className="fas fa-plus"></i> Ajouter une image
+                </button>
+            )}
+
+            {isOpen && (
+                <div className="modal-overlay" onClick={() => setIsOpen(false)}>
+                    <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                        <div className="modal-header">
+                            <h3>{isEdit ? 'Modifier l\'image' : 'Ajouter une image'}</h3>
+                            <button className="close-button" onClick={() => setIsOpen(false)}>
+                                <i className="fas fa-times"></i>
+                            </button>
+                        </div>
+
+                        <form ref={formRef} action={handleSubmit} className="modal-form">
+                            <div className="form-group">
+                                <label>Titre (Affiché)</label>
+                                <input
+                                    type="text"
+                                    name="name"
+                                    defaultValue={image?.name}
+                                    required
+                                    placeholder="Ex: Service premium"
+                                />
+                            </div>
+
+                            <div className="form-group">
+                                <label>Sous-titre (Affiché)</label>
+                                <input
+                                    type="text"
+                                    name="subtitle"
+                                    defaultValue={image?.subtitle || ''}
+                                    placeholder="Ex: Location de voitures de luxe"
+                                />
+                            </div>
+
+                            <div className="form-group">
+                                <label>URL de l'image</label>
+                                <input
+                                    type="text"
+                                    name="url"
+                                    defaultValue={image?.url}
+                                    required
+                                    placeholder="https://..."
+                                />
+                                <small className="modal-help-text">
+                                    Lien direct vers l'image (hébergée ailleurs ou dans public/)
+                                </small>
+                            </div>
+
+                            <div className="modal-actions">
+                                <button
+                                    type="button"
+                                    className="btn-secondary"
+                                    onClick={() => setIsOpen(false)}
+                                    disabled={isLoading}
+                                >
+                                    Annuler
+                                </button>
+                                <button
+                                    type="submit"
+                                    className="btn-primary"
+                                    disabled={isLoading}
+                                >
+                                    {isLoading ? 'Enregistrement...' : (isEdit ? 'Mettre à jour' : 'Ajouter')}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
+        </>
+    );
+}

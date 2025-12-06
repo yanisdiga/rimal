@@ -74,7 +74,7 @@ export function NavbarAndMenu({ voitures }: NavbarProps) {
           <span>Menu</span>
         </div>
         <div className="logo">
-          MJ Cars
+          <a href="/">MJ Cars</a>
         </div>
       </nav>
 

@@ -1,8 +1,17 @@
 import React from 'react';
 import Link from 'next/link';
 import { AdminLayout } from './components/AdminLayout';
+import { PrismaClient } from '@prisma/client';
 
-export default function AdminDashboard() {
+const prisma = new PrismaClient();
+
+export default async function AdminDashboard() {
+    const [vehicleCount, locationCount, reservationCount] = await Promise.all([
+        prisma.vehicule.count(),
+        prisma.location.count(),
+        prisma.reservation.count(),
+    ]);
+
     return (
         <AdminLayout title="Tableau de Bord">
             <div className="dashboard-grid">
@@ -10,6 +19,7 @@ export default function AdminDashboard() {
                     <div>
                         <h3>Gestion des Véhicules</h3>
                         <p>Ajoutez des modèles, gérez le stock et les statuts des véhicules.</p>
+                        <p style={{ fontSize: '2rem', fontWeight: 'bold', margin: '10px 0' }}>{vehicleCount}</p>
                     </div>
                     <span className="card-link">Gérer les véhicules &rarr;</span>
                 </Link>
@@ -18,17 +28,27 @@ export default function AdminDashboard() {
                     <div>
                         <h3>Lieux de Retrait</h3>
                         <p>Configurez les agences et points de retrait disponibles.</p>
+                        <p style={{ fontSize: '2rem', fontWeight: 'bold', margin: '10px 0' }}>{locationCount}</p>
                     </div>
                     <span className="card-link">Gérer les lieux &rarr;</span>
                 </Link>
 
-                <div className="dashboard-card disabled">
+                <Link href="/admin/reservations" className="dashboard-card">
                     <div>
                         <h3>Réservations</h3>
-                        <p>Visualisez et gérez les réservations clients (À venir).</p>
+                        <p>Visualisez et gérez les réservations clients.</p>
+                        <p style={{ fontSize: '2rem', fontWeight: 'bold', margin: '10px 0' }}>{reservationCount}</p>
                     </div>
-                    <span className="card-link">Bientôt disponible</span>
-                </div>
+                    <span className="card-link">Gérer les réservations &rarr;</span>
+                </Link>
+
+                <Link href="/admin/style" className="dashboard-card">
+                    <div>
+                        <h3>Style & Backgrounds</h3>
+                        <p>Gérez les images d'arrière-plan du site.</p>
+                    </div>
+                    <span className="card-link">Personnaliser &rarr;</span>
+                </Link>
             </div>
         </AdminLayout>
     );

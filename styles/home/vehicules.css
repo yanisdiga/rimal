@@ -61,7 +61,7 @@
         h2 {
             font-family: 'Anton', sans-serif;
             font-size: 1.8rem;
-            font-weight: 500;
+            font-weight: 800;
             margin: 10px 0;
             color: #1a1a1a;
             letter-spacing: 0.5px;
@@ -109,7 +109,7 @@
                 color: #333;
             }
 
-            button {
+            .reserve-button {
                 width: 100%;
                 padding: 14px;
                 border: none;
@@ -132,7 +132,7 @@
             }
 
             /* Shine Effect sur le bouton */
-            button::before {
+            .reserve-button::before {
                 content: '';
                 position: absolute;
                 top: 0;
@@ -146,12 +146,12 @@
                 transition: 0.5s;
             }
 
-            button:hover {
+            .reserve-button:hover {
                 transform: translateY(-2px);
                 box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
             }
 
-            button:hover::before {
+            .reserve-button:hover::before {
                 left: 100%;
             }
         }

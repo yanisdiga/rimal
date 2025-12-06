@@ -13,20 +13,20 @@ export function VehicleModelRow({ modele }: VehicleModelRowProps) {
     const [isEditing, setIsEditing] = useState(false);
 
     return (
-        <div className="data-item" style={{ flexDirection: 'column', alignItems: 'stretch' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #eee', paddingBottom: '15px', marginBottom: '15px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+        <div className="data-item model-row">
+            <div className="model-header">
+                <div className="model-main-info">
                     {modele.imageUrl && (
-                        <img src={modele.imageUrl} alt={modele.nom} style={{ width: '100px', height: '60px', objectFit: 'contain' }} />
+                        <img src={modele.imageUrl} alt={modele.nom} className="model-image" />
                     )}
                     <div>
-                        <h3 style={{ margin: 0, fontSize: '1.2rem' }}>{modele.nom}</h3>
-                        <p style={{ margin: 0, color: '#666', fontSize: '0.9rem' }}>
-                            {modele.transmission} • {modele.fuelType} • {modele.nbPlaces} places • <span style={{ color: '#1a1a1a', fontWeight: 'bold' }}>{modele.prixParJour} DH/jour</span>
+                        <h3 className="model-title">{modele.nom}</h3>
+                        <p className="model-details">
+                            {modele.transmission} • {modele.fuelType} • {modele.nbPlaces} places • <span className="model-price">{modele.prixParJour} DH/jour</span>
                         </p>
                     </div>
                 </div>
-                <div style={{ display: 'flex', gap: '10px' }}>
+                <div className="model-actions">
                     <button
                         onClick={() => setIsEditing(!isEditing)}
                         className="btn-primary"
@@ -39,21 +39,21 @@ export function VehicleModelRow({ modele }: VehicleModelRowProps) {
             </div>
 
             {isEditing && (
-                <div style={{ marginBottom: '20px', padding: '20px', backgroundColor: '#f9f9f9', borderRadius: '8px', border: '1px solid #eee' }}>
-                    <h4 style={{ marginBottom: '15px', fontFamily: 'Anton, sans-serif' }}>Modifier le Modèle</h4>
+                <div className="edit-model-container">
+                    <h4 className="edit-model-title">Modifier le Modèle</h4>
                     <EditModelForm modele={modele} onSuccess={() => setIsEditing(false)} />
                 </div>
             )}
 
-            <div style={{ paddingLeft: '20px' }}>
-                <h4 style={{ fontSize: '0.9rem', color: '#888', textTransform: 'uppercase', marginBottom: '10px' }}>
+            <div className="stock-section">
+                <h4 className="stock-title">
                     Véhicules en Stock ({modele.vehicules.length})
                 </h4>
 
                 {modele.vehicules.length === 0 ? (
-                    <p style={{ fontSize: '0.9rem', color: '#aaa', marginBottom: '15px' }}>Aucun véhicule physique enregistré.</p>
+                    <p className="stock-empty">Aucun véhicule physique enregistré.</p>
                 ) : (
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '15px' }}>
+                    <div className="stock-list">
                         {modele.vehicules.map((v) => (
                             <VehicleItem key={v.id} vehicle={v} />
                         ))}

@@ -1,0 +1,59 @@
+/* styles/reservation.css */
+
+.reservation-page {
+    padding-block: 2rem;
+    min-height: 100vh;
+    background-color: #f9f9f9;
+    font-family: 'Oswald', sans-serif;
+}
+
+.reservation-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.reservation-title {
+    text-align: center;
+    margin-bottom: 3rem;
+    font-family: 'Anton', sans-serif;
+    font-size: 3rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #1a1a1a;
+    position: relative;
+    padding-bottom: 1rem;
+}
+
+.reservation-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #1a1a1a, transparent);
+}
+
+/* Adjustments for VehiclesSection within Reservation Page */
+.reservation-page .vehicules {
+    margin-top: 0;
+    padding-top: 0;
+}
+
+.reservation-page .vehicules h1 {
+    display: none;
+    /* Hide the default "Nos Véhicules" title from the component */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .reservation-title {
+        font-size: 2rem;
+    }
+
+    .reservation-container {
+        padding: 1rem;
+    }
+}

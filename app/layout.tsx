@@ -15,6 +15,7 @@ import "../styles/style.css";
 
 import { prisma } from '../lib/prisma';
 import NavbarWrapper from "./components/NavbarWrapper";
+import { Footer } from "./components/Footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -52,8 +53,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 
       {/* Appliquez la police Oswald au body */}
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <NavbarWrapper voitures={voitures} />
         <main>{children}</main>
+        <Footer />
 
         {/* Mettez les scripts globaux à la fin du body */}
         <script src="https://cdn.jsdelivr.net/npm/flatpickr" defer></script>

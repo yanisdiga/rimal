@@ -14,15 +14,15 @@ export default async function LocationsPage() {
     return (
         <AdminLayout title="Gestion des Lieux">
             <div className="admin-form-container">
-                <h2 style={{ fontSize: '1.5rem', marginBottom: '20px', fontFamily: 'Anton, sans-serif' }}>Ajouter un Lieu</h2>
+                <h2 className="locations-title">Ajouter un Lieu</h2>
                 <AddLocationForm />
             </div>
 
             <div className="data-grid">
-                <h2 style={{ fontSize: '1.5rem', marginBottom: '10px', fontFamily: 'Anton, sans-serif' }}>Lieux Enregistrés ({locations.length})</h2>
+                <h2 className="locations-subtitle">Lieux Enregistrés ({locations.length})</h2>
 
                 {locations.length === 0 ? (
-                    <p style={{ color: '#888', fontStyle: 'italic' }}>Aucun lieu enregistré.</p>
+                    <p className="locations-empty">Aucun lieu enregistré.</p>
                 ) : (
                     locations.map((loc) => (
                         <div key={loc.id} className="data-item">
@@ -31,7 +31,7 @@ export default async function LocationsPage() {
                                     <h3>{loc.nom}</h3>
                                     {loc.adresse && <p>{loc.adresse}</p>}
                                     {loc.fraisSupplementaires > 0 && (
-                                        <span style={{ display: 'inline-block', marginTop: '5px', padding: '2px 8px', backgroundColor: '#fff9c4', color: '#fbc02d', borderRadius: '4px', fontSize: '0.8rem' }}>
+                                        <span className="location-fees-badge">
                                             + {loc.fraisSupplementaires} DH frais
                                         </span>
                                     )}

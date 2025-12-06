@@ -157,6 +157,16 @@
   box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.05);
 }
 
+.reservations .return-location.different {
+  i {
+    color: #000 !important;
+  }
+
+  span {
+    color: #555 !important;
+  }
+}
+
 /* Specific adjustments for grouped inputs */
 .reservations .button-start,
 .reservations .button-end {
@@ -532,10 +542,6 @@
 .reservations .button-end button {
   background-color: transparent !important;
   position: relative;
-}
-
-.imageSlider {
-  height: 80vh !important;
 }
 
 .calendar-container {

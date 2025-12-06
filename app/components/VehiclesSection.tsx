@@ -1,17 +1,24 @@
 // Fichier : app/components/VehiclesSection.tsx
 
 "use client"; // Obligatoire, car IntersectionObserver est une API du navigateur
+// Fichier : app/components/VehiclesSection.tsx
+
+"use client"; // Obligatoire, car IntersectionObserver est une API du navigateur
 
 import React, { useEffect, useRef, useState } from 'react';
 // Importe le type de données de Prisma (la page serveur nous les enverra)
 import { ModeleVoiture } from '@prisma/client';
 
 // 1. Définir les "props" que ce composant reçoit
+import Link from 'next/link';
+
+// 1. Définir les "props" que ce composant reçoit
 interface VehiclesSectionProps {
   voitures: ModeleVoiture[]; // Il reçoit les voitures du serveur
+  searchParams?: { [key: string]: string | string[] | undefined };
 }
 
-export function VehiclesSection({ voitures }: VehiclesSectionProps) {
+export function VehiclesSection({ voitures, searchParams }: VehiclesSectionProps) {
 
   // 2. Remplacer document.querySelector par des "états" et "refs"
   const [isVisible, setIsVisible] = useState(false);
@@ -55,6 +62,19 @@ export function VehiclesSection({ voitures }: VehiclesSectionProps) {
     return firstLetter + rest;
   }
 
+  // Helper pour construire l'URL de réservation
+  const getReservationUrl = (carId: number) => {
+    const params = new URLSearchParams();
+    if (searchParams) {
+      Object.entries(searchParams).forEach(([key, value]) => {
+        if (typeof value === 'string') {
+          params.set(key, value);
+        }
+      });
+    }
+    return `/reservation/${carId}?${params.toString()}`;
+  };
+
   // 4. Rendu du TSX
   // Remplace votre 'fetch' et 'innerHTML'
   return (
@@ -81,7 +101,9 @@ export function VehiclesSection({ voitures }: VehiclesSectionProps) {
 
             <div className="vehicule-bottom-info">
               <span className="price">À partir de {car.prixParJour} DH/jour</span>
-              <button className="reserve-button">Réserver</button>
+              <Link href={getReservationUrl(car.id)} className="reserve-button">
+                Réserver
+              </Link>
             </div>
           </div>
         ))}
