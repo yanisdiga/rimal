@@ -1,7 +1,8 @@
 /* styles/reservation.css */
 
 .reservation-page {
-    padding-block: 2rem;
+    padding-top: 100px;
+    padding-bottom: 2rem;
     min-height: 100vh;
     background-color: #f9f9f9;
     font-family: 'Oswald', sans-serif;
@@ -56,4 +57,21 @@
     .reservation-container {
         padding: 1rem;
     }
+}
+
+/* No Results State */
+.no-results-container {
+    text-align: center;
+    padding: 4rem 0;
+}
+
+.no-results-title {
+    font-size: 1.5rem;
+    color: #666;
+    margin-bottom: 1rem;
+    font-family: 'Oswald', sans-serif;
+}
+
+.no-results-text {
+    color: #888;
 }

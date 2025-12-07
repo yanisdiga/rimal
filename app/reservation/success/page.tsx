@@ -1,38 +1,35 @@
 import React from 'react';
 import Link from 'next/link';
+import '../../../styles/success.css';
+import { NavbarAndMenu } from '../../components/Menu';
+import { prisma } from '@/lib/prisma';
 
-export default function SuccessPage() {
+export default async function SuccessPage() {
+    const voitures = await prisma.modeleVoiture.findMany();
     return (
-        <div style={{ paddingTop: '150px', minHeight: '80vh', textAlign: 'center' }}>
-            <div className="container">
-                <div style={{
-                    backgroundColor: '#d4edda',
-                    color: '#155724',
-                    padding: '2rem',
-                    borderRadius: '8px',
-                    maxWidth: '600px',
-                    margin: '0 auto',
-                    border: '1px solid #c3e6cb'
-                }}>
-                    <i className="fas fa-check-circle" style={{ fontSize: '3rem', marginBottom: '1rem' }}></i>
-                    <h1 style={{ marginBottom: '1rem' }}>Réservation Confirmée !</h1>
-                    <p style={{ fontSize: '1.1rem', marginBottom: '2rem' }}>
-                        Votre demande de réservation a bien été enregistrée.
-                        Notre équipe vous contactera très prochainement pour confirmer les détails.
+        <>
+            <NavbarAndMenu voitures={voitures} />
+            <div className="success-layout">
+                <div className="success-modal">
+                    <div className="checkmark-container">
+                        <svg className="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                            <circle className="checkmark-circle" cx="26" cy="26" r="25" fill="none" />
+                            <path className="checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
+                        </svg>
+                    </div>
+
+                    <h1 className="success-title">Réservation Confirmée !</h1>
+
+                    <p className="success-message">
+                        Votre demande a été enregistrée avec succès.<br />
+                        Notre équipe vous contactera très prochainement pour finaliser les détails de votre location.
                     </p>
-                    <Link href="/" style={{
-                        display: 'inline-block',
-                        padding: '10px 20px',
-                        backgroundColor: '#155724',
-                        color: 'white',
-                        borderRadius: '5px',
-                        textDecoration: 'none',
-                        fontWeight: 'bold'
-                    }}>
+
+                    <Link href="/" className="btn-home">
                         Retour à l'accueil
                     </Link>
                 </div>
             </div>
-        </div>
+        </>
     );
 }

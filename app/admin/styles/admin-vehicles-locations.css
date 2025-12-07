@@ -1,0 +1,173 @@
+/* Vehicles Page Specifics */
+.add-vehicle-form {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    border: 1px solid #eee;
+}
+
+.add-vehicle-header {
+    font-size: 0.9rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #555;
+}
+
+.add-vehicle-row {
+    display: flex;
+    gap: 10px;
+    align-items: flex-end;
+}
+
+.vehicle-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid #eee;
+    border-radius: 6px;
+    background-color: #fff;
+}
+
+.vehicle-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.vehicle-plaque {
+    font-family: monospace;
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+.vehicle-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.vehicle-status-select {
+    padding: 5px;
+    font-size: 0.8rem;
+    width: auto;
+}
+
+.vehicle-select {
+    width: 100%;
+}
+
+/* Vehicle Model Row */
+.model-row {
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.model-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+}
+
+.model-main-info {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.model-image {
+    width: 100px;
+    height: 60px;
+    object-fit: contain;
+}
+
+.model-title {
+    margin: 0;
+    font-size: 1.2rem;
+}
+
+.model-details {
+    margin: 0;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.model-price {
+    color: #1a1a1a;
+    font-weight: bold;
+}
+
+.model-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.edit-model-container {
+    margin-bottom: 20px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    border: 1px solid #eee;
+}
+
+.edit-model-title {
+    margin-bottom: 15px;
+    font-family: 'Anton', sans-serif;
+}
+
+.stock-section {
+    padding-left: 20px;
+}
+
+.stock-title {
+    font-size: 0.9rem;
+    color: #888;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+
+.stock-empty {
+    font-size: 0.9rem;
+    color: #aaa;
+    margin-bottom: 15px;
+}
+
+.stock-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+
+/* Locations Page Specifics */
+.locations-title {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    font-family: 'Anton', sans-serif;
+}
+
+.locations-subtitle {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    font-family: 'Anton', sans-serif;
+}
+
+.locations-empty {
+    color: #888;
+    font-style: italic;
+}
+
+.location-fees-badge {
+    display: inline-block;
+    margin-top: 5px;
+    padding: 2px 8px;
+    background-color: #fff9c4;
+    color: #fbc02d;
+    border-radius: 4px;
+    font-size: 0.8rem;
+}

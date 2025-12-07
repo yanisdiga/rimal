@@ -1,0 +1,343 @@
+/* Reservations Page Specifics */
+.reservations-title {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    font-family: 'Anton', sans-serif;
+}
+
+.reservations-empty {
+    color: #888;
+    font-style: italic;
+}
+
+/* Reservation Card Details */
+.reservation-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+}
+
+.reservation-title {
+    margin: 0;
+    font-size: 1.2rem;
+}
+
+.reservation-subtitle {
+    font-size: 0.9rem;
+    color: #888;
+    font-weight: normal;
+}
+
+.reservation-price {
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.reservation-details-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.info-row {
+    margin-bottom: 3px;
+    display: flex;
+    align-items: center;
+}
+
+.info-icon {
+    width: 20px;
+    text-align: center;
+    margin-right: 5px;
+}
+
+.client-name {
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 3px;
+}
+
+.reservation-arrow {
+    font-size: 0.8rem;
+    margin: 0 5px;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 5px;
+}
+
+.btn-edit-reservation {
+    padding: 5px 10px;
+    font-size: 0.8rem;
+    background-color: #333;
+}
+
+.reservation-vehicle-image {
+    width: 100px;
+    height: 60px;
+    object-fit: contain;
+    background-color: #f9f9f9;
+    border-radius: 4px;
+}
+
+/* Conflict Warning */
+.conflict-warning {
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    border: 1px solid transparent;
+}
+
+.conflict-warning.pending {
+    background-color: #fffbeb;
+    border-color: #f59e0b;
+    color: #92400e;
+}
+
+.conflict-warning.confirmed {
+    background-color: #fee2e2;
+    border-color: #ef4444;
+    color: #b91c1c;
+}
+
+.conflict-icon {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+}
+
+.conflict-content {
+    flex: 1;
+}
+
+.conflict-title {
+    font-weight: bold;
+    margin: 0;
+}
+
+.conflict-text {
+    margin: 4px 0 0 0;
+    font-size: 0.9rem;
+}
+
+.conflict-note {
+    margin: 8px 0 0 0;
+    font-size: 0.85rem;
+    font-style: italic;
+}
+
+/* Reservation Form Override in Admin Modal */
+.reservations.admin-override {
+    width: 100% !important;
+    max-width: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+    backdrop-filter: none !important;
+}
+
+.reservations.admin-override .dates-validation-container {
+    width: 100%;
+    flex: none;
+    margin-bottom: 20px;
+}
+
+.reservations.admin-override .dates-container {
+    gap: 20px;
+}
+
+/* Ensure calendar dropdown is visible above other form elements */
+.reservations.admin-override .calendar-container {
+    z-index: 10000 !important;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2) !important;
+}
+
+.reservations.admin-override .options {
+    z-index: 10001 !important;
+}
+
+/* Planning Grid Styles */
+.planning-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    background: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.planning-nav {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.current-week-label {
+    font-weight: 500;
+    font-size: 1.1rem;
+    font-family: 'Anton', sans-serif;
+    min-width: 150px;
+    text-align: center;
+}
+
+.planning-container {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    overflow-x: auto;
+    padding: 20px;
+}
+
+.planning-grid {
+    display: grid;
+    border-top: 1px solid #eee;
+    border-left: 1px solid #eee;
+}
+
+.planning-header-cell {
+    padding: 10px 5px;
+    background-color: #f9f9f9;
+    border-right: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+    font-weight: bold;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+}
+
+.empty-corner {
+    background-color: #fff;
+    border-bottom: 2px solid #1a1a1a;
+    font-family: 'Anton', sans-serif;
+    font-size: 1.1rem;
+    position: sticky;
+    left: 0;
+    z-index: 10;
+}
+
+.day-header.weekend {
+    background-color: #f0f0f0;
+    color: #aeaeae;
+}
+
+.day-header.today {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+    border-bottom: 2px solid #2e7d32;
+}
+
+.day-name {
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    color: #888;
+}
+
+.day-number {
+    font-size: 1.2rem;
+    font-family: 'Anton', sans-serif;
+}
+
+.planning-row-header {
+    padding: 15px;
+    border-right: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: sticky;
+    left: 0;
+    z-index: 5;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
+}
+
+.planning-row-header .vehicle-name {
+    font-weight: bold;
+    font-size: 0.95rem;
+    margin-bottom: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 180px;
+}
+
+.planning-row-header .vehicle-plaque {
+    font-size: 0.8rem;
+    font-family: monospace;
+    color: #666;
+    background: #eee;
+    padding: 2px 5px;
+    border-radius: 4px;
+    align-self: flex-start;
+}
+
+.planning-cell {
+    border-right: 1px solid #f5f5f5;
+    border-bottom: 1px solid #eee;
+    height: 70px;
+    position: relative;
+    transition: background-color 0.2s;
+}
+
+.planning-cell.weekend-cell {
+    background-color: #fafafa;
+}
+
+.planning-cell.occupied {
+    background-color: #a5d6a7;
+    color: #1b5e20;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    padding: 0 5px;
+    overflow: hidden;
+}
+
+.planning-cell.occupied:hover {
+    filter: brightness(0.95);
+}
+
+.planning-cell.pending {
+    background-color: #ffe082;
+    color: #ff6f00;
+}
+
+.planning-cell.rejected,
+.planning-cell.cancelled {
+    background-color: #ef9a9a;
+    color: #b71c1c;
+    opacity: 0.6;
+}
+
+.planning-cell.completed {
+    background-color: #90caf9;
+    color: #0d47a1;
+}
+
+.planning-cell.res-start {
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+    margin-left: 2px;
+}
+
+.cell-label {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 0.75rem;
+    font-weight: bold;
+    padding-left: 5px;
+}

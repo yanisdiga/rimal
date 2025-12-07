@@ -1,0 +1,185 @@
+/* Lists & Grids (Vehicles/Locations) */
+.data-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.data-item {
+    background: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    border: 1px solid #eee;
+}
+
+.data-item-content {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex: 1;
+}
+
+.data-item img {
+    width: 120px;
+    height: 80px;
+    object-fit: contain;
+    border-radius: 6px;
+    background-color: #f9f9f9;
+}
+
+.data-info h3 {
+    margin: 0 0 5px 0;
+    font-size: 1.2rem;
+    font-weight: 500;
+}
+
+.data-info p {
+    margin: 0;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.data-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.data-actions.vertical {
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+    margin-left: 20px;
+}
+
+/* Status Badges */
+.status-badge {
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+.status-badge.available {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+}
+
+.status-badge.unavailable {
+    background-color: #ffebee;
+    color: #c62828;
+}
+
+.status-badge.retired {
+    background-color: #000;
+    color: #fff;
+}
+
+.status-badge.expired {
+    background-color: #f9ebff;
+    color: #6a1b9a;
+}
+
+.status-badge.pending {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.status-badge.confirmed {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.status-badge.rejected,
+.status-badge.cancelled {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.status-badge.completed {
+    background-color: #cce5ff;
+    color: #004085;
+}
+
+/* Modal Styles */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 30px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.modal-content.large {
+    max-width: 800px;
+}
+
+.modal-title {
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-family: 'Anton', sans-serif;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+    justify-content: flex-end;
+}
+
+.modal-label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+/* Responsive Data Item */
+@media (max-width: 768px) {
+    .data-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .data-item-content {
+        width: 100%;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .data-actions {
+        width: 100%;
+        justify-content: space-between;
+        margin-top: 10px;
+        border-top: 1px solid #eee;
+        padding-top: 10px;
+    }
+}
+
+/* Utilities */
+.mt-20 {
+    margin-top: 20px;
+}
+
+.flex-1 {
+    flex: 1;
+}

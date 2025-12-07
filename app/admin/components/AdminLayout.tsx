@@ -34,6 +34,9 @@ export function AdminLayout({ children, title }: AdminLayoutProps) {
                         <Link href="/admin/reservations" className={`nav-item ${isActive('/admin/reservations')}`}>
                             <i className="fas fa-calendar-alt"></i> Réservations
                         </Link>
+                        <Link href="/admin/planning" className={`nav-item ${isActive('/admin/planning')}`}>
+                            <i className="fas fa-calendar-week"></i> Planning
+                        </Link>
                         <Link href="/admin/vehicles" className={`nav-item ${isActive('/admin/vehicles')}`}>
                             <i className="fas fa-car"></i> Véhicules
                         </Link>

@@ -18,15 +18,15 @@ export default async function VehiclesPage() {
     return (
         <AdminLayout title="Gestion de la Flotte">
             <div className="admin-form-container">
-                <h2 style={{ fontSize: '1.5rem', marginBottom: '20px', fontFamily: 'Anton, sans-serif' }}>Ajouter un Modèle</h2>
+                <h2 className="admin-section-title">Ajouter un Modèle</h2>
                 <AddModelForm />
             </div>
 
             <div className="data-grid">
-                <h2 style={{ fontSize: '1.5rem', marginBottom: '10px', fontFamily: 'Anton, sans-serif' }}>Modèles Existants ({modeles.length})</h2>
+                <h2 className="admin-section-title">Modèles Existants ({modeles.length})</h2>
 
                 {modeles.length === 0 ? (
-                    <p style={{ color: '#888', fontStyle: 'italic' }}>Aucun modèle de voiture n'a été ajouté.</p>
+                    <p className="admin-empty-text">Aucun modèle de voiture n'a été ajouté.</p>
                 ) : (
                     modeles.map((modele) => (
                         <VehicleModelRow key={modele.id} modele={modele} />

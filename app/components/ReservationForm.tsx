@@ -46,6 +46,8 @@ export function ReservationForm({ locations, hours }: ReservationFormProps) {
   // --- États (States) ---
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [selectedRange, setSelectedRange] = useState<DateRange | undefined>();
+  const [isStartCalendarOpen, setIsStartCalendarOpen] = useState(false);
+  const [isEndCalendarOpen, setIsEndCalendarOpen] = useState(false);
 
   // 👇 CORRECTION ICI : Initialisation sûre de l'état
   // On type l'état comme 'Location | undefined' et on utilise locations[0]
@@ -66,6 +68,8 @@ export function ReservationForm({ locations, hours }: ReservationFormProps) {
 
   // --- Références (Refs) ---
   const calendarRef = useRef<HTMLDivElement>(null);
+  const startCalendarRef = useRef<HTMLDivElement>(null);
+  const endCalendarRef = useRef<HTMLDivElement>(null);
   const locationRef = useRef<HTMLDivElement>(null);
   const returnLocationRef = useRef<HTMLDivElement>(null);
   const startTimeRef = useRef<HTMLDivElement>(null);
@@ -74,6 +78,8 @@ export function ReservationForm({ locations, hours }: ReservationFormProps) {
   // --- Effets (Effects) ---
   // On attache les hooks de clic extérieur à chaque menu
   useClickOutside(calendarRef, () => setIsCalendarOpen(false));
+  useClickOutside(startCalendarRef, () => setIsStartCalendarOpen(false));
+  useClickOutside(endCalendarRef, () => setIsEndCalendarOpen(false));
   useClickOutside(locationRef, () => setIsLocationOpen(false));
   useClickOutside(returnLocationRef, () => setIsReturnLocationOpen(false));
   useClickOutside(startTimeRef, () => setIsStartTimeOpen(false));
@@ -84,6 +90,8 @@ export function ReservationForm({ locations, hours }: ReservationFormProps) {
     setSelectedRange(range);
     if (range?.from && range?.to) {
       setIsCalendarOpen(false); // Ferme si la sélection est complète
+      setIsStartCalendarOpen(false);
+      setIsEndCalendarOpen(false);
     }
   };
   const handleLocationSelect = (location: Location) => {
@@ -237,8 +245,12 @@ export function ReservationForm({ locations, hours }: ReservationFormProps) {
             <div className="button-start">
               <button
                 id="start-date"
-                className="choose-date"
-                onClick={() => setIsCalendarOpen(!isCalendarOpen)}
+                className={`choose-date ${isStartCalendarOpen ? 'open' : ''}`}
+                onClick={() => {
+                  setIsCalendarOpen(true);
+                  setIsStartCalendarOpen(true);
+                  setIsEndCalendarOpen(false);
+                }}
               >
                 <i className="fas fa-calendar-alt"></i>
                 <span>
@@ -250,7 +262,12 @@ export function ReservationForm({ locations, hours }: ReservationFormProps) {
               <div
                 className={`choose-hour ${isStartTimeOpen ? 'open' : ''}`}
                 ref={startTimeRef}
-                onClick={() => setIsStartTimeOpen(!isStartTimeOpen)}
+                onClick={() => {
+                  setIsStartTimeOpen(!isStartTimeOpen);
+                  setIsCalendarOpen(false);
+                  setIsStartCalendarOpen(false);
+                  setIsEndCalendarOpen(false);
+                }}
               >
                 <div className="choose-hour-select">
                   <div className="selected">
@@ -261,7 +278,9 @@ export function ReservationForm({ locations, hours }: ReservationFormProps) {
                 {isStartTimeOpen && (
                   <ul className="options">
                     {hours.map((hour) => (
-                      <li key={hour} onClick={() => handleStartTimeSelect(hour)}>
+                      <li key={hour} onClick={() => {
+                        handleStartTimeSelect(hour);
+                      }}>
                         {hour}
                       </li>
                     ))}
@@ -278,8 +297,12 @@ export function ReservationForm({ locations, hours }: ReservationFormProps) {
             <div className="button-end">
               <button
                 id="end-date"
-                className="choose-date"
-                onClick={() => setIsCalendarOpen(!isCalendarOpen)}
+                className={`choose-date ${isEndCalendarOpen ? 'open' : ''}`}
+                onClick={() => {
+                  setIsCalendarOpen(true);
+                  setIsEndCalendarOpen(true);
+                  setIsStartCalendarOpen(false);
+                }}
               >
                 <i className="fas fa-calendar-alt"></i>
                 <span>
@@ -291,7 +314,13 @@ export function ReservationForm({ locations, hours }: ReservationFormProps) {
               <div
                 className={`choose-hour return-hour ${isReturnTimeOpen ? 'open' : ''}`}
                 ref={returnTimeRef}
-                onClick={() => setIsReturnTimeOpen(!isReturnTimeOpen)}
+                onClick={() => {
+                  setIsReturnTimeOpen(!isReturnTimeOpen);
+                  setIsCalendarOpen(false);
+                  setIsStartCalendarOpen(false);
+                  setIsEndCalendarOpen(false);
+                }
+                }
               >
                 <div className="choose-hour-select">
                   <div className="selected">
@@ -319,16 +348,40 @@ export function ReservationForm({ locations, hours }: ReservationFormProps) {
               <DayPicker
                 mode="range"
                 selected={selectedRange}
-                onSelect={handleDateSelect}
+                onSelect={(range, selectedDay) => {
+                  // Logique personnalisée selon l'input actif
+                  if (isStartCalendarOpen) {
+                    // Si on choisit la date de départ, on force la date de fin à undefined
+                    // pour obliger l'utilisateur à faire un 2ème clic pour la fin (même si c'est le même jour)
+
+                    // IMPORTANT: On utilise 'selectedDay' (le jour cliqué) comme début de range
+                    // et on ignore 'range' (qui pourrait être une fusion avec l'ancienne sélection).
+                    // Cela garantit que si l'utilisateur reclique pour changer le début, 
+                    // l'ancienne range est effacée.
+                    setSelectedRange({ from: selectedDay, to: undefined });
+
+                    setIsStartCalendarOpen(false);
+                    setIsEndCalendarOpen(true);
+                    setIsCalendarOpen(true); // On maintient ouvert
+                  } else {
+                    // Sinon (mode date de fin ou défaut), on accepte la range telle quelle
+                    setSelectedRange(range);
+                    if (range?.from && range?.to) {
+                      setIsCalendarOpen(false);
+                      setIsStartCalendarOpen(false);
+                      setIsEndCalendarOpen(false);
+                    }
+                  }
+                }}
                 numberOfMonths={2}
                 locale={fr}
-                fromDate={new Date()} // Remplace minDate: "today"
+                disabled={{ before: new Date() }}
               />
             </div>
           )}
         </div>
         <button className="validate-button" onClick={handleSearch}>Rechercher</button>
       </div>
-    </div>
+    </div >
   );
 }

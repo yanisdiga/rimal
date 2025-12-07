@@ -33,6 +33,18 @@ export async function createReservation(formData: FormData) {
     const startDateTime = new Date(`${startDateStr}T${startTime || '00:00'}:00`);
     const endDateTime = new Date(`${endDateStr}T${returnTime || '00:00'}:00`);
 
+    const now = new Date();
+    // Reset seconds/milliseconds for fair comparison
+    now.setSeconds(0, 0);
+
+    if (startDateTime < now) {
+        return { error: 'La date de départ ne peut pas être dans le passé.' };
+    }
+
+    if (endDateTime <= startDateTime) {
+        return { error: 'La date de retour doit être ultérieure à la date de départ.' };
+    }
+
     // 1. Find an available vehicle of this model
     // We need to check if there is any vehicle of this model that does NOT have overlapping reservations
     // AND has status DISPONIBLE
@@ -43,7 +55,17 @@ export async function createReservation(formData: FormData) {
         where: {
             modeleId: modelId,
             statut: 'DISPONIBLE',
-            // TODO: Add overlap check
+            reservations: {
+                none: {
+                    status: {
+                        in: ['PENDING', 'CONFIRMED']
+                    },
+                    AND: [
+                        { dateDebut: { lt: endDateTime } },
+                        { dateFin: { gt: startDateTime } }
+                    ]
+                }
+            }
         }
     });
 

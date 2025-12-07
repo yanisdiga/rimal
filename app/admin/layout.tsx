@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import '../globals.css';
+import "../../styles/home/reservations.css";
 import "./admin.css";
 
 export default function AdminLayout({

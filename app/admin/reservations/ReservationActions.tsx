@@ -51,7 +51,6 @@ export function ReservationActions({ id, currentStatus }: ReservationActionsProp
                         onClick={() => initiateStatusChange('CONFIRMED')}
                         disabled={isLoading}
                         className="btn-success"
-                        style={{ opacity: isLoading ? 0.7 : 1 }}
                         title="Confirmer la réservation"
                     >
                         <i className="fas fa-check"></i>
@@ -63,7 +62,6 @@ export function ReservationActions({ id, currentStatus }: ReservationActionsProp
                         onClick={() => initiateStatusChange('CANCELLED')}
                         disabled={isLoading}
                         className="btn-danger"
-                        style={{ opacity: isLoading ? 0.7 : 1 }}
                         title="Annuler la réservation"
                     >
                         <i className="fas fa-times"></i>
@@ -74,8 +72,7 @@ export function ReservationActions({ id, currentStatus }: ReservationActionsProp
                     <button
                         onClick={() => initiateStatusChange('PENDING')}
                         disabled={isLoading}
-                        className="btn-secondary"
-                        style={{ opacity: isLoading ? 0.7 : 1, padding: '5px 10px', fontSize: '0.8rem' }}
+                        className="btn-secondary btn-sm"
                         title="Remettre en attente"
                     >
                         <i className="fas fa-clock"></i>

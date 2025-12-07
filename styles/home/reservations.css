@@ -151,9 +151,10 @@
 }
 
 .reservations .choose-location.open,
-.reservations .choose-hour.open {
+.reservations .choose-hour.open,
+.reservations button.choose-date.open {
   background-color: #fff;
-  border-color: #000;
+  border: 2px solid #000 !important;
   box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.05);
 }
 

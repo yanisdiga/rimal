@@ -23,6 +23,25 @@ export default async function ReservationsPage() {
         },
     });
 
+    const vehicles = await prisma.vehicule.findMany({
+        include: {
+            modele: true,
+            reservations: {
+                select: {
+                    id: true,
+                    dateDebut: true,
+                    dateFin: true,
+                    status: true,
+                    clientNom: true,
+                    clientPrenom: true,
+                }
+            }
+        },
+        orderBy: {
+            plaque: 'asc',
+        },
+    });
+
     const locations = await prisma.location.findMany();
 
     const formatPrice = (price: number) => {
@@ -52,6 +71,9 @@ export default async function ReservationsPage() {
                 break;
             case 'COMPLETED':
                 badgeClass += ' completed';
+                break;
+            case 'EXPIRED':
+                badgeClass += ' expired';
                 break;
             default:
                 badgeClass += ' pending';
@@ -87,7 +109,7 @@ export default async function ReservationsPage() {
                                     )}
 
                                     {/* Reservation Info */}
-                                    <div className="data-info" style={{ flex: 1 }}>
+                                    <div className="data-info flex-1">
                                         <div className="reservation-header">
                                             <h3 className="reservation-title">
                                                 {res.vehicule.modele.nom} <span className="reservation-subtitle">({res.vehicule.plaque})</span>
@@ -99,9 +121,10 @@ export default async function ReservationsPage() {
                                             <div>
                                                 <div className="info-row"><i className="fas fa-calendar-alt info-icon"></i> {formatDate(res.dateDebut)} - {formatDate(res.dateFin)}</div>
                                                 <div className="info-row"><i className="fas fa-map-marker-alt info-icon"></i> {res.lieuPriseEnCharge.nom} <i className="fas fa-arrow-right reservation-arrow"></i> {res.lieuRetour.nom}</div>
+                                                {res.note ? <div className="info-row"><i className="fa-regular fa-note-sticky info-icon"></i> {res.note}</div> : null}
                                             </div>
                                             <div>
-                                                <div className="client-name">{res.clientPrenom} {res.clientNom}</div>
+                                                <div className="client-name"><i className="fas fa-user info-icon"></i> {res.clientPrenom} {res.clientNom}</div>
                                                 <div className="info-row"><i className="fas fa-phone info-icon"></i> {res.clientTel}</div>
                                                 <div className="info-row"><i className="fas fa-envelope info-icon"></i> {res.clientEmail}</div>
                                             </div>
@@ -110,18 +133,19 @@ export default async function ReservationsPage() {
                                 </div>
 
                                 {/* Actions */}
-                                <div className="data-actions" style={{ flexDirection: 'column', alignItems: 'flex-end', gap: '10px', marginLeft: '20px' }}>
+                                <div className="data-actions vertical">
                                     {getStatusBadge(res.status)}
                                     <div className="action-buttons">
-                                        <EditReservationModal reservation={res} locations={locations} />
+                                        <EditReservationModal reservation={res} locations={locations} vehicles={vehicles} />
                                         <ReservationActions id={res.id} currentStatus={res.status} />
                                     </div>
                                 </div>
                             </div>
                         ))}
                     </div>
-                )}
-            </div>
-        </AdminLayout>
+                )
+                }
+            </div >
+        </AdminLayout >
     );
 }

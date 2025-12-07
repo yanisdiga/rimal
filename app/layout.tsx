@@ -17,6 +17,8 @@ import { prisma } from '../lib/prisma';
 import NavbarWrapper from "./components/NavbarWrapper";
 import { Footer } from "./components/Footer";
 
+import { checkExpiredReservations } from "./actions/checkExpiredReservations";
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -38,6 +40,9 @@ export const metadata: Metadata = {
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  // Vérification automatique des réservations expirées à chaque chargement de page
+  await checkExpiredReservations();
+
   const voitures = await prisma.modeleVoiture.findMany();
 
   return (

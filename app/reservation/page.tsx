@@ -16,13 +16,34 @@ export default async function ReservationPage({
     const resolvedSearchParams = await searchParams;
 
     // Dans une implémentation réelle, on utiliserait searchParams pour filtrer
-    // const { location, returnLocation, startDate, endDate, startTime, returnTime } = resolvedSearchParams;
-    // Pour l'instant, on récupère tous les véhicules comme convenu
+    const { startDate, endDate, startTime, returnTime } = resolvedSearchParams;
+
+    // Construction de la condition de disponibilité temporelle
+    let dateFilter: any = {};
+
+    if (startDate && endDate) {
+        const startDateTime = new Date(`${startDate}T${startTime || '00:00'}:00`);
+        const endDateTime = new Date(`${endDate}T${returnTime || '00:00'}:00`);
+
+        dateFilter = {
+            none: {
+                status: {
+                    in: ['CONFIRMED']
+                },
+                AND: [
+                    { dateDebut: { lt: endDateTime } },
+                    { dateFin: { gt: startDateTime } }
+                ]
+            }
+        };
+    }
+
     const voitures = await prisma.modeleVoiture.findMany({
         where: {
             vehicules: {
                 some: {
-                    statut: 'DISPONIBLE'
+                    statut: 'DISPONIBLE',
+                    reservations: dateFilter
                 }
             }
         }
@@ -34,13 +55,24 @@ export default async function ReservationPage({
     return (
         <>
             <NavbarAndMenu voitures={voitures} />
-            <div className="reservation-page" style={{ paddingTop: '100px' }}>
+            <div className="reservation-page">
                 <div className="reservation-container">
                     <h1 className="reservation-title">
                         Résultats de votre recherche
                     </h1>
-                    {/* On réutilise la section véhicules existante */}
-                    <VehiclesSection voitures={voitures} searchParams={resolvedSearchParams} />
+
+                    {voitures.length === 0 ? (
+                        <div className="no-results-container">
+                            <div className="no-results-title">
+                                Aucun véhicule disponible pour ces dates.
+                            </div>
+                            <p className="no-results-text">
+                                Essayez de modifier vos dates ou contactez-nous directement.
+                            </p>
+                        </div>
+                    ) : (
+                        <VehiclesSection voitures={voitures} searchParams={resolvedSearchParams} />
+                    )}
                 </div>
             </div>
 

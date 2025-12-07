@@ -7,25 +7,6 @@
     font-family: 'Oswald', sans-serif;
 }
 
-.home-logo-container {
-    text-align: center;
-    margin-bottom: 2rem;
-}
-
-.home-logo {
-    font-family: 'Anton', sans-serif;
-    font-size: 2.5rem;
-    color: #1a1a1a;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    text-decoration: none;
-    transition: color 0.3s ease;
-}
-
-.home-logo:hover {
-    color: #555;
-}
-
 .booking-container {
     position: relative;
     max-width: 900px;
@@ -35,6 +16,7 @@
     border-radius: 20px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
     border: 1px solid rgba(0, 0, 0, 0.05);
+    margin-top: 2rem;
 }
 
 .back-button {
@@ -75,6 +57,7 @@
     display: flex;
     gap: 3rem;
     align-items: flex-start;
+    align-items: center;
 }
 
 .form-column {
@@ -336,4 +319,55 @@
         position: static;
         margin-bottom: 2rem;
     }
+}
+
+/* Helper Classes */
+.full-width {
+    grid-column: 1 / -1;
+}
+
+.choose-date-btn {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background-color: #fcfcfc;
+    text-align: left;
+    font-family: 'Oswald', sans-serif;
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.choose-date-btn:hover {
+    background-color: #fff;
+    border-color: #1a1a1a;
+}
+
+.calendar-popup {
+    position: absolute;
+    z-index: 1000;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 5px;
+}
+
+.chevron-icon {
+    margin-left: 10px;
+    font-size: 0.8rem;
+}
+
+.error-message {
+    color: #e74c3c;
+    margin-bottom: 1rem;
+    padding: 10px;
+    background-color: #fce8e6;
+    border-radius: 8px;
+    border-left: 4px solid #e74c3c;
 }

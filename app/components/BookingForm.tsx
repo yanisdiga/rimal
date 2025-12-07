@@ -89,7 +89,14 @@ export function BookingForm({ modelId, modelName, modelImageUrl, searchParams, l
     const totalPrice = calculateTotal();
     const days = totalPrice > 0 ? Math.round(totalPrice / pricePerDay) : 0;
 
-    const handleDateSelect = (range: DateRange | undefined) => {
+    const handleDateSelect = (range: DateRange | undefined, selectedDay: Date) => {
+        // Si une plage complète est déjà sélectionnée, on redémarre la sélection
+        // avec la nouvelle date comme point de départ
+        if (selectedRange?.from && selectedRange?.to) {
+            setSelectedRange({ from: selectedDay, to: undefined });
+            return;
+        }
+
         setSelectedRange(range);
         if (range?.from && range?.to) {
             setIsCalendarOpen(false);
@@ -133,26 +140,12 @@ export function BookingForm({ modelId, modelName, modelImageUrl, searchParams, l
                     <div className="booking-form-section">
                         <h3>Dates de réservation</h3>
                         <div className="form-grid">
-                            <div className="form-group" style={{ gridColumn: '1 / -1' }}>
+                            <div className="form-group full-width">
                                 <label>Date de départ et de retour *</label>
                                 <button
                                     type="button"
-                                    className="choose-date-button"
+                                    className="choose-date-btn"
                                     onClick={() => setIsCalendarOpen(!isCalendarOpen)}
-                                    style={{
-                                        width: '100%',
-                                        padding: '12px 15px',
-                                        border: '1px solid #e0e0e0',
-                                        borderRadius: '8px',
-                                        backgroundColor: '#fcfcfc',
-                                        textAlign: 'left',
-                                        fontFamily: 'Oswald, sans-serif',
-                                        fontSize: '1rem',
-                                        cursor: 'pointer',
-                                        display: 'flex',
-                                        justifyContent: 'space-between',
-                                        alignItems: 'center'
-                                    }}
                                 >
                                     <span>
                                         {selectedRange?.from ? format(selectedRange.from, 'dd/MM/yyyy') : 'Sélectionner les dates'}
@@ -161,14 +154,14 @@ export function BookingForm({ modelId, modelName, modelImageUrl, searchParams, l
                                     <i className="fas fa-calendar-alt"></i>
                                 </button>
                                 {isCalendarOpen && (
-                                    <div style={{ position: 'absolute', zIndex: 10, backgroundColor: 'white', border: '1px solid #ccc', borderRadius: '8px', padding: '10px', boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }}>
+                                    <div className="calendar-popup">
                                         <DayPicker
                                             mode="range"
                                             selected={selectedRange}
                                             onSelect={handleDateSelect}
                                             numberOfMonths={2}
                                             locale={fr}
-                                            fromDate={new Date()}
+                                            disabled={{ before: new Date() }}
                                         />
                                     </div>
                                 )}
@@ -184,7 +177,7 @@ export function BookingForm({ modelId, modelName, modelImageUrl, searchParams, l
                                     <div className="choose-hour-select">
                                         <div className="selected">
                                             <span>{startTime}</span>
-                                            <i className="fas fa-chevron-down" style={{ marginLeft: '10px', fontSize: '0.8rem' }}></i>
+                                            <i className="fas fa-chevron-down chevron-icon"></i>
                                         </div>
                                     </div>
                                     {isStartTimeOpen && (
@@ -209,7 +202,7 @@ export function BookingForm({ modelId, modelName, modelImageUrl, searchParams, l
                                     <div className="choose-hour-select">
                                         <div className="selected">
                                             <span>{returnTime}</span>
-                                            <i className="fas fa-chevron-down" style={{ marginLeft: '10px', fontSize: '0.8rem' }}></i>
+                                            <i className="fas fa-chevron-down chevron-icon"></i>
                                         </div>
                                     </div>
                                     {isReturnTimeOpen && (
@@ -289,7 +282,7 @@ export function BookingForm({ modelId, modelName, modelImageUrl, searchParams, l
                         </div>
                     </div>
 
-                    {error && <div className="error-message" style={{ color: 'red', marginBottom: '1rem' }}>{error}</div>}
+                    {error && <div className="error-message">{error}</div>}
 
                     <button type="submit" className="submit-button" disabled={isSubmitting}>
                         {isSubmitting ? 'Traitement...' : 'Confirmer la réservation'}
