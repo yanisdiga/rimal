@@ -229,3 +229,26 @@
     transform: scale(1.02);
     transition: transform 0.3s ease-in-out;
 }
+
+@media screen and (max-width: 768px) {
+    .hamburger span {
+        display: none;
+    }
+
+    .hamburger svg {
+        top: 25px;
+        left: 20px;
+        transform: scale(1.2);
+        position: absolute;
+    }
+
+    .menu-overlay {
+        width: 100%;
+    }
+
+    .menu-overlay .close-button {
+        top: 10px !important;
+        right: 10px !important;
+        color: black;
+    }
+}
