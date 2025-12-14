@@ -72,12 +72,39 @@
 }
 
 .form-group select,
-.form-group input {
+.sidebar-custom-input-wrapper {
     width: 100%;
     padding: 0.8rem;
     border: 1px solid #ddd;
     border-radius: 8px;
     font-size: 0.95rem;
+    background-color: white;
+}
+
+.sidebar-custom-input-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+}
+
+.sidebar-custom-input-wrapper input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 0.95rem;
+}
+
+.sidebar-custom-input-wrapper i {
+    cursor: pointer;
+    color: black;
+    /* Requested black color */
+    margin-left: 10px;
+    font-size: 1rem;
+    transition: color 0.2s;
+}
+
+.sidebar-custom-input-wrapper i:hover {
+    color: #555;
 }
 
 .update-search-btn {

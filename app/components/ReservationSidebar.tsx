@@ -23,8 +23,8 @@ export function ReservationSidebar({ locations, className }: ReservationSidebarP
     const searchParams = useSearchParams();
 
     // --- State for Search Params ---
-    const [pickupLocationId, setPickupLocationId] = useState(searchParams.get('location') || '');
-    const [returnLocationId, setReturnLocationId] = useState(searchParams.get('returnLocation') || '');
+    const [pickupLocationId, setPickupLocationId] = useState(searchParams.get('customLocation') || searchParams.get('location') || '');
+    const [returnLocationId, setReturnLocationId] = useState(searchParams.get('customReturnLocation') || searchParams.get('returnLocation') || '');
 
     // Date/Time State
     const [startDate, setStartDate] = useState<Date | undefined>(
@@ -54,11 +54,24 @@ export function ReservationSidebar({ locations, className }: ReservationSidebarP
     const handleSearchUpdate = () => {
         const params = new URLSearchParams(searchParams.toString());
 
-        if (pickupLocationId) params.set('location', pickupLocationId);
-        else params.delete('location');
+        if (searchParams.get('customLocation') !== null) {
+            if (pickupLocationId) params.set('customLocation', pickupLocationId); // pickupLocationId holds the text in this mode
+            // Clear standard location if custom is set
+            params.delete('location');
+        } else {
+            if (pickupLocationId) params.set('location', pickupLocationId);
+            else params.delete('location');
+            params.delete('customLocation');
+        }
 
-        if (returnLocationId) params.set('returnLocation', returnLocationId);
-        else params.delete('returnLocation');
+        if (searchParams.get('customReturnLocation') !== null) {
+            if (returnLocationId) params.set('customReturnLocation', returnLocationId);
+            params.delete('returnLocation');
+        } else {
+            if (returnLocationId) params.set('returnLocation', returnLocationId);
+            else params.delete('returnLocation');
+            params.delete('customReturnLocation');
+        }
 
         if (startDate) params.set('startDate', format(startDate, 'yyyy-MM-dd'));
         else params.delete('startDate');
@@ -99,28 +112,97 @@ export function ReservationSidebar({ locations, className }: ReservationSidebarP
 
                 <div className="form-group">
                     <label>Retrait</label>
-                    <select
-                        value={pickupLocationId}
-                        onChange={(e) => setPickupLocationId(e.target.value)}
-                    >
-                        <option value="">Choisir un lieu...</option>
-                        {locations.map(loc => (
-                            <option key={loc.id} value={loc.id}>{loc.nom}</option>
-                        ))}
-                    </select>
+                    {/* Check if custom location is active or standard select */}
+                    {searchParams.get('customLocation') !== null ? (
+                        <div className="sidebar-custom-input-wrapper">
+                            <input
+                                type="text"
+                                value={pickupLocationId || ''}
+                                onChange={(e) => setPickupLocationId(e.target.value)}
+                                placeholder="Adresse de retrait..."
+                            />
+                            <i
+                                className="fas fa-times"
+                                onClick={() => {
+                                    const params = new URLSearchParams(searchParams.toString());
+                                    params.delete('customLocation');
+                                    setPickupLocationId('');
+                                    router.push(`/reservation?${params.toString()}`);
+                                }}
+                                title="Annuler"
+                            ></i>
+                        </div>
+                    ) : (
+                        <select
+                            value={pickupLocationId || ''}
+                            onChange={(e) => {
+                                if (e.target.value === 'custom') {
+                                    // Switch to custom mode via router push or state handling?
+                                    // Better to just set a flag locally or push a param?
+                                    // Let's simple prompt or changing UI state.
+                                    // For sidebar simplicity, we might need a button to toggle "Autre"
+                                    // But to keep it consistent, let's just use the select with an 'Autre' option that changes the UI.
+                                    // Simplified: Just add "Autre" to options. If selected, changing UI to input.
+                                    setPickupLocationId(''); // Clear previous selection
+                                    const params = new URLSearchParams(searchParams.toString());
+                                    params.set('customLocation', ''); // set empty to trigger input mode
+                                    router.push(`/reservation?${params.toString()}`);
+                                } else {
+                                    setPickupLocationId(e.target.value);
+                                }
+                            }}
+                        >
+                            <option value="">Choisir un lieu...</option>
+                            {locations.map(loc => (
+                                <option key={loc.id} value={loc.id}>{loc.nom}</option>
+                            ))}
+                            <option value="custom" style={{ fontWeight: 'bold', color: '#B49339' }}>Autre / Adresse Spécifique</option>
+                        </select>
+                    )}
                 </div>
 
                 <div className="form-group">
                     <label>Retour</label>
-                    <select
-                        value={returnLocationId}
-                        onChange={(e) => setReturnLocationId(e.target.value)}
-                    >
-                        <option value="">Même que le retrait</option>
-                        {locations.map(loc => (
-                            <option key={loc.id} value={loc.id}>{loc.nom}</option>
-                        ))}
-                    </select>
+                    {searchParams.get('customReturnLocation') !== null ? (
+                        <div className="sidebar-custom-input-wrapper">
+                            <input
+                                type="text"
+                                value={returnLocationId}
+                                onChange={(e) => setReturnLocationId(e.target.value)}
+                                placeholder="Adresse de retour..."
+                            />
+                            <i
+                                className="fas fa-times"
+                                onClick={() => {
+                                    const params = new URLSearchParams(searchParams.toString());
+                                    params.delete('customReturnLocation');
+                                    setReturnLocationId('');
+                                    router.push(`/reservation?${params.toString()}`);
+                                }}
+                                title="Annuler"
+                            ></i>
+                        </div>
+                    ) : (
+                        <select
+                            value={returnLocationId || ''}
+                            onChange={(e) => {
+                                if (e.target.value === 'custom') {
+                                    setReturnLocationId(''); // Clear previous selection
+                                    const params = new URLSearchParams(searchParams.toString());
+                                    params.set('customReturnLocation', '');
+                                    router.push(`/reservation?${params.toString()}`);
+                                } else {
+                                    setReturnLocationId(e.target.value);
+                                }
+                            }}
+                        >
+                            <option value="">Même que le retrait</option>
+                            {locations.map(loc => (
+                                <option key={loc.id} value={loc.id}>{loc.nom}</option>
+                            ))}
+                            <option value="custom" style={{ fontWeight: 'bold', color: '#B49339' }}>Autre / Adresse Spécifique</option>
+                        </select>
+                    )}
                 </div>
 
                 {/* New Date Selector in Sidebar */}

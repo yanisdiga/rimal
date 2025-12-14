@@ -5,8 +5,17 @@ import { redirect } from 'next/navigation';
 
 export async function createReservation(formData: FormData) {
     const modelId = parseInt(formData.get('modelId') as string);
-    const locationId = parseInt(formData.get('locationId') as string);
-    const returnLocationId = parseInt(formData.get('returnLocationId') as string);
+    // Parse locationId safely - might be empty if custom
+    const locationIdStr = formData.get('locationId') as string;
+    const locationId = locationIdStr ? parseInt(locationIdStr) : null;
+
+    // Return location - fallback to locationId if empty (unless custom override logic is needed)
+    const returnLocationIdStr = formData.get('returnLocationId') as string;
+    const returnLocationId = returnLocationIdStr ? parseInt(returnLocationIdStr) : null;
+
+    const customLocation = formData.get('customLocation') as string;
+    const customReturnLocation = formData.get('customReturnLocation') as string;
+
     const startDateStr = formData.get('startDate') as string;
     const endDateStr = formData.get('endDate') as string;
     const startTime = formData.get('startTime') as string;
@@ -18,10 +27,15 @@ export async function createReservation(formData: FormData) {
     const phone = formData.get('phone') as string;
 
     console.log('Received FormData:', Object.fromEntries(formData));
-    console.log('Parsed IDs:', { modelId, locationId, returnLocationId });
+    console.log('Parsed:', { modelId, locationId, returnLocationId, customLocation });
 
     if (!modelId) return { error: 'Le modèle de véhicule est manquant.' };
-    if (!locationId) return { error: 'Le lieu de départ est manquant.' };
+
+    // CUSTOM LOGIC: Either standard location OR custom location is required
+    if (!locationId && !customLocation) {
+        return { error: 'Le lieu de départ est manquant. Veuillez choisir un lieu ou saisir une adresse.' };
+    }
+
     if (!startDateStr) return { error: 'La date de départ est manquante.' };
     if (!endDateStr) return { error: 'La date de retour est manquante.' };
     if (!lastName) return { error: 'Le nom est requis.' };
@@ -45,12 +59,7 @@ export async function createReservation(formData: FormData) {
         return { error: 'La date de retour doit être ultérieure à la date de départ.' };
     }
 
-    // 1. Find an available vehicle of this model
-    // We need to check if there is any vehicle of this model that does NOT have overlapping reservations
-    // AND has status DISPONIBLE
-
-    // Simple naive check: find first available vehicle
-    // In a real app, we would check for overlaps
+    // 1. Availability Check
     const availableVehicle = await prisma.vehicule.findFirst({
         where: {
             modeleId: modelId,
@@ -70,10 +79,12 @@ export async function createReservation(formData: FormData) {
     });
 
     if (!availableVehicle) {
+        // Fallback: Check if ANY vehicle of this model exists, to give a better error? 
+        // Or just say unavailable.
         return { error: 'Désolé, aucun véhicule de ce modèle n\'est disponible pour ces dates.' };
     }
 
-    // Calculate price (naive implementation)
+    // Calculate price
     const model = await prisma.modeleVoiture.findUnique({ where: { id: modelId } });
     if (!model) return { error: 'Modèle introuvable.' };
 
@@ -92,9 +103,23 @@ export async function createReservation(formData: FormData) {
                 clientEmail: email,
                 clientTel: phone,
                 status: 'PENDING',
-                vehiculeId: availableVehicle.id,
-                lieuPriseEnChargeId: locationId,
-                lieuRetourId: returnLocationId || locationId,
+
+                // Use connect for relation
+                vehicule: {
+                    connect: { id: availableVehicle.id }
+                },
+
+                // Use connect for optional locations if ID matches, else null
+                lieuPriseEnCharge: locationId ? { connect: { id: locationId } } : undefined,
+
+                lieuRetour: (returnLocationId || locationId) ? { connect: { id: returnLocationId || locationId || undefined } } : undefined,
+
+                // Custom fields
+                customPriseEnCharge: customLocation || undefined,
+                // If customReturnLocation is provided, use it. 
+                // Else if customLocation (pickup) is provided AND returnLocationId is empty/null, it typically implies return = pickup.
+                // However, our flow suggests if returnLocationId is provided, we use it. 
+                customRetour: customReturnLocation || customLocation || undefined,
             }
         });
     } catch (e) {

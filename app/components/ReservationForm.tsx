@@ -39,7 +39,7 @@ export function ReservationForm({ locations, hours }: ReservationFormProps) {
   const [selectedRange, setSelectedRange] = useState<DateRange | undefined>();
 
   const [isLocationOpen, setIsLocationOpen] = useState(false);
-  const [selectedLocation, setSelectedLocation] = useState<Location | undefined>(locations[0]);
+  const [selectedLocation, setSelectedLocation] = useState<Location | undefined>(undefined);
 
   const [isReturnLocationOpen, setIsReturnLocationOpen] = useState(false);
   const [selectedReturnLocation, setSelectedReturnLocation] = useState<Location | undefined>();
@@ -47,6 +47,13 @@ export function ReservationForm({ locations, hours }: ReservationFormProps) {
   const [selectedStartTime, setSelectedStartTime] = useState(hours[0]);
   const [selectedReturnTime, setSelectedReturnTime] = useState(hours[0]);
   const [isReturnLocationDifferent, setIsReturnLocationDifferent] = useState(false);
+
+  // Custom Location State
+  const [isCustomLocationMode, setIsCustomLocationMode] = useState(false);
+  const [customLocationText, setCustomLocationText] = useState('');
+
+  const [isCustomReturnLocationMode, setIsCustomReturnLocationMode] = useState(false);
+  const [customReturnLocationText, setCustomReturnLocationText] = useState('');
 
   // --- Références (Refs) ---
   const locationRef = useRef<HTMLDivElement>(null);
@@ -77,10 +84,17 @@ export function ReservationForm({ locations, hours }: ReservationFormProps) {
   const handleSearch = () => {
     const query: Record<string, string> = {};
 
-    if (selectedLocation?.id) {
+    if (isCustomLocationMode && customLocationText) {
+      query.customLocation = customLocationText;
+    } else if (selectedLocation?.id) {
       query.location = selectedLocation.id.toString();
     }
-    query.returnLocation = (selectedReturnLocation?.id || selectedLocation?.id || '').toString();
+
+    if (isCustomReturnLocationMode && customReturnLocationText) {
+      query.customReturnLocation = customReturnLocationText;
+    } else {
+      query.returnLocation = (selectedReturnLocation?.id || selectedLocation?.id || '').toString();
+    }
 
     if (selectedRange?.from) {
       query.startDate = format(selectedRange.from, 'yyyy-MM-dd');
@@ -112,20 +126,38 @@ export function ReservationForm({ locations, hours }: ReservationFormProps) {
           <div
             className={`choose-location ${isLocationOpen ? 'open' : ''}`}
             ref={locationRef}
-            onClick={() => setIsLocationOpen(!isLocationOpen)}
+            onClick={() => !isCustomLocationMode && setIsLocationOpen(!isLocationOpen)}
           >
-            <i className="fas fa-map-marker-alt"></i>
-            <div className="choose-location-select">
-              <div className="selected">
-                <span>
-                  {selectedLocation ? selectedLocation.nom : 'Choisir un lieu'}
-                </span>
-                <svg viewBox="-19.04 0 75.804 75.804" className={isLocationOpen ? 'rotated' : ''}>
-                  <path style={{ fill: "#353434" }} d="M37.902,30.566L1.876,5.32c-1.425-0.992-2.316-2.583-2.385-4.32c-0.063-1.736,0.697-3.391,2.039-4.481L36.883-26.68  c2.197-1.777,5.361-1.464,7.132,0.735c0.686,0.854,1.066,1.914,1.066,3.007v54.265c0,2.833-2.296,5.129-5.129,5.129  C39.297,36.456,38.583,36.237,37.902,30.566z" />
-                </svg>
+
+            {isCustomLocationMode ? (
+              <div className="custom-location-input-wrapper">
+                <input
+                  type="text"
+                  placeholder="Entrez l'adresse de livraison..."
+                  value={customLocationText}
+                  onChange={(e) => setCustomLocationText(e.target.value)}
+                  autoFocus
+                  className="custom-input-field"
+                />
+                <i className="fas fa-times custom-input-close" onClick={(e) => { e.stopPropagation(); setIsCustomLocationMode(false); setSelectedLocation(locations[0]); }}></i>
               </div>
-            </div>
-            {isLocationOpen && (
+            ) : (
+              <>
+                <i className="fas fa-map-marker-alt"></i>
+                <div className="choose-location-select">
+                  <div className="selected">
+                    <span>
+                      {selectedLocation ? selectedLocation.nom : 'Choisir un lieu'}
+                    </span>
+                    <svg viewBox="-19.04 0 75.804 75.804" className={isLocationOpen ? 'rotated' : ''}>
+                      <path className="location-svg-path" d="M37.902,30.566L1.876,5.32c-1.425-0.992-2.316-2.583-2.385-4.32c-0.063-1.736,0.697-3.391,2.039-4.481L36.883-26.68  c2.197-1.777,5.361-1.464,7.132,0.735c0.686,0.854,1.066,1.914,1.066,3.007v54.265c0,2.833-2.296,5.129-5.129,5.129  C39.297,36.456,38.583,36.237,37.902,30.566z" />
+                    </svg>
+                  </div>
+                </div>
+              </>
+            )}
+
+            {isLocationOpen && !isCustomLocationMode && (
               <ul className="options">
                 {locations.map((loc) => (
                   <li
@@ -135,6 +167,9 @@ export function ReservationForm({ locations, hours }: ReservationFormProps) {
                     {loc.nom}
                   </li>
                 ))}
+                <li onClick={() => { setIsCustomLocationMode(true); setIsLocationOpen(false); setSelectedLocation(undefined); }} className="option-custom">
+                  Autre / Adresse Spécifique
+                </li>
               </ul>
             )}
             <input type="hidden" name="location" value={selectedLocation?.id || ''} />
@@ -142,24 +177,41 @@ export function ReservationForm({ locations, hours }: ReservationFormProps) {
         </div>
 
         {/* === COLONNE 2: RETOUR === */}
-        <div className="location-column return-column">
+        <div className={`location-column return-column ${(selectedReturnLocation || isCustomReturnLocationMode) ? 'active' : ''}`}>
           <span>
-            {selectedReturnLocation ? 'Retour' : <span>&nbsp;</span>}
+            {selectedReturnLocation || isCustomReturnLocationMode ? 'Retour' : <span>&nbsp;</span>}
           </span>
           <div
             className={`choose-location return-location ${isReturnLocationOpen ? 'open' : ''} ${isReturnLocationDifferent ? 'different' : ''}`}
             ref={returnLocationRef}
-            onClick={() => setIsReturnLocationOpen(!isReturnLocationOpen)}
+            onClick={() => !isCustomReturnLocationMode && setIsReturnLocationOpen(!isReturnLocationOpen)}
           >
-            <i className="fa-solid fa-plus"></i>
-            <div className="choose-location-select">
-              <div className="selected">
-                <span>
-                  {selectedReturnLocation ? selectedReturnLocation.nom : 'Lieu de retour différent'}
-                </span>
+            {isCustomReturnLocationMode ? (
+              <div className="custom-location-input-wrapper">
+                <input
+                  type="text"
+                  placeholder="Adresse de retour..."
+                  value={customReturnLocationText}
+                  onChange={(e) => setCustomReturnLocationText(e.target.value)}
+                  autoFocus
+                  className="custom-input-field"
+                />
+                <i className="fas fa-times custom-input-close" onClick={(e) => { e.stopPropagation(); setIsCustomReturnLocationMode(false); setSelectedReturnLocation(undefined); }}></i>
               </div>
-            </div>
-            {isReturnLocationOpen && (
+            ) : (
+              <>
+                <i className="fa-solid fa-plus"></i>
+                <div className="choose-location-select">
+                  <div className="selected">
+                    <span>
+                      {selectedReturnLocation ? selectedReturnLocation.nom : 'Lieu de retour différent'}
+                    </span>
+                  </div>
+                </div>
+              </>
+            )}
+
+            {isReturnLocationOpen && !isCustomReturnLocationMode && (
               <ul className="options">
                 {locations.map((loc) => (
                   <li
@@ -169,6 +221,9 @@ export function ReservationForm({ locations, hours }: ReservationFormProps) {
                     {loc.nom}
                   </li>
                 ))}
+                <li onClick={() => { setIsCustomReturnLocationMode(true); setIsReturnLocationOpen(false); setSelectedReturnLocation(undefined); }} className="option-custom">
+                  Autre / Adresse Spécifique
+                </li>
               </ul>
             )}
             <input type="hidden" name="return-location" value={selectedReturnLocation?.id || selectedLocation?.id || ''} />

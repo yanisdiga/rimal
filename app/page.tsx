@@ -70,7 +70,7 @@ export default async function Home() {
             {/* Slider doesn't need reveal usually, or can be separate */}
             <ImageSlider images={sliderData} interval={5000} />
 
-            <ScrollReveal delay="delay-100">
+            <ScrollReveal delay="delay-100" className="reservation-wrapper-fix">
                 <ReservationForm locations={locations} hours={timeSlots} />
             </ScrollReveal>
 

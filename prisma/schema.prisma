@@ -128,12 +128,16 @@ model Reservation {
   vehiculeId Int
   vehicule   Vehicule @relation(fields: [vehiculeId], references: [id])
 
-  // Relations pour les lieux
-  lieuPriseEnChargeId Int
-  lieuPriseEnCharge   Location @relation("PriseEnCharge", fields: [lieuPriseEnChargeId], references: [id])
+  // Relations pour les lieux (Optionnelles pour permettre le Sur Mesure)
+  lieuPriseEnChargeId Int?
+  lieuPriseEnCharge   Location? @relation("PriseEnCharge", fields: [lieuPriseEnChargeId], references: [id])
 
-  lieuRetourId Int
-  lieuRetour   Location @relation("Retour", fields: [lieuRetourId], references: [id])
+  lieuRetourId Int?
+  lieuRetour   Location? @relation("Retour", fields: [lieuRetourId], references: [id])
+
+  // Champs pour les lieux personnalisés
+  customPriseEnCharge String? @map("custom_prise_en_charge")
+  customRetour        String? @map("custom_retour")
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")

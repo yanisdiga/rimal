@@ -118,6 +118,25 @@ export function DateRangeSelector({
         setActiveInput('end');
     };
 
+    // --- Responsive Months Logic ---
+    const [numMonths, setNumMonths] = useState(numberOfMonths);
+
+    useEffect(() => {
+        const handleResize = () => {
+            if (window.innerWidth < 768) {
+                setNumMonths(1);
+            } else {
+                setNumMonths(numberOfMonths);
+            }
+        };
+
+        // Initial check
+        handleResize();
+
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, [numberOfMonths]);
+
     return (
         <div className={`dates-container ${className || ''}`} ref={containerRef}>
 
@@ -225,7 +244,7 @@ export function DateRangeSelector({
                         mode="range"
                         selected={selectedRange}
                         onSelect={handleDaySelect}
-                        numberOfMonths={numberOfMonths}
+                        numberOfMonths={numMonths}
                         locale={fr}
                         disabled={{ before: new Date() }}
                     />

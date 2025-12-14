@@ -128,32 +128,46 @@ export function BookingForm({ modelId, modelName, modelImageUrl, searchParams, l
                                 <select
                                     id="locationId"
                                     name="locationId"
-                                    defaultValue={searchParams.location as string}
-                                    required
+                                    defaultValue={searchParams.location as string || ''}
+                                    required={!searchParams.customLocation}
+                                    disabled={!!searchParams.customLocation}
                                 >
-                                    <option value="">Sélectionnez un lieu</option>
+                                    <option value="">
+                                        {searchParams.customLocation ? `(Personnalisé: ${searchParams.customLocation})` : 'Sélectionnez un lieu'}
+                                    </option>
                                     {locations.map((loc) => (
                                         <option key={loc.id} value={loc.id}>
                                             {loc.nom}
                                         </option>
                                     ))}
                                 </select>
+                                {searchParams.customLocation && (
+                                    <input type="hidden" name="customLocation" value={searchParams.customLocation as string} />
+                                )}
                             </div>
                             <div className="form-group">
                                 <label htmlFor="returnLocationId">Lieu de retour *</label>
                                 <select
                                     id="returnLocationId"
                                     name="returnLocationId"
-                                    defaultValue={searchParams.returnLocation as string}
-                                    required
+                                    defaultValue={searchParams.returnLocation as string || ''}
+                                    required={!searchParams.customReturnLocation && !searchParams.customLocation}
+                                    disabled={!!searchParams.customReturnLocation || !!searchParams.customLocation}
                                 >
-                                    <option value="">Sélectionnez un lieu</option>
+                                    <option value="">
+                                        {searchParams.customReturnLocation
+                                            ? `(Personnalisé: ${searchParams.customReturnLocation})`
+                                            : (searchParams.customLocation ? '(Même endroit que le départ)' : 'Sélectionnez un lieu')}
+                                    </option>
                                     {locations.map((loc) => (
                                         <option key={loc.id} value={loc.id}>
                                             {loc.nom}
                                         </option>
                                     ))}
                                 </select>
+                                {searchParams.customReturnLocation && (
+                                    <input type="hidden" name="customReturnLocation" value={searchParams.customReturnLocation as string} />
+                                )}
                             </div>
                         </div>
                     </div>

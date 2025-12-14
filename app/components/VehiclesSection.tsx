@@ -89,7 +89,9 @@ export function VehiclesSection({ voitures, searchParams }: VehiclesSectionProps
         {voitures.map((car) => (
           <div key={car.id} className="vehicule">
             <div className="vehicule-top-info">
-              <h2>{car.nom}</h2>
+              <Link href={`/vehicule/${car.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                <h2>{car.nom}</h2>
+              </Link>
               <div className="carInfo">
                 {/* On utilise les vrais champs de la BDD */}
                 <span>{toSentenceCase(car.transmission)}</span>
@@ -97,13 +99,20 @@ export function VehiclesSection({ voitures, searchParams }: VehiclesSectionProps
               </div>
             </div>
 
-            <img src={car.imageUrl || undefined} alt={car.nom} />
+            <Link href={`/vehicule/${car.id}`}>
+              <img src={car.imageUrl || undefined} alt={car.nom} style={{ cursor: 'pointer' }} />
+            </Link>
 
             <div className="vehicule-bottom-info">
               <span className="price">À partir de {car.prixParJour} DH/jour</span>
-              <Link href={getReservationUrl(car.id)} className="reserve-button">
-                Réserver
-              </Link>
+              <div className="buttons-container">
+                <Link href={getReservationUrl(car.id)} className="reserve-button">
+                  Réserver
+                </Link>
+                <Link href={`/vehicule/${car.id}`} className="details-button">
+                  Détails
+                </Link>
+              </div>
             </div>
           </div>
         ))}

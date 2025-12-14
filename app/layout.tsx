@@ -16,6 +16,7 @@ import "../styles/style.css";
 import { prisma } from '../lib/prisma';
 import NavbarWrapper from "./components/NavbarWrapper";
 import { Footer } from "./components/Footer";
+import { WhatsAppButton } from "./components/WhatsAppButton";
 
 import { checkExpiredReservations } from "./actions/checkExpiredReservations";
 
@@ -51,14 +52,13 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <head>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
         <script src="https://cdn.jsdelivr.net/npm/flatpickr" defer></script>
       </head>
 
       {/* Appliquez la police Oswald au body */}
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <main>{children}</main>
+        <WhatsAppButton />
         <Footer />
 
         {/* Mettez les scripts globaux à la fin du body */}

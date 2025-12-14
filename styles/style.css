@@ -59,3 +59,9 @@ body.no-scroll {
     /* La magie est ici : */
     overflow: hidden;
 }
+
+/* Fix for Reservation Dropdowns getting clipped by ScrollReveal wrapper */
+.reservation-wrapper-fix {
+    position: relative;
+    z-index: 1000 !important;
+}

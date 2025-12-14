@@ -120,7 +120,12 @@ export default async function ReservationsPage() {
                                         <div className="reservation-details-grid">
                                             <div>
                                                 <div className="info-row"><i className="fas fa-calendar-alt info-icon"></i> {formatDate(res.dateDebut)} - {formatDate(res.dateFin)}</div>
-                                                <div className="info-row"><i className="fas fa-map-marker-alt info-icon"></i> {res.lieuPriseEnCharge.nom} <i className="fas fa-arrow-right reservation-arrow"></i> {res.lieuRetour.nom}</div>
+                                                <div className="info-row">
+                                                    <i className="fas fa-map-marker-alt info-icon"></i>
+                                                    {res.lieuPriseEnCharge ? res.lieuPriseEnCharge.nom : <span style={{ color: '#B49339', fontWeight: 'bold' }}>{res.customPriseEnCharge || 'Adresse Personnalisée'}</span>}
+                                                    <i className="fas fa-arrow-right reservation-arrow"></i>
+                                                    {res.lieuRetour ? res.lieuRetour.nom : <span style={{ color: '#B49339', fontWeight: 'bold' }}>{res.customRetour || 'Même adresse'}</span>}
+                                                </div>
                                                 {res.note ? <div className="info-row"><i className="fa-regular fa-note-sticky info-icon"></i> {res.note}</div> : null}
                                             </div>
                                             <div>
