@@ -76,7 +76,7 @@ export default async function StylePage() {
                     <div className="service-list">
                         {images.map((img) => (
                             <div key={img.id} className="style-card" style={{ position: 'relative' }}>
-                                <div className="service-card-actions" style={{ zIndex: 10, background: 'rgba(255,255,255,0.9)', padding: '5px', borderRadius: '0 0 0 8px' }}>
+                                <div className="service-card-actions">
                                     <StyleModal
                                         image={img}
                                         trigger={
@@ -207,7 +207,7 @@ export default async function StylePage() {
                     <div className="service-list">
                         {experiences.map((exp: any) => (
                             <div key={exp.id} className="style-card" style={{ position: 'relative' }}>
-                                <div className="service-card-actions" style={{ zIndex: 10, background: 'rgba(255,255,255,0.9)', padding: '5px', borderRadius: '0 0 0 8px' }}>
+                                <div className="service-card-actions">
                                     <ExperienceModal
                                         item={exp}
                                         trigger={

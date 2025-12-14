@@ -342,6 +342,12 @@
     padding-left: 5px;
 }
 
+.location-column {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .reservation-details-grid {

@@ -33,8 +33,10 @@ export function EditReservationModal({ reservation, locations, vehicles }: EditR
     const [isLoading, setIsLoading] = useState(false);
 
     // Form State
-    const [lieuPriseEnChargeId, setLieuPriseEnChargeId] = useState(reservation.lieuPriseEnChargeId);
-    const [lieuRetourId, setLieuRetourId] = useState(reservation.lieuRetourId);
+    const [lieuPriseEnChargeId, setLieuPriseEnChargeId] = useState<number | null>(reservation.lieuPriseEnChargeId);
+    const [lieuRetourId, setLieuRetourId] = useState<number | null>(reservation.lieuRetourId);
+    const [customPriseEnCharge, setCustomPriseEnCharge] = useState((reservation as any).customPriseEnCharge);
+    const [customRetour, setCustomRetour] = useState((reservation as any).customRetour);
     const [prixTotal, setPrixTotal] = useState(reservation.prixTotal);
     const [note, setNote] = useState((reservation as any).note);
     const [vehiculeId, setVehiculeId] = useState(reservation.vehiculeId);
@@ -154,8 +156,10 @@ export function EditReservationModal({ reservation, locations, vehicles }: EditR
         const result = await updateReservationDetails(reservation.id, {
             dateDebut: dateDebutObj,
             dateFin: dateFinObj,
-            lieuPriseEnChargeId: Number(lieuPriseEnChargeId),
-            lieuRetourId: Number(lieuRetourId),
+            lieuPriseEnChargeId: lieuPriseEnChargeId ? Number(lieuPriseEnChargeId) : null,
+            lieuRetourId: lieuRetourId ? Number(lieuRetourId) : null,
+            customPriseEnCharge: customPriseEnCharge,
+            customRetour: customRetour,
             prixTotal: Number(prixTotal),
             note: note,
             vehiculeId: Number(vehiculeId),
@@ -362,30 +366,66 @@ export function EditReservationModal({ reservation, locations, vehicles }: EditR
                         </div>
                     </div>
 
-                    <div className="form-group mt-20">
+                    <div className="form-group mt-20 location-column">
                         <label className="modal-label">Lieu de Départ</label>
                         <select
-                            value={lieuPriseEnChargeId}
-                            onChange={(e) => setLieuPriseEnChargeId(Number(e.target.value))}
-                            required
+                            value={lieuPriseEnChargeId || ''}
+                            onChange={(e) => {
+                                const val = e.target.value;
+                                if (val === '') {
+                                    setLieuPriseEnChargeId(null);
+                                } else {
+                                    setLieuPriseEnChargeId(Number(val));
+                                    setCustomPriseEnCharge(null); // Clear custom if standard selected
+                                }
+                            }}
+                            required={!customPriseEnCharge}
                         >
+                            <option value="">{customPriseEnCharge ? `Personnalisé: ${customPriseEnCharge}` : 'Sélectionner un lieu'}</option>
                             {locations.map(loc => (
                                 <option key={loc.id} value={loc.id}>{loc.nom}</option>
                             ))}
                         </select>
+                        {customPriseEnCharge && (
+                            <input
+                                type="text"
+                                className="mt-2 text-sm text-gray-600 w-full p-2 border rounded"
+                                value={customPriseEnCharge}
+                                onChange={(e) => setCustomPriseEnCharge(e.target.value)}
+                                placeholder="Adresse personnalisée"
+                            />
+                        )}
                     </div>
 
-                    <div className="form-group">
+                    <div className="form-group location-column">
                         <label className="modal-label">Lieu de Retour</label>
                         <select
-                            value={lieuRetourId}
-                            onChange={(e) => setLieuRetourId(Number(e.target.value))}
-                            required
+                            value={lieuRetourId || ''}
+                            onChange={(e) => {
+                                const val = e.target.value;
+                                if (val === '') {
+                                    setLieuRetourId(null);
+                                } else {
+                                    setLieuRetourId(Number(val));
+                                    setCustomRetour(null); // Clear custom if standard selected
+                                }
+                            }}
+                            required={!customRetour}
                         >
+                            <option value="">{customRetour ? `Personnalisé: ${customRetour}` : 'Sélectionner un lieu'}</option>
                             {locations.map(loc => (
                                 <option key={loc.id} value={loc.id}>{loc.nom}</option>
                             ))}
                         </select>
+                        {customRetour && (
+                            <input
+                                type="text"
+                                className="mt-2 text-sm text-gray-600 w-full p-2 border rounded"
+                                value={customRetour}
+                                onChange={(e) => setCustomRetour(e.target.value)}
+                                placeholder="Adresse personnalisée"
+                            />
+                        )}
                     </div>
 
                     <div className="form-group">
@@ -395,7 +435,6 @@ export function EditReservationModal({ reservation, locations, vehicles }: EditR
                             value={prixTotal}
                             onChange={(e) => setPrixTotal(Number(e.target.value))}
                             required
-                            min="0"
                         />
                     </div>
 

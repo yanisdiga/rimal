@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { BackgroundImage } from '@prisma/client';
 import { createBackgroundImage, updateBackgroundImage } from '@/app/actions/style';
 
@@ -9,10 +9,17 @@ interface StyleModalProps {
     trigger?: React.ReactNode; // Custom trigger button
 }
 
+import { createPortal } from 'react-dom';
+
 export function StyleModal({ image, trigger }: StyleModalProps) {
     const [isOpen, setIsOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [mounted, setMounted] = useState(false);
     const formRef = useRef<HTMLFormElement>(null);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
 
     const isEdit = !!image;
 
@@ -34,6 +41,74 @@ export function StyleModal({ image, trigger }: StyleModalProps) {
         }
     };
 
+    const modalContent = (
+        <div className="modal-overlay" onClick={() => setIsOpen(false)}>
+            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                <div className="modal-header">
+                    <h3>{isEdit ? 'Modifier l\'image' : 'Ajouter une image'}</h3>
+                    <button className="close-button" onClick={() => setIsOpen(false)}>
+                        <i className="fas fa-times"></i>
+                    </button>
+                </div>
+
+                <form ref={formRef} action={handleSubmit} className="modal-form">
+                    <div className="form-group">
+                        <label>Titre (Affiché)</label>
+                        <input
+                            type="text"
+                            name="name"
+                            defaultValue={image?.name}
+                            required
+                            placeholder="Ex: Service premium"
+                        />
+                    </div>
+
+                    <div className="form-group">
+                        <label>Sous-titre (Affiché)</label>
+                        <input
+                            type="text"
+                            name="subtitle"
+                            defaultValue={image?.subtitle || ''}
+                            placeholder="Ex: Location de voitures de luxe"
+                        />
+                    </div>
+
+                    <div className="form-group">
+                        <label>URL de l'image</label>
+                        <input
+                            type="text"
+                            name="url"
+                            defaultValue={image?.url}
+                            required
+                            placeholder="https://..."
+                        />
+                        <small className="modal-help-text">
+                            Lien direct vers l'image (hébergée ailleurs ou dans public/)
+                        </small>
+                    </div>
+
+                    <div className="modal-actions">
+                        <button
+                            type="button"
+                            className="btn-secondary"
+                            onClick={() => setIsOpen(false)}
+                            disabled={isLoading}
+                        >
+                            Annuler
+                        </button>
+                        <button
+                            type="submit"
+                            className="btn-primary"
+                            disabled={isLoading}
+                        >
+                            {isLoading ? 'Enregistrement...' : (isEdit ? 'Mettre à jour' : 'Ajouter')}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    );
+
     return (
         <>
             {trigger ? (
@@ -47,73 +122,7 @@ export function StyleModal({ image, trigger }: StyleModalProps) {
                 </button>
             )}
 
-            {isOpen && (
-                <div className="modal-overlay" onClick={() => setIsOpen(false)}>
-                    <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-                        <div className="modal-header">
-                            <h3>{isEdit ? 'Modifier l\'image' : 'Ajouter une image'}</h3>
-                            <button className="close-button" onClick={() => setIsOpen(false)}>
-                                <i className="fas fa-times"></i>
-                            </button>
-                        </div>
-
-                        <form ref={formRef} action={handleSubmit} className="modal-form">
-                            <div className="form-group">
-                                <label>Titre (Affiché)</label>
-                                <input
-                                    type="text"
-                                    name="name"
-                                    defaultValue={image?.name}
-                                    required
-                                    placeholder="Ex: Service premium"
-                                />
-                            </div>
-
-                            <div className="form-group">
-                                <label>Sous-titre (Affiché)</label>
-                                <input
-                                    type="text"
-                                    name="subtitle"
-                                    defaultValue={image?.subtitle || ''}
-                                    placeholder="Ex: Location de voitures de luxe"
-                                />
-                            </div>
-
-                            <div className="form-group">
-                                <label>URL de l'image</label>
-                                <input
-                                    type="text"
-                                    name="url"
-                                    defaultValue={image?.url}
-                                    required
-                                    placeholder="https://..."
-                                />
-                                <small className="modal-help-text">
-                                    Lien direct vers l'image (hébergée ailleurs ou dans public/)
-                                </small>
-                            </div>
-
-                            <div className="modal-actions">
-                                <button
-                                    type="button"
-                                    className="btn-secondary"
-                                    onClick={() => setIsOpen(false)}
-                                    disabled={isLoading}
-                                >
-                                    Annuler
-                                </button>
-                                <button
-                                    type="submit"
-                                    className="btn-primary"
-                                    disabled={isLoading}
-                                >
-                                    {isLoading ? 'Enregistrement...' : (isEdit ? 'Mettre à jour' : 'Ajouter')}
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            )}
+            {isOpen && mounted && createPortal(modalContent, document.body)}
         </>
     );
 }

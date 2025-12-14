@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { createExperience, updateExperience } from '../experience/actions';
 
 interface ExperienceItem {
@@ -16,9 +16,16 @@ interface ExperienceModalProps {
     trigger?: React.ReactNode;
 }
 
+import { createPortal } from 'react-dom';
+
 export function ExperienceModal({ item, trigger }: ExperienceModalProps) {
     const [isOpen, setIsOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
 
     const isEdit = !!item;
 
@@ -39,6 +46,82 @@ export function ExperienceModal({ item, trigger }: ExperienceModalProps) {
         }
     };
 
+    const modalContent = (
+        <div className="modal-overlay" onClick={() => setIsOpen(false)}>
+            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                <div className="modal-header">
+                    <h3>{isEdit ? 'Modifier l\'Expérience' : 'Ajouter une Expérience'}</h3>
+                    <button className="close-button" onClick={() => setIsOpen(false)}>
+                        <i className="fas fa-times"></i>
+                    </button>
+                </div>
+
+                <form action={handleSubmit} className="modal-form">
+                    <div className="form-group">
+                        <label>Titre</label>
+                        <input
+                            type="text"
+                            name="title"
+                            defaultValue={item?.title}
+                            required
+                            placeholder="Ex: L'Excellence..."
+                        />
+                    </div>
+
+                    <div className="form-group">
+                        <label>Description</label>
+                        <textarea
+                            name="description"
+                            rows={6}
+                            defaultValue={item?.description}
+                            required
+                            placeholder="Texte descriptif..."
+                        ></textarea>
+                    </div>
+
+                    <div className="form-group">
+                        <label>URL Image</label>
+                        <input
+                            type="text"
+                            name="imageUrl"
+                            defaultValue={item?.imageUrl}
+                            required
+                            placeholder="https://..."
+                        />
+                    </div>
+
+                    <div className="form-group">
+                        <label>Texte Bouton</label>
+                        <input
+                            type="text"
+                            name="buttonText"
+                            defaultValue={item?.buttonText}
+                            placeholder="Ex: Découvrir..."
+                        />
+                    </div>
+
+                    <div className="modal-actions">
+                        <button
+                            type="button"
+                            className="btn-secondary"
+                            onClick={() => setIsOpen(false)}
+                            disabled={isLoading}
+                        >
+                            Annuler
+                        </button>
+                        <button
+                            type="submit"
+                            className="btn-primary"
+                            disabled={isLoading}
+                        >
+                            {isLoading ? 'Enregistrement...' : (isEdit ? 'Mettre à jour' : 'Ajouter')}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    );
+
     return (
         <>
             {trigger ? (
@@ -53,81 +136,7 @@ export function ExperienceModal({ item, trigger }: ExperienceModalProps) {
                 </button>
             )}
 
-            {isOpen && (
-                <div className="modal-overlay" onClick={() => setIsOpen(false)}>
-                    <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-                        <div className="modal-header">
-                            <h3>{isEdit ? 'Modifier l\'Expérience' : 'Ajouter une Expérience'}</h3>
-                            <button className="close-button" onClick={() => setIsOpen(false)}>
-                                <i className="fas fa-times"></i>
-                            </button>
-                        </div>
-
-                        <form action={handleSubmit} className="modal-form">
-                            <div className="form-group">
-                                <label>Titre</label>
-                                <input
-                                    type="text"
-                                    name="title"
-                                    defaultValue={item?.title}
-                                    required
-                                    placeholder="Ex: L'Excellence..."
-                                />
-                            </div>
-
-                            <div className="form-group">
-                                <label>Description</label>
-                                <textarea
-                                    name="description"
-                                    rows={6}
-                                    defaultValue={item?.description}
-                                    required
-                                    placeholder="Texte descriptif..."
-                                ></textarea>
-                            </div>
-
-                            <div className="form-group">
-                                <label>URL Image</label>
-                                <input
-                                    type="text"
-                                    name="imageUrl"
-                                    defaultValue={item?.imageUrl}
-                                    required
-                                    placeholder="https://..."
-                                />
-                            </div>
-
-                            <div className="form-group">
-                                <label>Texte Bouton</label>
-                                <input
-                                    type="text"
-                                    name="buttonText"
-                                    defaultValue={item?.buttonText}
-                                    placeholder="Ex: Découvrir..."
-                                />
-                            </div>
-
-                            <div className="modal-actions">
-                                <button
-                                    type="button"
-                                    className="btn-secondary"
-                                    onClick={() => setIsOpen(false)}
-                                    disabled={isLoading}
-                                >
-                                    Annuler
-                                </button>
-                                <button
-                                    type="submit"
-                                    className="btn-primary"
-                                    disabled={isLoading}
-                                >
-                                    {isLoading ? 'Enregistrement...' : (isEdit ? 'Mettre à jour' : 'Ajouter')}
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            )}
+            {isOpen && mounted && createPortal(modalContent, document.body)}
         </>
     );
 }

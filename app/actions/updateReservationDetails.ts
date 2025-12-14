@@ -6,8 +6,10 @@ import { revalidatePath } from 'next/cache';
 interface ReservationUpdateData {
     dateDebut: Date;
     dateFin: Date;
-    lieuPriseEnChargeId: number;
-    lieuRetourId: number;
+    lieuPriseEnChargeId: number | null;
+    lieuRetourId: number | null;
+    customPriseEnCharge?: string | null;
+    customRetour?: string | null;
     prixTotal: number;
     note?: string | null;
     vehiculeId: number;
@@ -29,10 +31,11 @@ export async function updateReservationDetails(id: number, data: ReservationUpda
         await prisma.reservation.update({
             where: { id },
             data: {
-                dateDebut: data.dateDebut,
                 dateFin: data.dateFin,
-                lieuPriseEnChargeId: data.lieuPriseEnChargeId,
-                lieuRetourId: data.lieuRetourId,
+                lieuPriseEnChargeId: data.lieuPriseEnChargeId || null, // Convert 0 to null safety check
+                lieuRetourId: data.lieuRetourId || null,
+                customPriseEnCharge: data.customPriseEnCharge,
+                customRetour: data.customRetour,
                 prixTotal: data.prixTotal,
                 note: data.note,
                 vehiculeId: data.vehiculeId,

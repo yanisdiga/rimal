@@ -132,6 +132,10 @@
     right: 10px;
     display: flex;
     gap: 15px;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 5px;
+    border-radius: 0 0 0 8px;
+    z-index: 1;
 }
 
 .delete-btn {
@@ -179,4 +183,11 @@
     font-size: 2rem;
     margin-bottom: 1rem;
     color: #333;
+}
+
+.modal-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-bottom: 10px;
 }

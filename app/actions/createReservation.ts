@@ -5,16 +5,21 @@ import { redirect } from 'next/navigation';
 
 export async function createReservation(formData: FormData) {
     const modelId = parseInt(formData.get('modelId') as string);
-    // Parse locationId safely - might be empty if custom
-    const locationIdStr = formData.get('locationId') as string;
-    const locationId = locationIdStr ? parseInt(locationIdStr) : null;
-
-    // Return location - fallback to locationId if empty (unless custom override logic is needed)
-    const returnLocationIdStr = formData.get('returnLocationId') as string;
-    const returnLocationId = returnLocationIdStr ? parseInt(returnLocationIdStr) : null;
+    // Parse inputs
+    let locationId = formData.get('locationId') ? parseInt(formData.get('locationId') as string) : null;
+    let returnLocationId = formData.get('returnLocationId') ? parseInt(formData.get('returnLocationId') as string) : null;
 
     const customLocation = formData.get('customLocation') as string;
     const customReturnLocation = formData.get('customReturnLocation') as string;
+
+    // HARDENING: Enforce mutual exclusivity
+    // If a custom location is provided, ignore the standard ID
+    if (customLocation) {
+        locationId = null;
+    }
+    if (customReturnLocation) {
+        returnLocationId = null;
+    }
 
     const startDateStr = formData.get('startDate') as string;
     const endDateStr = formData.get('endDate') as string;
@@ -112,7 +117,16 @@ export async function createReservation(formData: FormData) {
                 // Use connect for optional locations if ID matches, else null
                 lieuPriseEnCharge: locationId ? { connect: { id: locationId } } : undefined,
 
-                lieuRetour: (returnLocationId || locationId) ? { connect: { id: returnLocationId || locationId || undefined } } : undefined,
+                // Logic for Return Location:
+                // 1. If we have a specific returnLocationId (validated above to be non-custom), use it.
+                // 2. If NOT (null), check if we are in a "Standard Mode" (No custom return, No custom pickup).
+                //    If so, fallback to locationId (Same as Pickup).
+                // 3. Otherwise (Custom mode involved), leave as undefined/null.
+                lieuRetour: (returnLocationId)
+                    ? { connect: { id: returnLocationId } }
+                    : (!customReturnLocation && !customLocation && locationId)
+                        ? { connect: { id: locationId } }
+                        : undefined,
 
                 // Custom fields
                 customPriseEnCharge: customLocation || undefined,
