@@ -1,0 +1,29 @@
+/* styles/animations.css */
+
+/* Base state: Invisible and shifted down */
+.reveal-wrapper {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+    /* "Luxury" ease-out curve */
+    will-change: opacity, transform;
+}
+
+/* Visible state: specific class added by JS */
+.reveal-wrapper.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Staggered delays can be added via utility classes if needed */
+.delay-100 {
+    transition-delay: 0.1s;
+}
+
+.delay-200 {
+    transition-delay: 0.2s;
+}
+
+.delay-300 {
+    transition-delay: 0.3s;
+}

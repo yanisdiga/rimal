@@ -46,7 +46,9 @@
     background-color: rgba(0, 0, 0, 0.6);
     backdrop-filter: blur(32px);
     transform: translateX(-20px);
-    z-index: 5;
+    z-index: 99;
+    top: 0;
+
 }
 
 .menu-overlay {

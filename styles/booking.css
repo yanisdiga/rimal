@@ -57,7 +57,6 @@
     display: flex;
     gap: 3rem;
     align-items: flex-start;
-    align-items: center;
 }
 
 .form-column {
@@ -135,6 +134,7 @@
 /* Form Styles */
 .booking-form-section {
     margin-bottom: 2rem;
+    position: relative;
 }
 
 .booking-form-section h3 {
@@ -370,4 +370,105 @@
     background-color: #fce8e6;
     border-radius: 8px;
     border-left: 4px solid #e74c3c;
+}
+
+/* --- DateRangeSelector Integration in Booking Form --- */
+.booking-style.dates-container {
+    display: flex;
+    gap: 1rem;
+    width: 100%;
+}
+
+.booking-style .start-date-container,
+.booking-style .end-date-container {
+    flex: 1;
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
+}
+
+.booking-style .button-start,
+.booking-style .button-end {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.booking-style .choose-date {
+    flex: 1;
+    padding: 12px 15px;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    /* Fully rounded */
+    background-color: #fcfcfc;
+    font-family: 'Oswald', sans-serif;
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
+    height: 50px;
+    width: 100%;
+}
+
+.booking-style .choose-hour {
+    width: 100px;
+    /* Fixed width for time */
+    padding: 0;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    /* Fully rounded */
+    background-color: #fcfcfc;
+    cursor: pointer;
+    display: flex;
+    /* Fix alignment */
+    align-items: center;
+    justify-content: center;
+    height: 50px;
+    width: 100%;
+    padding: 12px 15px;
+}
+
+.booking-style .choose-hour-select {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.booking-style .choose-date:hover,
+.booking-style .choose-hour:hover {
+    background-color: #fff;
+    border-color: #1a1a1a;
+}
+
+.booking-style .calendar-container {
+    position: absolute;
+    /* Below input */
+    z-index: 1000;
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 10px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    width: fit-content;
+}
+
+.calendar-container .rdp-months {
+    flex-wrap: nowrap;
+}
+
+/* Fix mobile layout */
+@media (max-width: 768px) {
+    .booking-style.dates-container {
+        flex-direction: column;
+    }
+
+    .booking-style .start-date-container,
+    .booking-style .end-date-container {
+        width: 100%;
+    }
 }

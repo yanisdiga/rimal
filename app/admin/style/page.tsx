@@ -1,7 +1,13 @@
+import fs from 'fs/promises';
+import path from 'path';
 import { PrismaClient } from '@prisma/client';
 import { AdminLayout } from '@/app/admin/components/AdminLayout';
 import { StyleModal } from './StyleModal';
-import { deleteBackgroundImage } from '@/app/actions/style';
+import { ServiceModal } from './ServiceModal';
+import { createBackgroundImage, deleteBackgroundImage } from '@/app/actions/style';
+import { createService, deleteService } from '../services/actions';
+import { createExperience, deleteExperience } from '../experience/actions';
+import { ExperienceModal } from './ExperienceModal';
 import './style.css';
 
 const prisma = new PrismaClient();
@@ -13,37 +19,64 @@ export default async function StylePage() {
         },
     });
 
+    // Load Services from JSON
+    const servicesPath = path.join(process.cwd(), 'data', 'services.json');
+    let services = [];
+    try {
+        const data = await fs.readFile(servicesPath, 'utf-8');
+        services = JSON.parse(data);
+    } catch (e) {
+        services = [];
+    }
+
+    // Load Experience from JSON
+    const experiencePath = path.join(process.cwd(), 'data', 'experience.json');
+    let experiences = [];
+    try {
+        const data = await fs.readFile(experiencePath, 'utf-8');
+        experiences = JSON.parse(data);
+    } catch (e) {
+        experiences = [];
+    }
+
     return (
-        <AdminLayout title="Gestion du Style (Backgrounds)">
+        <AdminLayout title="Gestion du Style et Contenu">
             <div className="data-grid">
-                <div className="style-page-header">
-                    <h2 className="style-page-title">
-                        Images d'arrière-plan ({images.length})
-                    </h2>
-                    <StyleModal />
-                </div>
 
-                {images.length === 0 ? (
-                    <p className="style-empty-message">Aucune image configurée.</p>
-                ) : (
-                    <div className="style-grid">
+                {/* --- BACKGROUNDS SECTION --- */}
+                <h2 className="style-page-title" style={{ marginBottom: '2rem' }}>
+                    Images d'arrière-plan ({images.length})
+                </h2>
+
+                <div className="services-split">
+                    {/* ADD FORM */}
+                    <div className="service-form">
+                        <h3 style={{ marginBottom: '1rem' }}>Ajouter une image</h3>
+                        <form action={createBackgroundImage}>
+                            <div className="form-group">
+                                <label>Titre (Affiché)</label>
+                                <input type="text" name="name" placeholder="Ex: Service premium" required />
+                            </div>
+                            <div className="form-group">
+                                <label>Sous-titre (Affiché)</label>
+                                <input type="text" name="subtitle" placeholder="Ex: Location de voitures de luxe" />
+                            </div>
+                            <div className="form-group">
+                                <label>URL de l'image</label>
+                                <input type="text" name="url" placeholder="https://..." required />
+                                <small style={{ display: 'block', marginTop: '5px', color: '#666' }}>
+                                    Lien direct vers l'image
+                                </small>
+                            </div>
+                            <button type="submit" className="btn-submit">Ajouter</button>
+                        </form>
+                    </div>
+
+                    {/* LIST */}
+                    <div className="service-list">
                         {images.map((img) => (
-                            <div key={img.id} className="style-card">
-                                <div className="style-card-image-container">
-                                    <img
-                                        src={img.url}
-                                        alt={img.name}
-                                        className="style-card-image"
-                                    />
-                                </div>
-
-                                <div className="style-card-content">
-                                    <h3 className="style-card-title">{img.name}</h3>
-                                    {img.title && <p className="style-card-text"><strong>Titre:</strong> {img.title}</p>}
-                                    {img.subtitle && <p className="style-card-text"><strong>Sous-titre:</strong> {img.subtitle}</p>}
-                                </div>
-
-                                <div className="style-card-actions">
+                            <div key={img.id} className="style-card" style={{ position: 'relative' }}>
+                                <div className="service-card-actions" style={{ zIndex: 10, background: 'rgba(255,255,255,0.9)', padding: '5px', borderRadius: '0 0 0 8px' }}>
                                     <StyleModal
                                         image={img}
                                         trigger={
@@ -58,10 +91,155 @@ export default async function StylePage() {
                                         </button>
                                     </form>
                                 </div>
+
+                                <div className="style-card-image-container">
+                                    <img
+                                        src={img.url}
+                                        alt={img.name}
+                                        className="style-card-image"
+                                    />
+                                </div>
+
+                                <div className="style-card-content">
+                                    <h3 className="style-card-title">{img.name}</h3>
+                                    {img.title && <p className="style-card-text"><strong>Titre:</strong> {img.title}</p>}
+                                    {img.subtitle && <p className="style-card-text"><strong>Sous-titre:</strong> {img.subtitle}</p>}
+                                </div>
                             </div>
                         ))}
                     </div>
-                )}
+                </div>
+
+                <hr style={{ margin: '4rem 0', borderTop: '1px solid #ddd' }} />
+
+                {/* --- SERVICES SECTION --- */}
+                <h2 className="style-page-title" style={{ marginBottom: '2rem' }}>
+                    Services Exclusifs (Page d'accueil)
+                </h2>
+
+                <div className="services-split">
+                    {/* ADD FORM */}
+                    <div className="service-form">
+                        <h3 style={{ marginBottom: '1rem' }}>Ajouter un Service</h3>
+                        <form action={createService}>
+                            <div className="form-group">
+                                <label>Titre</label>
+                                <input type="text" name="title" placeholder="Ex: Kilométrage Illimité" required />
+                            </div>
+                            <div className="form-group">
+                                <label>Icône (FontAwesome)</label>
+                                <input type="text" name="icon" placeholder="Ex: fa-road" required />
+                                <small style={{ display: 'block', marginTop: '5px', color: '#666' }}>
+                                    Utilisez des classes <a href="https://fontawesome.com/icons" target="_blank" style={{ textDecoration: 'underline' }}>FontAwesome</a> (ex: fa-wifi, fa-car)
+                                </small>
+                            </div>
+                            <div className="form-group">
+                                <label>Description</label>
+                                <textarea name="description" rows={4} placeholder="Description courte..." required></textarea>
+                            </div>
+                            <button type="submit" className="btn-submit">Ajouter</button>
+                        </form>
+                    </div>
+
+                    {/* LIST */}
+                    <div className="service-list">
+                        {services.map((svc: any) => (
+                            <div key={svc.id} className="service-card">
+                                <div className="service-card-actions">
+                                    <ServiceModal
+                                        service={svc}
+                                        trigger={
+                                            <button className="btn-icon" title="Modifier">
+                                                <i className="fas fa-edit"></i>
+                                            </button>
+                                        }
+                                    />
+                                    <form action={deleteService.bind(null, svc.id)}>
+                                        <button className="btn-icon delete" title="Supprimer" type="submit">
+                                            <i className="fas fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                                <div style={{ textAlign: 'center', margin: '2rem 0 1rem 0' }}>
+                                    <i className={`fas ${svc.icon} icon-preview`}></i>
+                                </div>
+                                <h4 style={{ marginBottom: '0.5rem', fontWeight: 'bold' }}>{svc.title}</h4>
+                                <p style={{ color: '#666', fontSize: '0.9rem', lineHeight: '1.4' }}>{svc.description}</p>
+                            </div>
+                        ))}
+                        {services.length === 0 && <p>Aucun service configuré.</p>}
+                    </div>
+                </div>
+
+                <hr style={{ margin: '4rem 0', borderTop: '1px solid #ddd' }} />
+
+                {/* --- EXPERIENCE SECTION --- */}
+                <h2 className="style-page-title" style={{ marginBottom: '2rem' }}>
+                    Expérience Section (Page d'accueil)
+                </h2>
+
+                <div className="services-split">
+                    {/* ADD FORM */}
+                    <div className="service-form">
+                        <h3 style={{ marginBottom: '1rem' }}>Ajouter une Expérience</h3>
+                        <form action={createExperience}>
+                            <div className="form-group">
+                                <label>Titre</label>
+                                <input type="text" name="title" placeholder="Ex: L'Excellence..." required />
+                            </div>
+                            <div className="form-group">
+                                <label>Description</label>
+                                <textarea name="description" rows={4} placeholder="Description..." required></textarea>
+                            </div>
+                            <div className="form-group">
+                                <label>URL Image</label>
+                                <input type="text" name="imageUrl" placeholder="https://..." required />
+                            </div>
+                            <div className="form-group">
+                                <label>Texte Bouton</label>
+                                <input type="text" name="buttonText" placeholder="Ex: Découvrir..." />
+                            </div>
+                            <button type="submit" className="btn-submit">Ajouter</button>
+                        </form>
+                    </div>
+
+                    {/* LIST */}
+                    <div className="service-list">
+                        {experiences.map((exp: any) => (
+                            <div key={exp.id} className="style-card" style={{ position: 'relative' }}>
+                                <div className="service-card-actions" style={{ zIndex: 10, background: 'rgba(255,255,255,0.9)', padding: '5px', borderRadius: '0 0 0 8px' }}>
+                                    <ExperienceModal
+                                        item={exp}
+                                        trigger={
+                                            <button className="btn-icon" title="Modifier">
+                                                <i className="fas fa-edit"></i>
+                                            </button>
+                                        }
+                                    />
+                                    <form action={deleteExperience.bind(null, exp.id)}>
+                                        <button className="btn-icon delete" title="Supprimer" type="submit">
+                                            <i className="fas fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
+
+                                <div className="style-card-image-container">
+                                    <img
+                                        src={exp.imageUrl}
+                                        alt={exp.title}
+                                        className="style-card-image"
+                                    />
+                                </div>
+
+                                <div className="style-card-content">
+                                    <h3 className="style-card-title">{exp.title}</h3>
+                                    <p className="style-card-text" style={{ whiteSpace: 'pre-line' }}>{exp.description.substring(0, 100)}...</p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
             </div>
         </AdminLayout>
     );

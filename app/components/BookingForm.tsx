@@ -13,28 +13,23 @@ interface BookingFormProps {
     pricePerDay: number;
 }
 
-import { DayPicker, DateRange } from 'react-day-picker';
-import { format } from 'date-fns';
-import { fr } from 'date-fns/locale';
-import 'react-day-picker/dist/style.css';
+// ... imports
+import { DateRangeSelector } from './DateRangeSelector';
+import { DateRange } from 'react-day-picker';
 
-// Hook for clicking outside
-function useClickOutside(ref: React.RefObject<any>, handler: () => void) {
-    useEffect(() => {
-        const listener = (event: MouseEvent | TouchEvent) => {
-            if (!ref.current || ref.current.contains(event.target as Node)) {
-                return;
-            }
-            handler();
-        };
-        document.addEventListener('mousedown', listener);
-        document.addEventListener('touchstart', listener);
-        return () => {
-            document.removeEventListener('mousedown', listener);
-            document.removeEventListener('touchstart', listener);
-        };
-    }, [ref, handler]);
-}
+// ... (keep BookingFormProps)
+
+// Remove DayPicker imports
+import { format } from 'date-fns';
+// ...
+
+// Remove useClickOutside hook if not used elsewhere (it was used for time pickers, but DateRangeSelector handles that now)
+// Actually, check if DateRangeSelector is handling time entirely. 
+// Yes, DateRangeSelector takes startTime, returnTime, and their handlers.
+// So we can remove useClickOutside and timeSlots from here as well, passing timeSlots if needed or letting DateRangeSelector use its default.
+// The Plan said "Pass timeSlots". DateRangeSelector has a default, but let's see.
+// DateRangeSelector accepts `hours` prop.
+// So we will remove useClickOutside from here.
 
 const timeSlots = [
     "08:00", "08:30", "09:00", "09:30", "10:00", "10:30", "11:00", "11:30",
@@ -46,8 +41,7 @@ export function BookingForm({ modelId, modelName, modelImageUrl, searchParams, l
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
-    // State for dates and times to calculate price
-    // Initialize from searchParams if available
+    // State for dates
     const initialStartDate = searchParams.startDate ? new Date(searchParams.startDate as string) : undefined;
     const initialEndDate = searchParams.endDate ? new Date(searchParams.endDate as string) : undefined;
 
@@ -56,20 +50,10 @@ export function BookingForm({ modelId, modelName, modelImageUrl, searchParams, l
         to: initialEndDate,
     });
 
-    const [isCalendarOpen, setIsCalendarOpen] = useState(false);
-
     const [startTime, setStartTime] = useState(searchParams.startTime as string || '10:00');
     const [returnTime, setReturnTime] = useState(searchParams.returnTime as string || '10:00');
 
-    const [isStartTimeOpen, setIsStartTimeOpen] = useState(false);
-    const [isReturnTimeOpen, setIsReturnTimeOpen] = useState(false);
-
-    const startTimeRef = useRef<HTMLDivElement>(null);
-    const returnTimeRef = useRef<HTMLDivElement>(null);
-
-    useClickOutside(startTimeRef, () => setIsStartTimeOpen(false));
-    useClickOutside(returnTimeRef, () => setIsReturnTimeOpen(false));
-
+    // Remove isCalendarOpen, isStartTimeOpen, etc.
 
     // Calculate total price
     const calculateTotal = () => {
@@ -89,29 +73,9 @@ export function BookingForm({ modelId, modelName, modelImageUrl, searchParams, l
     const totalPrice = calculateTotal();
     const days = totalPrice > 0 ? Math.round(totalPrice / pricePerDay) : 0;
 
-    const handleDateSelect = (range: DateRange | undefined, selectedDay: Date) => {
-        // Si une plage complète est déjà sélectionnée, on redémarre la sélection
-        // avec la nouvelle date comme point de départ
-        if (selectedRange?.from && selectedRange?.to) {
-            setSelectedRange({ from: selectedDay, to: undefined });
-            return;
-        }
-
-        setSelectedRange(range);
-        if (range?.from && range?.to) {
-            setIsCalendarOpen(false);
-        }
-    };
-
-    const handleStartTimeSelect = (hour: string) => {
-        setStartTime(hour);
-        setIsStartTimeOpen(false);
-    };
-
-    const handleReturnTimeSelect = (hour: string) => {
-        setReturnTime(hour);
-        setIsReturnTimeOpen(false);
-    };
+    // Remove handleDateSelect (DateRangeSelector handles internal logic, we just pass setter)
+    // Actually DateRangeSelector expects `onDateChange: (range: { from: Date | undefined; to: Date | undefined }) => void;`
+    // Our state is `DateRange`. `DateRange` is `{ from?: Date; to?: Date }`. Compatible.
 
     async function handleSubmit(formData: FormData) {
         setIsSubmitting(true);
@@ -123,7 +87,6 @@ export function BookingForm({ modelId, modelName, modelImageUrl, searchParams, l
             setError(result.error);
             setIsSubmitting(false);
         }
-        // If success, the server action will redirect
     }
 
     return (
@@ -131,7 +94,6 @@ export function BookingForm({ modelId, modelName, modelImageUrl, searchParams, l
             <div className="form-column">
                 <form action={handleSubmit} className="booking-form">
                     <input type="hidden" name="modelId" value={modelId} />
-                    {/* Hidden inputs for server action */}
                     <input type="hidden" name="startDate" value={selectedRange?.from ? format(selectedRange.from, 'yyyy-MM-dd') : ''} />
                     <input type="hidden" name="endDate" value={selectedRange?.to ? format(selectedRange.to, 'yyyy-MM-dd') : ''} />
                     <input type="hidden" name="startTime" value={startTime} />
@@ -139,85 +101,24 @@ export function BookingForm({ modelId, modelName, modelImageUrl, searchParams, l
 
                     <div className="booking-form-section">
                         <h3>Dates de réservation</h3>
-                        <div className="form-grid">
-                            <div className="form-group full-width">
-                                <label>Date de départ et de retour *</label>
-                                <button
-                                    type="button"
-                                    className="choose-date-btn"
-                                    onClick={() => setIsCalendarOpen(!isCalendarOpen)}
-                                >
-                                    <span>
-                                        {selectedRange?.from ? format(selectedRange.from, 'dd/MM/yyyy') : 'Sélectionner les dates'}
-                                        {selectedRange?.to ? ` - ${format(selectedRange.to, 'dd/MM/yyyy')}` : ''}
-                                    </span>
-                                    <i className="fas fa-calendar-alt"></i>
-                                </button>
-                                {isCalendarOpen && (
-                                    <div className="calendar-popup">
-                                        <DayPicker
-                                            mode="range"
-                                            selected={selectedRange}
-                                            onSelect={handleDateSelect}
-                                            numberOfMonths={2}
-                                            locale={fr}
-                                            disabled={{ before: new Date() }}
-                                        />
-                                    </div>
-                                )}
-                            </div>
-
-                            <div className="form-group">
-                                <label>Heure de départ *</label>
-                                <div
-                                    className={`choose-hour ${isStartTimeOpen ? 'open' : ''}`}
-                                    ref={startTimeRef}
-                                    onClick={() => setIsStartTimeOpen(!isStartTimeOpen)}
-                                >
-                                    <div className="choose-hour-select">
-                                        <div className="selected">
-                                            <span>{startTime}</span>
-                                            <i className="fas fa-chevron-down chevron-icon"></i>
-                                        </div>
-                                    </div>
-                                    {isStartTimeOpen && (
-                                        <ul className="options">
-                                            {timeSlots.map((hour) => (
-                                                <li key={hour} onClick={(e) => { e.stopPropagation(); handleStartTimeSelect(hour); }}>
-                                                    {hour}
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    )}
-                                </div>
-                            </div>
-
-                            <div className="form-group">
-                                <label>Heure de retour *</label>
-                                <div
-                                    className={`choose-hour ${isReturnTimeOpen ? 'open' : ''}`}
-                                    ref={returnTimeRef}
-                                    onClick={() => setIsReturnTimeOpen(!isReturnTimeOpen)}
-                                >
-                                    <div className="choose-hour-select">
-                                        <div className="selected">
-                                            <span>{returnTime}</span>
-                                            <i className="fas fa-chevron-down chevron-icon"></i>
-                                        </div>
-                                    </div>
-                                    {isReturnTimeOpen && (
-                                        <ul className="options">
-                                            {timeSlots.map((hour) => (
-                                                <li key={hour} onClick={(e) => { e.stopPropagation(); handleReturnTimeSelect(hour); }}>
-                                                    {hour}
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    )}
-                                </div>
-                            </div>
+                        {/* We replace the whole custom date UI with DateRangeSelector */}
+                        {/* Note: DateRangeSelector includes Date AND Time pickers */}
+                        <div className="form-group full-width">
+                            <DateRangeSelector
+                                startDate={selectedRange?.from}
+                                endDate={selectedRange?.to}
+                                onDateChange={setSelectedRange}
+                                startTime={startTime}
+                                returnTime={returnTime}
+                                onStartTimeChange={setStartTime}
+                                onReturnTimeChange={setReturnTime}
+                                hours={timeSlots}
+                                numberOfMonths={2}
+                                className="booking-style"
+                            />
                         </div>
                     </div>
+
 
                     <div className="booking-form-section">
                         <h3>Lieux</h3>

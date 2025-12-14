@@ -10,11 +10,12 @@ import { ModeleVoiture } from '@prisma/client';
 // Il a besoin de la liste des voitures (récupérée par le serveur)
 interface NavbarProps {
   voitures: ModeleVoiture[];
+  isReservationPage?: boolean;
   // Vous pourriez aussi passer les localisations en props si elles deviennent dynamiques
   // localisations: Location[];
 }
 
-export function NavbarAndMenu({ voitures }: NavbarProps) {
+export function NavbarAndMenu({ voitures, isReservationPage = false }: NavbarProps) {
 
   // 2. Remplacer les querySelector par des états React
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -60,7 +61,7 @@ export function NavbarAndMenu({ voitures }: NavbarProps) {
       {/* ================================================= */}
       {/* 1. La Navbar (le hamburger et le logo) */}
       {/* ================================================= */}
-      <nav className="navbar">
+      <nav className={`navbar${isReservationPage ? ' navbar-reservation' : ''}`}>
         <div className="hamburger" onClick={openMenu}>
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#000000">
             <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>

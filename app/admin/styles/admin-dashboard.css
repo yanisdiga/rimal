@@ -44,3 +44,10 @@
     transform: none;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
 }
+
+/* Responsive */
+@media (max-width: 480px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+}

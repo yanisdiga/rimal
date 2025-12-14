@@ -2,6 +2,8 @@ import React from 'react';
 import { prisma } from '../../lib/prisma';
 import { VehiclesSection } from '../components/VehiclesSection';
 import { NavbarAndMenu } from '../components/Menu';
+import { ReservationSidebar } from '../components/ReservationSidebar';
+import Link from 'next/link';
 
 import '../../styles/reservation.css';
 
@@ -15,12 +17,11 @@ export default async function ReservationPage({
 }) {
     const resolvedSearchParams = await searchParams;
 
-    // Dans une implémentation réelle, on utiliserait searchParams pour filtrer
-    const { startDate, endDate, startTime, returnTime } = resolvedSearchParams;
+    // 1. Extraire les paramètres de recherche et filtres
+    const { startDate, endDate, startTime, returnTime, transmission } = resolvedSearchParams;
 
-    // Construction de la condition de disponibilité temporelle
+    // 2. Construction de la condition de disponibilité (Dates)
     let dateFilter: any = {};
-
     if (startDate && endDate) {
         const startDateTime = new Date(`${startDate}T${startTime || '00:00'}:00`);
         const endDateTime = new Date(`${endDate}T${returnTime || '00:00'}:00`);
@@ -38,41 +39,68 @@ export default async function ReservationPage({
         };
     }
 
-    const voitures = await prisma.modeleVoiture.findMany({
-        where: {
-            vehicules: {
-                some: {
-                    statut: 'DISPONIBLE',
-                    reservations: dateFilter
-                }
+    // 3. Construction des filtres supplémentaires (Transmission)
+    const whereCondition: any = {
+        vehicules: {
+            some: {
+                statut: 'DISPONIBLE',
+                reservations: dateFilter
             }
         }
+    };
+
+    if (transmission) {
+        // transmission can be "MANUELLE" or "MANUELLE,AUTOMATIQUE"
+        const transmissionList = (Array.isArray(transmission) ? transmission : transmission.split(','))
+            .map(t => t.toUpperCase().trim());
+
+        // Prisma 'in' filter for Enum
+        whereCondition.transmission = {
+            in: transmissionList as any // Force cast if Type safety complaints
+        };
+    }
+
+    // 4. Récupération des données
+    const voitures = await prisma.modeleVoiture.findMany({
+        where: whereCondition
     });
 
-    // On a aussi besoin des voitures pour le menu (si nécessaire)
-    // Note: NavbarAndMenu attend 'voitures' pour le menu déroulant "Nos Véhicules"
+    const locations = await prisma.location.findMany();
 
     return (
         <>
-            <NavbarAndMenu voitures={voitures} />
+            <NavbarAndMenu voitures={voitures} isReservationPage={true} />
             <div className="reservation-page">
                 <div className="reservation-container">
-                    <h1 className="reservation-title">
-                        Résultats de votre recherche
-                    </h1>
 
-                    {voitures.length === 0 ? (
-                        <div className="no-results-container">
-                            <div className="no-results-title">
-                                Aucun véhicule disponible pour ces dates.
-                            </div>
-                            <p className="no-results-text">
-                                Essayez de modifier vos dates ou contactez-nous directement.
-                            </p>
+                    {/* SIDEBAR GAUCHE */}
+                    <ReservationSidebar locations={locations} />
+
+                    {/* CONTENU PRINCIPAL DROITE */}
+                    <div className="reservation-content">
+
+                        <div className="reservation-header">
+                            <h1 className="reservation-title">
+                                Résultats de votre recherche
+                            </h1>
+                            <Link href="/" className="back-button">
+                                <i className="fas fa-arrow-left"></i> Retour
+                            </Link>
                         </div>
-                    ) : (
-                        <VehiclesSection voitures={voitures} searchParams={resolvedSearchParams} />
-                    )}
+
+                        {voitures.length === 0 ? (
+                            <div className="no-results-container">
+                                <div className="no-results-title">
+                                    Aucun véhicule disponible.
+                                </div>
+                                <p className="no-results-text">
+                                    Essayez de modifier vos dates ou vos filtres.
+                                </p>
+                            </div>
+                        ) : (
+                            <VehiclesSection voitures={voitures} searchParams={resolvedSearchParams} />
+                        )}
+                    </div>
                 </div>
             </div>
 

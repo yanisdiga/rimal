@@ -1,0 +1,9 @@
+[
+  {
+    "id": 1,
+    "title": "L'Excellence à Chaque Kilomètre",
+    "description": "Chez MJ Cars, nous ne louons pas seulement des voitures, nous offrons une expérience. Que vous cherchiez l'élégance d'une berline de luxe ou la puissance d'un SUV sportif, notre flotte est soigneusement sélectionnée pour répondre aux attentes les plus exigeantes.\r\n\r\nLaissez-vous séduire par le confort absolu et la performance inégalée de nos véhicules. Votre voyage mérite ce qu'il y a de meilleur.",
+    "imageUrl": "https://images.unsplash.com/photo-1563720223185-11003d516935?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+    "buttonText": "Découvrir l'agence"
+  }
+]

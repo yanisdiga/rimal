@@ -10,6 +10,7 @@ import { ReservationForm } from './components/ReservationForm';
 import { ServicesSection } from './components/ServicesSection';
 import { ExperienceSection } from './components/ExperienceSection';
 import { ReviewsSection } from './components/ReviewsSection';
+import { ScrollReveal } from './components/ScrollReveal';
 
 const timeSlots = [
     "08:00", "08:30", "09:00", "09:30", "10:00", "10:30", "11:00", "11:30",
@@ -36,25 +37,62 @@ export default async function Home() {
         subtitle: image.subtitle || '', // Ajoutez un champ subtitle à votre BDD ou mettez une valeur par défaut
     }));
 
+    // LOAD SERVICES FROM JSON
+    let servicesData = [];
+    try {
+        const fs = require('fs/promises');
+        const path = require('path');
+        const filePath = path.join(process.cwd(), 'data', 'services.json');
+        const fileContent = await fs.readFile(filePath, 'utf-8');
+        servicesData = JSON.parse(fileContent);
+    } catch (e) {
+        console.error("Error loading services", e);
+    }
+
+    // LOAD EXPERIENCE FROM JSON
+    let experienceData = [];
+    try {
+        const fs = require('fs/promises');
+        const path = require('path');
+        const experiencePath = path.join(process.cwd(), 'data', 'experience.json');
+        const fileContent = await fs.readFile(experiencePath, 'utf-8');
+        experienceData = JSON.parse(fileContent);
+    } catch (e) {
+        console.error("Error loading experience", e);
+    }
 
     const voitures = await prisma.modeleVoiture.findMany();
     const locations = await prisma.location.findMany();
     return (
         <>
             <NavbarAndMenu voitures={voitures} />
+
+            {/* Slider doesn't need reveal usually, or can be separate */}
             <ImageSlider images={sliderData} interval={5000} />
-            <ReservationForm locations={locations} hours={timeSlots} />
+
+            <ScrollReveal delay="delay-100">
+                <ReservationForm locations={locations} hours={timeSlots} />
+            </ScrollReveal>
 
             {/* New Services Section */}
-            <ServicesSection />
+            <ScrollReveal>
+                <ServicesSection services={servicesData} />
+            </ScrollReveal>
 
-            <VehiclesSection voitures={voitures} />
+            <ScrollReveal>
+                <h1 className="vehicules-title">Nos Véhicules</h1>
+                <VehiclesSection voitures={voitures} />
+            </ScrollReveal>
 
             {/* New Experience Section */}
-            <ExperienceSection />
+            <ScrollReveal>
+                <ExperienceSection experiences={experienceData} />
+            </ScrollReveal>
 
             {/* New Reviews Section */}
-            <ReviewsSection />
+            <ScrollReveal>
+                <ReviewsSection />
+            </ScrollReveal>
         </>
     );
 }

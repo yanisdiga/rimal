@@ -1,18 +1,11 @@
-// Fichier : app/components/ReservationForm.tsx
-
 "use client";
 
 import React, { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-// Importe le type de votre BDD
 import { Location } from '@prisma/client';
-// Imports pour le calendrier
-import { DayPicker, DateRange } from 'react-day-picker';
 import { format } from 'date-fns';
-import { fr } from 'date-fns/locale';
-
-// Import du CSS pour le calendrier (vous pouvez le mettre dans globals.css)
-import 'react-day-picker/dist/style.css';
+import { DateRange } from 'react-day-picker';
+import { DateRangeSelector } from './DateRangeSelector';
 
 // --- (Début) Hook pour gérer les clics en dehors ---
 // (Mis ici pour garder le fichier autonome)
@@ -35,7 +28,6 @@ function useClickOutside(ref: React.RefObject<any>, handler: () => void) {
 }
 // --- (Fin) Hook ---
 
-// Définition des props que le composant reçoit de la page
 interface ReservationFormProps {
   locations: Location[];
   hours: string[];
@@ -44,82 +36,40 @@ interface ReservationFormProps {
 export function ReservationForm({ locations, hours }: ReservationFormProps) {
 
   // --- États (States) ---
-  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [selectedRange, setSelectedRange] = useState<DateRange | undefined>();
-  const [isStartCalendarOpen, setIsStartCalendarOpen] = useState(false);
-  const [isEndCalendarOpen, setIsEndCalendarOpen] = useState(false);
 
-  // 👇 CORRECTION ICI : Initialisation sûre de l'état
-  // On type l'état comme 'Location | undefined' et on utilise locations[0]
-  // (qui sera 'undefined' si 'locations' est un tableau vide)
   const [isLocationOpen, setIsLocationOpen] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState<Location | undefined>(locations[0]);
 
   const [isReturnLocationOpen, setIsReturnLocationOpen] = useState(false);
   const [selectedReturnLocation, setSelectedReturnLocation] = useState<Location | undefined>();
 
-  // (On suppose que 'hours' ne sera jamais un tableau vide)
-  const [isStartTimeOpen, setIsStartTimeOpen] = useState(false);
   const [selectedStartTime, setSelectedStartTime] = useState(hours[0]);
-
-  const [isReturnTimeOpen, setIsReturnTimeOpen] = useState(false);
   const [selectedReturnTime, setSelectedReturnTime] = useState(hours[0]);
   const [isReturnLocationDifferent, setIsReturnLocationDifferent] = useState(false);
 
   // --- Références (Refs) ---
-  const calendarRef = useRef<HTMLDivElement>(null);
-  const startCalendarRef = useRef<HTMLDivElement>(null);
-  const endCalendarRef = useRef<HTMLDivElement>(null);
   const locationRef = useRef<HTMLDivElement>(null);
   const returnLocationRef = useRef<HTMLDivElement>(null);
-  const startTimeRef = useRef<HTMLDivElement>(null);
-  const returnTimeRef = useRef<HTMLDivElement>(null);
 
   // --- Effets (Effects) ---
-  // On attache les hooks de clic extérieur à chaque menu
-  useClickOutside(calendarRef, () => setIsCalendarOpen(false));
-  useClickOutside(startCalendarRef, () => setIsStartCalendarOpen(false));
-  useClickOutside(endCalendarRef, () => setIsEndCalendarOpen(false));
   useClickOutside(locationRef, () => setIsLocationOpen(false));
   useClickOutside(returnLocationRef, () => setIsReturnLocationOpen(false));
-  useClickOutside(startTimeRef, () => setIsStartTimeOpen(false));
-  useClickOutside(returnTimeRef, () => setIsReturnTimeOpen(false));
 
   // --- Fonctions (Handlers) ---
-  const handleDateSelect = (range: DateRange | undefined) => {
-    setSelectedRange(range);
-    if (range?.from && range?.to) {
-      setIsCalendarOpen(false); // Ferme si la sélection est complète
-      setIsStartCalendarOpen(false);
-      setIsEndCalendarOpen(false);
-    }
-  };
   const handleLocationSelect = (location: Location) => {
     setSelectedLocation(location);
     setIsLocationOpen(false);
   };
   const handleReturnLocationSelect = (location: Location) => {
-    // Si le lieu de retour choisi est le MÊME que le lieu de départ...
     if (location.id === selectedLocation?.id) {
-      // ...on réinitialise le lieu de retour (on le remet à 'undefined').
       setSelectedReturnLocation(undefined);
       setIsReturnLocationDifferent(false);
     } else {
-      // ...sinon, on le définit.
       setSelectedReturnLocation(location);
       setIsReturnLocationDifferent(true);
     }
-
-    // On ferme le menu déroulant dans tous les cas
     setIsReturnLocationOpen(false);
-  };
-  const handleStartTimeSelect = (hour: string) => {
-    setSelectedStartTime(hour);
-    setIsStartTimeOpen(false);
-  };
-  const handleReturnTimeSelect = (hour: string) => {
-    setSelectedReturnTime(hour);
-    setIsReturnTimeOpen(false);
   };
 
   const router = useRouter();
@@ -130,7 +80,6 @@ export function ReservationForm({ locations, hours }: ReservationFormProps) {
     if (selectedLocation?.id) {
       query.location = selectedLocation.id.toString();
     }
-    // If return location is not explicitly set, it defaults to the pickup location
     query.returnLocation = (selectedReturnLocation?.id || selectedLocation?.id || '').toString();
 
     if (selectedRange?.from) {
@@ -147,15 +96,12 @@ export function ReservationForm({ locations, hours }: ReservationFormProps) {
       query.returnTime = selectedReturnTime;
     }
 
-    // Construct the query string
     const queryString = new URLSearchParams(query).toString();
     router.push(`/reservation?${queryString}`);
   };
 
-  // --- Rendu JSX ---
   return (
     <div className="reservations">
-      {/* 👇 VOTRE CODE EST ICI - Remplacez ce bloc entier 👇 */}
       <div className="locations-container">
 
         {/* === COLONNE 1: RETRAIT === */}
@@ -175,7 +121,7 @@ export function ReservationForm({ locations, hours }: ReservationFormProps) {
                   {selectedLocation ? selectedLocation.nom : 'Choisir un lieu'}
                 </span>
                 <svg viewBox="-19.04 0 75.804 75.804" className={isLocationOpen ? 'rotated' : ''}>
-                  {/* ... svg path ... */}
+                  <path style={{ fill: "#353434" }} d="M37.902,30.566L1.876,5.32c-1.425-0.992-2.316-2.583-2.385-4.32c-0.063-1.736,0.697-3.391,2.039-4.481L36.883-26.68  c2.197-1.777,5.361-1.464,7.132,0.735c0.686,0.854,1.066,1.914,1.066,3.007v54.265c0,2.833-2.296,5.129-5.129,5.129  C39.297,36.456,38.583,36.237,37.902,30.566z" />
                 </svg>
               </div>
             </div>
@@ -195,14 +141,11 @@ export function ReservationForm({ locations, hours }: ReservationFormProps) {
           </div>
         </div>
 
-        {/* === COLONNE 2: RETOUR (C'EST LE BLOC QUE VOUS AVIEZ SUPPRIMÉ) === */}
+        {/* === COLONNE 2: RETOUR === */}
         <div className="location-column return-column">
-          {/* Le label "Retour" (vide ou non) pour l'alignement */}
           <span>
             {selectedReturnLocation ? 'Retour' : <span>&nbsp;</span>}
           </span>
-
-          {/* Le bouton "+ Lieu de retour différent" */}
           <div
             className={`choose-location return-location ${isReturnLocationOpen ? 'open' : ''} ${isReturnLocationDifferent ? 'different' : ''}`}
             ref={returnLocationRef}
@@ -231,155 +174,22 @@ export function ReservationForm({ locations, hours }: ReservationFormProps) {
             <input type="hidden" name="return-location" value={selectedReturnLocation?.id || selectedLocation?.id || ''} />
           </div>
         </div>
-        {/* === FIN DU BLOC MANQUANT === */}
-
       </div>
 
-      {/* === Conteneur des Dates === */}
       <div className="dates-validation-container">
-        <div className="dates-container" ref={calendarRef}>
 
-          {/* Bouton Date de départ */}
-          <div className="start-date-container">
-            <span>Date et heure de départ</span>
-            <div className="button-start">
-              <button
-                id="start-date"
-                className={`choose-date ${isStartCalendarOpen ? 'open' : ''}`}
-                onClick={() => {
-                  setIsCalendarOpen(true);
-                  setIsStartCalendarOpen(true);
-                  setIsEndCalendarOpen(false);
-                }}
-              >
-                <i className="fas fa-calendar-alt"></i>
-                <span>
-                  {selectedRange?.from ? format(selectedRange.from, 'dd/MM/yyyy') : ''}
-                </span>
-              </button>
+        {/* NEW REUSABLE DATE SELECTOR */}
+        <DateRangeSelector
+          startDate={selectedRange?.from}
+          endDate={selectedRange?.to}
+          onDateChange={setSelectedRange}
+          startTime={selectedStartTime}
+          returnTime={selectedReturnTime}
+          onStartTimeChange={setSelectedStartTime}
+          onReturnTimeChange={setSelectedReturnTime}
+          hours={hours}
+        />
 
-              {/* Menu Heure de départ */}
-              <div
-                className={`choose-hour ${isStartTimeOpen ? 'open' : ''}`}
-                ref={startTimeRef}
-                onClick={() => {
-                  setIsStartTimeOpen(!isStartTimeOpen);
-                  setIsCalendarOpen(false);
-                  setIsStartCalendarOpen(false);
-                  setIsEndCalendarOpen(false);
-                }}
-              >
-                <div className="choose-hour-select">
-                  <div className="selected">
-                    <span>{selectedStartTime}</span>
-                    <svg>{/* ... */}</svg>
-                  </div>
-                </div>
-                {isStartTimeOpen && (
-                  <ul className="options">
-                    {hours.map((hour) => (
-                      <li key={hour} onClick={() => {
-                        handleStartTimeSelect(hour);
-                      }}>
-                        {hour}
-                      </li>
-                    ))}
-                  </ul>
-                )}
-                <input type="hidden" name="start-time" value={selectedStartTime} />
-              </div>
-            </div>
-          </div>
-
-          {/* Bouton Date de retour */}
-          <div className="end-date-container">
-            <span>Date et heure de retour</span>
-            <div className="button-end">
-              <button
-                id="end-date"
-                className={`choose-date ${isEndCalendarOpen ? 'open' : ''}`}
-                onClick={() => {
-                  setIsCalendarOpen(true);
-                  setIsEndCalendarOpen(true);
-                  setIsStartCalendarOpen(false);
-                }}
-              >
-                <i className="fas fa-calendar-alt"></i>
-                <span>
-                  {selectedRange?.to ? format(selectedRange.to, 'dd/MM/yyyy') : ''}
-                </span>
-              </button>
-
-              {/* Menu Heure de retour */}
-              <div
-                className={`choose-hour return-hour ${isReturnTimeOpen ? 'open' : ''}`}
-                ref={returnTimeRef}
-                onClick={() => {
-                  setIsReturnTimeOpen(!isReturnTimeOpen);
-                  setIsCalendarOpen(false);
-                  setIsStartCalendarOpen(false);
-                  setIsEndCalendarOpen(false);
-                }
-                }
-              >
-                <div className="choose-hour-select">
-                  <div className="selected">
-                    <span>{selectedReturnTime}</span>
-                    <svg>{/* ... */}</svg>
-                  </div>
-                </div>
-                {isReturnTimeOpen && (
-                  <ul className="options">
-                    {hours.map((hour) => (
-                      <li key={hour} onClick={() => handleReturnTimeSelect(hour)}>
-                        {hour}
-                      </li>
-                    ))}
-                  </ul>
-                )}
-                <input type="hidden" name="return-time" value={selectedReturnTime} />
-              </div>
-            </div>
-          </div>
-
-          {/* LE CALENDRIER (anciennement flatpickr) */}
-          {isCalendarOpen && (
-            <div className="calendar-container">
-              <DayPicker
-                mode="range"
-                selected={selectedRange}
-                onSelect={(range, selectedDay) => {
-                  // Logique personnalisée selon l'input actif
-                  if (isStartCalendarOpen) {
-                    // Si on choisit la date de départ, on force la date de fin à undefined
-                    // pour obliger l'utilisateur à faire un 2ème clic pour la fin (même si c'est le même jour)
-
-                    // IMPORTANT: On utilise 'selectedDay' (le jour cliqué) comme début de range
-                    // et on ignore 'range' (qui pourrait être une fusion avec l'ancienne sélection).
-                    // Cela garantit que si l'utilisateur reclique pour changer le début, 
-                    // l'ancienne range est effacée.
-                    setSelectedRange({ from: selectedDay, to: undefined });
-
-                    setIsStartCalendarOpen(false);
-                    setIsEndCalendarOpen(true);
-                    setIsCalendarOpen(true); // On maintient ouvert
-                  } else {
-                    // Sinon (mode date de fin ou défaut), on accepte la range telle quelle
-                    setSelectedRange(range);
-                    if (range?.from && range?.to) {
-                      setIsCalendarOpen(false);
-                      setIsStartCalendarOpen(false);
-                      setIsEndCalendarOpen(false);
-                    }
-                  }
-                }}
-                numberOfMonths={2}
-                locale={fr}
-                disabled={{ before: new Date() }}
-              />
-            </div>
-          )}
-        </div>
         <button className="validate-button" onClick={handleSearch}>Rechercher</button>
       </div>
     </div >

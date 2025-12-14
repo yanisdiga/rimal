@@ -82,7 +82,7 @@ export function VehiclesSection({ voitures, searchParams }: VehiclesSectionProps
       className={`vehicules ${isVisible ? 'visible' : ''}`}
       ref={sectionRef} // On lie la ref à cette div
     >
-      <h1>Nos Véhicules</h1>
+      {/* <h1>Nos Véhicules</h1> */}
       <div className="vehicules-container">
 
         {/* On boucle sur les 'voitures' reçues en props */}

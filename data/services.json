@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "icon": "fa-road",
+    "title": "Kilométrage Illimité",
+    "description": "Profitez de la route sans compter. Nos offres incluent le kilométrage illimité pour une liberté totale."
+  },
+  {
+    "id": 2,
+    "icon": "fa-shield-alt",
+    "title": "Assurance Incluse",
+    "description": "Roulez en toute sérénité avec notre couverture d'assurance tous risques incluse dans chaque location."
+  },
+  {
+    "id": 3,
+    "icon": "fa-car-side",
+    "title": "Livraison Premium",
+    "description": "Nous livrons votre véhicule de prestige directement à votre hôtel, aéroport ou domicile."
+  },
+  {
+    "id": 4,
+    "icon": "fa-headset",
+    "title": "Support 24/7",
+    "description": "Une équipe dédiée à votre écoute à tout moment pour garantir une expérience sans faille."
+  }
+]
