@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import { PrismaClient } from '@prisma/client';
 import { AdminLayout } from '../components/AdminLayout';
 import { format } from 'date-fns';
