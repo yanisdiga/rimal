@@ -96,6 +96,7 @@ model Location {
   nom                  String  @unique // Ex: "Aéroport Marrakech-Menara"
   adresse              String?
   fraisSupplementaires Int     @default(0) @map("frais_supplementaires")
+  imageUrl             String? @map("image_url")
 
   // Relations pour les réservations
   reservationsPriseEnCharge Reservation[] @relation("PriseEnCharge")

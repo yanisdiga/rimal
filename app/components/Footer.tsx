@@ -26,11 +26,10 @@ export function Footer() {
                 <a href="#">Plan du Site</a>
             </div>
             <div className="third-cat">
-                <a href="#"><i className="fab fa-facebook-f"></i>Facebook</a>
+                <a href="#"><i className="fab fa-whatsapp"></i>What's app</a>
                 <a href="#"><i className="fab fa-instagram"></i>Instagram</a>
-                <a href="#"><i className="fab fa-linkedin-in"></i>Linkedin</a>
             </div>
-            <span>© 2024 Rimal. Tous droits réservés.</span>
+            <span>© 2025 Rimal. Tous droits réservés.</span>
         </div>
     );
 }

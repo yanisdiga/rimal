@@ -53,31 +53,53 @@ export function BookingForm({ modelId, modelName, modelImageUrl, searchParams, l
     const [startTime, setStartTime] = useState(searchParams.startTime as string || '10:00');
     const [returnTime, setReturnTime] = useState(searchParams.returnTime as string || '10:00');
 
-    // Remove isCalendarOpen, isStartTimeOpen, etc.
+    // State for locations to calculate fees
+    const [locationId, setLocationId] = useState<string>(searchParams.location as string || '');
+    const [returnLocationId, setReturnLocationId] = useState<string>(searchParams.returnLocation as string || '');
 
     // Calculate total price
     const calculateTotal = () => {
-        if (!selectedRange?.from || !selectedRange?.to) return 0;
+        if (!selectedRange?.from || !selectedRange?.to) return { total: 0, days: 0, locFees: 0 };
         const start = new Date(`${format(selectedRange.from, 'yyyy-MM-dd')}T${startTime}`);
         const end = new Date(`${format(selectedRange.to, 'yyyy-MM-dd')}T${returnTime}`);
 
-        if (isNaN(start.getTime()) || isNaN(end.getTime())) return 0;
+        if (isNaN(start.getTime()) || isNaN(end.getTime())) return { total: 0, days: 0, locFees: 0 };
 
         const diffTime = end.getTime() - start.getTime();
-        if (diffTime <= 0) return 0;
+        if (diffTime <= 0) return { total: 0, days: 0, locFees: 0 };
 
         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-        return diffDays * pricePerDay;
+        let total = diffDays * pricePerDay;
+        // Calculation logic strictly mirroring server action
+        let locFees = 0;
+
+        if (locationId) {
+            const loc = locations.find(l => l.id.toString() === locationId);
+            if (loc) locFees += loc.fraisSupplementaires;
+        }
+
+        // Determine effective return ID logic
+        const effectiveReturnId = returnLocationId
+            ? returnLocationId
+            : (!searchParams.customReturnLocation && !searchParams.customLocation && locationId)
+                ? locationId
+                : null;
+
+        if (effectiveReturnId) {
+            const loc = locations.find(l => l.id.toString() === effectiveReturnId);
+            if (loc) locFees += loc.fraisSupplementaires;
+        }
+
+        total += locFees;
+
+        return { total, days: diffDays, locFees };
     };
 
-    const totalPrice = calculateTotal();
-    const days = totalPrice > 0 ? Math.round(totalPrice / pricePerDay) : 0;
-
-    // Remove handleDateSelect (DateRangeSelector handles internal logic, we just pass setter)
-    // Actually DateRangeSelector expects `onDateChange: (range: { from: Date | undefined; to: Date | undefined }) => void;`
-    // Our state is `DateRange`. `DateRange` is `{ from?: Date; to?: Date }`. Compatible.
+    const calculation = calculateTotal();
+    const { total: totalPrice, days, locFees } = calculation;
 
     async function handleSubmit(formData: FormData) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
         setIsSubmitting(true);
         setError(null);
 
@@ -101,8 +123,6 @@ export function BookingForm({ modelId, modelName, modelImageUrl, searchParams, l
 
                     <div className="booking-form-section">
                         <h3>Dates de réservation</h3>
-                        {/* We replace the whole custom date UI with DateRangeSelector */}
-                        {/* Note: DateRangeSelector includes Date AND Time pickers */}
                         <div className="form-group full-width">
                             <DateRangeSelector
                                 startDate={selectedRange?.from}
@@ -128,7 +148,8 @@ export function BookingForm({ modelId, modelName, modelImageUrl, searchParams, l
                                 <select
                                     id="locationId"
                                     name="locationId"
-                                    defaultValue={searchParams.location as string || ''}
+                                    value={locationId}
+                                    onChange={(e) => setLocationId(e.target.value)}
                                     required={!searchParams.customLocation}
                                     disabled={!!searchParams.customLocation}
                                 >
@@ -137,7 +158,7 @@ export function BookingForm({ modelId, modelName, modelImageUrl, searchParams, l
                                     </option>
                                     {locations.map((loc) => (
                                         <option key={loc.id} value={loc.id}>
-                                            {loc.nom}
+                                            {loc.nom} (+{loc.fraisSupplementaires} DH)
                                         </option>
                                     ))}
                                 </select>
@@ -150,7 +171,8 @@ export function BookingForm({ modelId, modelName, modelImageUrl, searchParams, l
                                 <select
                                     id="returnLocationId"
                                     name="returnLocationId"
-                                    defaultValue={searchParams.returnLocation as string || ''}
+                                    value={returnLocationId}
+                                    onChange={(e) => setReturnLocationId(e.target.value)}
                                     required={!searchParams.customReturnLocation && !searchParams.customLocation}
                                     disabled={!!searchParams.customReturnLocation || !!searchParams.customLocation}
                                 >
@@ -161,7 +183,7 @@ export function BookingForm({ modelId, modelName, modelImageUrl, searchParams, l
                                     </option>
                                     {locations.map((loc) => (
                                         <option key={loc.id} value={loc.id}>
-                                            {loc.nom}
+                                            {loc.nom} (+{loc.fraisSupplementaires} DH)
                                         </option>
                                     ))}
                                 </select>
@@ -225,6 +247,12 @@ export function BookingForm({ modelId, modelName, modelImageUrl, searchParams, l
                             <span>Durée :</span>
                             <strong>{days} jours</strong>
                         </div>
+                        {locFees > 0 && (
+                            <div className="summary-row fees">
+                                <span>Frais de lieu :</span>
+                                <strong>+ {locFees} DH</strong>
+                            </div>
+                        )}
                         <div className="summary-total">
                             <span>Total estimé :</span>
                             <strong>{totalPrice} DH</strong>

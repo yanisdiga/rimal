@@ -102,12 +102,33 @@ export async function createLocation(formData: FormData) {
     const nom = formData.get('nom') as string;
     const adresse = formData.get('adresse') as string;
     const fraisSupplementaires = parseInt(formData.get('fraisSupplementaires') as string || '0');
+    const imageUrl = formData.get('imageUrl') as string;
 
     await prisma.location.create({
         data: {
             nom,
             adresse,
             fraisSupplementaires,
+            imageUrl,
+        },
+    });
+
+    revalidatePath('/admin/locations');
+}
+
+export async function updateLocation(id: number, formData: FormData) {
+    const nom = formData.get('nom') as string;
+    const adresse = formData.get('adresse') as string;
+    const fraisSupplementaires = parseInt(formData.get('fraisSupplementaires') as string || '0');
+    const imageUrl = formData.get('imageUrl') as string;
+
+    await prisma.location.update({
+        where: { id },
+        data: {
+            nom,
+            adresse,
+            fraisSupplementaires,
+            imageUrl,
         },
     });
 

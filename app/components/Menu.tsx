@@ -4,18 +4,17 @@
 
 import React, { useState, useEffect } from 'react';
 // Importe le type de données que Prisma nous donne
-import { ModeleVoiture } from '@prisma/client';
+import { ModeleVoiture, Location } from '@prisma/client';
 
 // 1. Définir les "props" que ce composant reçoit
 // Il a besoin de la liste des voitures (récupérée par le serveur)
 interface NavbarProps {
   voitures: ModeleVoiture[];
-  isReservationPage?: boolean;
-  // Vous pourriez aussi passer les localisations en props si elles deviennent dynamiques
-  // localisations: Location[];
+  locations: Location[];
+  isOtherPage?: boolean;
 }
 
-export function NavbarAndMenu({ voitures, isReservationPage = false }: NavbarProps) {
+export function NavbarAndMenu({ voitures, locations, isOtherPage = false }: NavbarProps) {
 
   // 2. Remplacer les querySelector par des états React
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -56,12 +55,20 @@ export function NavbarAndMenu({ voitures, isReservationPage = false }: NavbarPro
     return firstLetter + rest;
   }
 
+  const arrow_svg = () => {
+    return (
+      <svg xmlns="http://www.w3.org/2000/svg" fill="#000000" width="18px" height="18px" viewBox="0 0 32 32" version="1.1">
+        <path d="M8.489 31.975c-0.271 0-0.549-0.107-0.757-0.316-0.417-0.417-0.417-1.098 0-1.515l14.258-14.264-14.050-14.050c-0.417-0.417-0.417-1.098 0-1.515s1.098-0.417 1.515 0l14.807 14.807c0.417 0.417 0.417 1.098 0 1.515l-15.015 15.022c-0.208 0.208-0.486 0.316-0.757 0.316z" />
+      </svg>
+    )
+  }
+
   return (
     <>
       {/* ================================================= */}
       {/* 1. La Navbar (le hamburger et le logo) */}
       {/* ================================================= */}
-      <nav className={`navbar${isReservationPage ? ' navbar-reservation' : ''}`}>
+      <nav className={`navbar${isOtherPage ? ' navbar-reservation' : ''}`}>
         <div className="hamburger" onClick={openMenu}>
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#000000">
             <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
@@ -75,7 +82,7 @@ export function NavbarAndMenu({ voitures, isReservationPage = false }: NavbarPro
           <span>Menu</span>
         </div>
         <div className="logo">
-          <a href="/">Rimal</a>
+          <a href="/">Bouderba Rental Cars</a>
         </div>
       </nav>
 
@@ -95,9 +102,7 @@ export function NavbarAndMenu({ voitures, isReservationPage = false }: NavbarPro
                 onClick={(e) => { e.preventDefault(); selectTab('vehicules'); }}
               >
                 <span>Nos véhicules</span>
-                <svg xmlns="http://www.w3.org/2000/svg" fill="#000000" width="18px" height="18px" viewBox="0 0 32 32" version="1.1">
-                  <path d="M8.489 31.975c-0.271 0-0.549-0.107-0.757-0.316-0.417-0.417-0.417-1.098 0-1.515l14.258-14.264-14.050-14.050c-0.417-0.417-0.417-1.098 0-1.515s1.098-0.417 1.515 0l14.807 14.807c0.417 0.417 0.417 1.098 0 1.515l-15.015 15.022c-0.208 0.208-0.486 0.316-0.757 0.316z" />
-                </svg>
+                {arrow_svg()}
               </a>
 
               <a
@@ -106,12 +111,19 @@ export function NavbarAndMenu({ voitures, isReservationPage = false }: NavbarPro
                 onClick={(e) => { e.preventDefault(); selectTab('localisations'); }}
               >
                 <span>Nos localisations</span>
-                <svg xmlns="http://www.w3.org/2000/svg" fill="#000000" width="18px" height="18px" viewBox="0 0 32 32" version="1.1">
-                  <path d="M8.489 31.975c-0.271 0-0.549-0.107-0.757-0.316-0.417-0.417-0.417-1.098 0-1.515l14.258-14.264-14.050-14.050c-0.417-0.417-0.417-1.098 0-1.515s1.098-0.417 1.515 0l14.807 14.807c0.417 0.417 0.417 1.098 0 1.515l-15.015 15.022c-0.208 0.208-0.486 0.316-0.757 0.316z" />
-                </svg>
+                {arrow_svg()}
               </a>
 
-              {/* Vos autres liens (Réserv, Agence...) vont ici */}
+              <a href="/reservation">
+                <span>Réservations</span>
+                {arrow_svg()}
+              </a>
+
+              <a href="/agency">
+                <span>Nous contacter</span>
+                {arrow_svg()}
+              </a>
+
             </div>
           </div>
 
@@ -132,29 +144,19 @@ export function NavbarAndMenu({ voitures, isReservationPage = false }: NavbarPro
               ))}
             </div>
 
-            {/* Ce panneau était statique dans votre JS/HTML, on le garde statique */}
+            {/* Ce panneau est maintenant dynamique */}
             <div className={`localisations-items right-menu-items ${activeTab === 'localisations' && isMenuOpen ? 'active' : ''}`}>
-              <div className="localisation-item item">
-                <span className="locName">Aéroport Marrakech-Menara</span>
-                <img className="locImg" src="https://aeroport-marrakech.com/wp-content/uploads/2018/12/25.jpg" alt="Aéroport" />
-                <div className="locInfo">
-                  <span>50DH</span>
+              {locations.map((loc) => (
+                <div key={loc.id} className="localisation-item item">
+                  <span className="locName">{loc.nom}</span>
+                  {loc.imageUrl && (
+                    <img className="locImg" src={loc.imageUrl} alt={loc.nom} />
+                  )}
+                  <div className="locInfo">
+                    <span>{loc.fraisSupplementaires > 0 ? `Frais : ${loc.fraisSupplementaires} DH` : 'Sans frais'}</span>
+                  </div>
                 </div>
-              </div>
-              <div className="localisation-item item">
-                <span className="locName">Place Jamaa el Fna</span>
-                <img className="locImg" src="https://dunesdeserts.com/wp-content/uploads/2019/01/Jmaalefna.jpg" alt="Jamaa el Fna" />
-                <div className="locInfo">
-                  <span>Sans frais</span>
-                </div>
-              </div>
-              <div className="localisation-item item">
-                <span className="locName">Palmeraie</span>
-                <img className="locImg" src="https://media.istockphoto.com/id/137855633/fr/photo/hauts-palmiers-marocaine-flags-ligne-approche-et-dun-minaret-de-la-mosqu%C3%A9e.jpg?s=612x612&w=0&k=20&c=utuIlJWtL8_6D8V-FKRvy8NWXa7YiWHjcbfieCRrI3k=" alt="Palmeraie" />
-                <div className="locInfo">
-                  <span>Sans frais</span>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
 

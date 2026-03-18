@@ -45,7 +45,7 @@ export default async function BookingPage({
 
     return (
         <>
-            <NavbarAndMenu voitures={voitures} />
+            <NavbarAndMenu voitures={voitures} locations={locations} isOtherPage={true} />
             <div className="booking-page">
                 <div className="booking-container">
                     <Link href="/reservation" className="back-button">

@@ -16,7 +16,7 @@ import "../styles/style.css";
 import { prisma } from '../lib/prisma';
 import NavbarWrapper from "./components/NavbarWrapper";
 import { Footer } from "./components/Footer";
-import { WhatsAppButton } from "./components/WhatsAppButton";
+import { SocialButton } from "./components/SocialButton";
 
 import { checkExpiredReservations } from "./actions/checkExpiredReservations";
 
@@ -36,7 +36,7 @@ const oswald = Oswald({
 });
 
 export const metadata: Metadata = {
-  title: "Rimal",
+  title: "Bouderba Rental Cars",
   description: "Car rental service",
 };
 
@@ -58,7 +58,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       {/* Appliquez la police Oswald au body */}
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <main>{children}</main>
-        <WhatsAppButton />
+        <SocialButton />
         <Footer />
 
         {/* Mettez les scripts globaux à la fin du body */}

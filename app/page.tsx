@@ -65,7 +65,7 @@ export default async function Home() {
     const locations = await prisma.location.findMany();
     return (
         <>
-            <NavbarAndMenu voitures={voitures} />
+            <NavbarAndMenu voitures={voitures} locations={locations} />
 
             {/* Slider doesn't need reveal usually, or can be separate */}
             <ImageSlider images={sliderData} interval={5000} />

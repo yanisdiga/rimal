@@ -4,6 +4,7 @@ import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { ReservationActions } from './ReservationActions';
 import { EditReservationModal } from './EditReservationModal';
+import { PriceRecapButton } from './PriceRecapButton';
 
 const prisma = new PrismaClient();
 
@@ -142,6 +143,7 @@ export default async function ReservationsPage() {
                                     {getStatusBadge(res.status)}
                                     <div className="action-buttons">
                                         <EditReservationModal reservation={res} locations={locations} vehicles={vehicles} />
+                                        <PriceRecapButton reservation={res} />
                                         <ReservationActions id={res.id} currentStatus={res.status} />
                                     </div>
                                 </div>

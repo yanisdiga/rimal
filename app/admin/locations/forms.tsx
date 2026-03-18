@@ -1,10 +1,11 @@
 'use client';
 
-import { createLocation, deleteLocation } from '@/app/actions/admin';
-import { useRef } from 'react';
+import { createLocation, deleteLocation, updateLocation } from '@/app/actions/admin';
+import { useRef, useState } from 'react';
 import { useFormStatus } from 'react-dom';
+import { Location } from '@prisma/client';
 
-function SubmitLocationButton() {
+function SubmitButton({ label, loadingLabel }: { label: string, loadingLabel: string }) {
     const { pending } = useFormStatus();
     return (
         <button
@@ -13,7 +14,7 @@ function SubmitLocationButton() {
             className="btn-primary"
             style={{ width: '100%', marginTop: '20px' }}
         >
-            {pending ? 'Création en cours...' : 'Créer le Lieu'}
+            {pending ? loadingLabel : label}
         </button>
     );
 }
@@ -44,15 +45,105 @@ export function AddLocationForm() {
                 <label className="form-label">Adresse (Optionnel)</label>
                 <input name="adresse" type="text" placeholder="Adresse complète..." />
             </div>
-            <SubmitLocationButton />
+            <div className="form-group">
+                <label className="form-label">URL de l'image (Optionnel)</label>
+                <input name="imageUrl" type="text" placeholder="https://..." />
+            </div>
+            <SubmitButton label="Créer le Lieu" loadingLabel="Création..." />
         </form>
+    );
+}
+
+export function LocationItem({ location }: { location: Location }) {
+    const [isEditing, setIsEditing] = useState(false);
+
+    if (isEditing) {
+        return (
+            <div className="data-item editing" style={{ display: 'block' }}>
+                <form
+                    action={async (formData) => {
+                        await updateLocation(location.id, formData);
+                        setIsEditing(false);
+                    }}
+                    className="edit-form"
+                >
+                    <div className="form-row">
+                        <div className="form-group">
+                            <label className="form-label">Nom</label>
+                            <input name="nom" defaultValue={location.nom} required type="text" />
+                        </div>
+                        <div className="form-group">
+                            <label className="form-label">Frais (DH)</label>
+                            <input name="fraisSupplementaires" defaultValue={location.fraisSupplementaires} type="number" />
+                        </div>
+                    </div>
+                    <div className="form-group">
+                        <label className="form-label">Adresse</label>
+                        <input name="adresse" defaultValue={location.adresse || ''} type="text" />
+                    </div>
+                    <div className="form-group">
+                        <label className="form-label">URL Image</label>
+                        <input name="imageUrl" defaultValue={location.imageUrl || ''} type="text" />
+                    </div>
+
+                    <div className="form-actions" style={{ display: 'flex', gap: '10px', marginTop: '15px' }}>
+                        <SubmitButton label="Enregistrer" loadingLabel="Sauvegarde..." />
+                        <button
+                            type="button"
+                            className="btn-secondary"
+                            onClick={() => setIsEditing(false)}
+                            style={{ marginTop: '20px' }}
+                        >
+                            Annuler
+                        </button>
+                    </div>
+                </form>
+            </div>
+        );
+    }
+
+    return (
+        <div className="data-item">
+            <div className="data-item-content">
+                {location.imageUrl && (
+                    <img
+                        src={location.imageUrl}
+                        alt={location.nom}
+                        style={{ width: '60px', height: '60px', objectFit: 'cover', borderRadius: '8px', marginRight: '15px' }}
+                    />
+                )}
+                <div className="data-info">
+                    <h3>{location.nom}</h3>
+                    {location.adresse && <p>{location.adresse}</p>}
+                    {location.fraisSupplementaires > 0 && (
+                        <span className="location-fees-badge">
+                            + {location.fraisSupplementaires} DH frais
+                        </span>
+                    )}
+                </div>
+            </div>
+            <div className="data-actions">
+                <button
+                    className="btn-edit"
+                    onClick={() => setIsEditing(true)}
+                    style={{ marginRight: '10px', padding: '5px 10px', cursor: 'pointer', background: '#e0e0e0', border: 'none', borderRadius: '4px' }}
+                >
+                    Modifier
+                </button>
+                <DeleteLocationButton id={location.id} />
+            </div>
+        </div>
     );
 }
 
 export function DeleteLocationButton({ id }: { id: number }) {
     return (
         <button
-            onClick={() => deleteLocation(id)}
+            onClick={() => {
+                if (confirm('Êtes-vous sûr de vouloir supprimer ce lieu ?')) {
+                    deleteLocation(id)
+                }
+            }}
             className="btn-danger"
         >
             Supprimer

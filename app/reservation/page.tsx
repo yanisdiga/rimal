@@ -69,7 +69,7 @@ export default async function ReservationPage({
 
     return (
         <>
-            <NavbarAndMenu voitures={voitures} isReservationPage={true} />
+            <NavbarAndMenu voitures={voitures} locations={locations} isOtherPage={true} />
             <div className="reservation-page">
                 <div className="reservation-container">
 

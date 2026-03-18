@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import { AddLocationForm, DeleteLocationButton } from './forms';
+import { AddLocationForm, LocationItem } from './forms';
 import { AdminLayout } from '../components/AdminLayout';
 
 const prisma = new PrismaClient();
@@ -25,23 +25,9 @@ export default async function LocationsPage() {
                     <p className="locations-empty">Aucun lieu enregistré.</p>
                 ) : (
                     locations.map((loc) => (
-                        <div key={loc.id} className="data-item">
-                            <div className="data-item-content">
-                                <div className="data-info">
-                                    <h3>{loc.nom}</h3>
-                                    {loc.adresse && <p>{loc.adresse}</p>}
-                                    {loc.fraisSupplementaires > 0 && (
-                                        <span className="location-fees-badge">
-                                            + {loc.fraisSupplementaires} DH frais
-                                        </span>
-                                    )}
-                                </div>
-                            </div>
-                            <div className="data-actions">
-                                <DeleteLocationButton id={loc.id} />
-                            </div>
-                        </div>
+                        <LocationItem key={loc.id} location={loc} />
                     ))
+
                 )}
             </div>
         </AdminLayout>

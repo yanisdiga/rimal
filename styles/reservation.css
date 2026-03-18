@@ -1,23 +1,7 @@
 /* styles/reservation.css */
 
 .navbar-reservation {
-    /* Designer Choice: Clean White Frosted Glass */
     background-color: #f8f9fa !important;
-    backdrop-filter: blur(32px);
-    -webkit-backdrop-filter: blur(32px);
-    background: none;
-}
-
-.navbar-reservation .logo a {
-    color: #1a1a1a !important;
-}
-
-.navbar-reservation .hamburger span {
-    color: #1a1a1a !important;
-}
-
-.navbar-reservation .hamburger svg path {
-    stroke: #1a1a1a !important;
 }
 
 .reservation-page {
