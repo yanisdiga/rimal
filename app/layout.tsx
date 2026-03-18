@@ -41,27 +41,31 @@ export const metadata: Metadata = {
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  // Vérification automatique des réservations expirées à chaque chargement de page
+  // Vérification automatique des réservations expirées
   await checkExpiredReservations();
 
-  const voitures = await prisma.modeleVoiture.findMany();
+  // RÉCUPÉRATION : On récupère les voitures ET les lieux en parallèle pour gagner du temps
+  const [voitures, locations] = await Promise.all([
+    prisma.modeleVoiture.findMany(),
+    prisma.location.findMany()
+  ]);
 
   return (
     <html lang="fr">
-      {/* Ajouts dans le <head> */}
       <head>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
-        <script src="https://cdn.jsdelivr.net/npm/flatpickr" defer></script>
       </head>
 
-      {/* Appliquez la police Oswald au body */}
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        {/* AJOUT : On affiche la Navbar en lui passant les données de Hostinger */}
+        <NavbarWrapper voitures={voitures} locations={locations} />
+        
         <main>{children}</main>
+        
         <SocialButton />
         <Footer />
 
-        {/* Mettez les scripts globaux à la fin du body */}
         <script src="https://cdn.jsdelivr.net/npm/flatpickr" defer></script>
       </body>
     </html>

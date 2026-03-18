@@ -2,17 +2,20 @@
 
 import { usePathname } from "next/navigation";
 import { NavbarAndMenu } from "./Menu";
-import type { ModeleVoiture } from "@prisma/client";
+// Ajoute "Location" dans l'import ci-dessous 
+import type { ModeleVoiture, Location } from "@prisma/client"; 
 
 interface NavbarWrapperProps {
     voitures: ModeleVoiture[];
+    locations: Location[];
 }
 
-export default function NavbarWrapper({ voitures }: NavbarWrapperProps) {
+export default function NavbarWrapper({ voitures, locations }: NavbarWrapperProps) {
     const pathname = usePathname();
     const isAdmin = pathname.startsWith("/admin");
 
     if (isAdmin) return null;
 
-    return <NavbarAndMenu voitures={voitures} />;
+    // Ajoute locations ici pour satisfaire TypeScript
+    return <NavbarAndMenu voitures={voitures} locations={locations} />;
 }
