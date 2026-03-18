@@ -3,6 +3,8 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import PlaceHolderImage from '@/public/images/placeholder.jpg'; // Assuming we handle images
 
+export const dynamic = 'force-dynamic';
+
 export default async function VehiclePage({ params }: { params: { id: string } }) {
     const id = parseInt(params.id);
     if (isNaN(id)) return notFound();
