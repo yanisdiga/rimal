@@ -4,7 +4,6 @@ import { AdminLayout } from '../components/AdminLayout';
 import { VehicleModelRow } from './VehicleModelRow';
 
 const prisma = new PrismaClient();
-export const dynamic = 'force-dynamic';
 
 export default async function VehiclesPage() {
     const modeles = await prisma.modeleVoiture.findMany({
