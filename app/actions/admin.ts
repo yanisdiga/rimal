@@ -29,6 +29,8 @@ export async function createModel(formData: FormData) {
     });
 
     revalidatePath('/admin/vehicles');
+    revalidatePath('/'); // La liste des voitures sur l'accueil
+    revalidatePath('/vehicule/[id]', 'page'); // La page de détails
 }
 
 export async function deleteModel(id: number) {
@@ -36,6 +38,8 @@ export async function deleteModel(id: number) {
         where: { id },
     });
     revalidatePath('/admin/vehicles');
+    revalidatePath('/'); // La liste des voitures sur l'accueil
+    revalidatePath('/vehicule/[id]', 'page'); // La page de détails
 }
 
 export async function updateModel(id: number, formData: FormData) {
@@ -61,6 +65,8 @@ export async function updateModel(id: number, formData: FormData) {
     });
 
     revalidatePath('/admin/vehicles');
+    revalidatePath('/'); // La liste des voitures sur l'accueil
+    revalidatePath('/vehicule/[id]', 'page'); // La page de détails
 }
 
 // --- VEHICLE ACTIONS ---
@@ -79,6 +85,8 @@ export async function createVehicle(formData: FormData) {
     });
 
     revalidatePath('/admin/vehicles');
+    revalidatePath('/'); // La liste des voitures sur l'accueil
+    revalidatePath('/vehicule/[id]', 'page'); // La page de détails
 }
 
 export async function updateVehicleStatus(id: number, statut: StatutVehicule) {
@@ -87,6 +95,8 @@ export async function updateVehicleStatus(id: number, statut: StatutVehicule) {
         data: { statut },
     });
     revalidatePath('/admin/vehicles');
+    revalidatePath('/'); // La liste des voitures sur l'accueil
+    revalidatePath('/vehicule/[id]', 'page'); // La page de détails
 }
 
 export async function deleteVehicle(id: number) {
@@ -94,6 +104,8 @@ export async function deleteVehicle(id: number) {
         where: { id },
     });
     revalidatePath('/admin/vehicles');
+    revalidatePath('/'); // La liste des voitures sur l'accueil
+    revalidatePath('/vehicule/[id]', 'page'); // La page de détails
 }
 
 // --- LOCATION ACTIONS ---
@@ -114,6 +126,7 @@ export async function createLocation(formData: FormData) {
     });
 
     revalidatePath('/admin/locations');
+    revalidatePath('/'); // La liste des voitures sur l'accueil
 }
 
 export async function updateLocation(id: number, formData: FormData) {
@@ -133,6 +146,7 @@ export async function updateLocation(id: number, formData: FormData) {
     });
 
     revalidatePath('/admin/locations');
+    revalidatePath('/');
 }
 
 export async function deleteLocation(id: number) {
@@ -140,4 +154,5 @@ export async function deleteLocation(id: number) {
         where: { id },
     });
     revalidatePath('/admin/locations');
+    revalidatePath('/');
 }
